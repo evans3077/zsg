@@ -1,0 +1,108 @@
+<aside class="admin-sidebar">
+    <div class="sidebar-header">
+        <div class="logo-icon">
+            <i class="fas fa-tree"></i>
+        </div>
+        <div>
+            <h1>Zamar Springs</h1>
+            <div class="subtitle">Admin Dashboard</div>
+        </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <!-- Dashboard -->
+        <div class="nav-section">
+            <div class="nav-section-title">Main</div>
+            <a href="{% url 'admin_dashboard:dashboard' %}" 
+               class="nav-item {% if active_module == 'dashboard' %}active{% endif %}">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+        
+        <!-- Content Management -->
+        <div class="nav-section">
+            <div class="nav-section-title">Content</div>
+            
+            <!-- Conferences -->
+            <a href="{% url 'admin_dashboard:module_dashboard' 'conferences' %}" 
+               class="nav-item {% if active_module == 'conferences' %}active{% endif %}">
+                <i class="fas fa-building"></i>
+                <span>Conferences</span>
+                {% if modules_with_pending %}
+                    {% for module in modules_with_pending %}
+                        {% if module.module == 'conferences' %}
+                        <span class="nav-badge">{{ module.count }}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </a>
+            
+            <!-- Home -->
+            <a href="{% url 'admin_dashboard:module_dashboard' 'home' %}" 
+               class="nav-item {% if active_module == 'home' %}active{% endif %}">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            
+            <!-- Gardens -->
+            <a href="#" class="nav-item">
+                <i class="fas fa-tree"></i>
+                <span>Gardens</span>
+                <span class="nav-badge">Soon</span>
+            </a>
+            
+            <!-- Dining -->
+            <a href="#" class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Dining</span>
+                <span class="nav-badge">Soon</span>
+            </a>
+            
+            <!-- Kids -->
+            <a href="#" class="nav-item">
+                <i class="fas fa-child"></i>
+                <span>Kids & Family</span>
+                <span class="nav-badge">Soon</span>
+            </a>
+        </div>
+        
+        <!-- System -->
+        <div class="nav-section">
+            <div class="nav-section-title">System</div>
+            
+            <a href="{% url 'admin_dashboard:module_dashboard' 'system' %}" 
+               class="nav-item {% if active_module == 'system' %}active{% endif %}">
+                <i class="fas fa-cog"></i>
+                <span>System</span>
+                {% if modules_with_pending %}
+                    {% for module in modules_with_pending %}
+                        {% if module.module == 'system' %}
+                        <span class="nav-badge">{{ module.count }}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </a>
+            
+            <a href="{% url 'admin:index' %}" class="nav-item" target="_blank">
+                <i class="fas fa-wrench"></i>
+                <span>Django Admin</span>
+            </a>
+            
+            <a href="/" class="nav-item" target="_blank">
+                <i class="fas fa-external-link-alt"></i>
+                <span>View Site</span>
+            </a>
+        </div>
+        
+        <!-- User -->
+        <div class="nav-section">
+            <div class="nav-section-title">Account</div>
+            
+            <a href="{% url 'admin:logout' %}" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </nav>
+</aside>

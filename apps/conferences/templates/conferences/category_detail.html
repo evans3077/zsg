@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }} | Zamar Springs Gardens{% endblock %}
+
+{% block meta_description %}{{ category.description }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/conference.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Category Hero -->
+<section class="conference-hero">
+    <div class="container">
+        <div class="conference-hero-content">
+            <h1 class="conference-hero-title">{{ category.name }}</h1>
+            <p class="conference-hero-subtitle">{{ category.description }}</p>
+            <a href="#rooms" class="btn btn-gold btn-large">
+                <i class="fas fa-building"></i>
+                View All Rooms
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Category Navigation -->
+<section class="category-nav">
+    <div class="container">
+        <div class="category-nav-scroll">
+            {% for cat in all_categories %}
+            <a href="{% url 'conferences:category_detail' cat.slug %}" 
+               class="category-card {% if cat.slug == category.slug %}active{% endif %}">
+                <i class="{{ cat.icon }}"></i>
+                <div>
+                    <h3>{{ cat.name }}</h3>
+                    <p>{{ cat.description|truncatewords:8 }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Rooms in this category -->
+<section class="rooms-section" id="rooms">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">All {{ category.name }}</h2>
+            <p class="section-subtitle">Browse our selection of {{ category.name|lower }}</p>
+        </div>
+        
+        {% if rooms %}
+        <div class="rooms-grid">
+            {% for room in rooms %}
+            <div class="room-card {% if room.is_featured %}room-card-featured{% endif %}">
+                <div class="room-image">
+                    {% if room.featured_image %}
+                    <img src="{{ room.featured_image.url }}" alt="{{ room.name }}" loading="lazy">
+                    {% else %}
+                    <i class="fas fa-building fa-4x"></i>
+                    {% endif %}
+                    {% if room.room_type == 'executive' %}
+                    <span class="room-badge">Executive</span>
+                    {% elif room.room_type == 'hall' %}
+                    <span class="room-badge">Conference Hall</span>
+                    {% elif room.room_type == 'board' %}
+                    <span class="room-badge">Board Room</span>
+                    {% else %}
+                    <span class="room-badge">Meeting Room</span>
+                    {% endif %}
+                </div>
+                
+                <div class="room-content">
+                    <div class="room-header">
+                        <div>
+                            <h3 class="room-title">{{ room.name }}</h3>
+                            <p class="room-type">{{ room.category.name }}</p>
+                        </div>
+                        <div class="room-capacity">
+                            <i class="fas fa-users"></i>
+                            {{ room.get_max_capacity }}
+                        </div>
+                    </div>
+                    
+                    <p class="room-description">
+                        {{ room.description|truncatewords:25 }}
+                    </p>
+                    
+                    <div class="room-features">
+                        {% if room.has_projector %}
+                        <span class="room-feature">
+                            <i class="fas fa-tv"></i>
+                            Projector
+                        </span>
+                        {% endif %}
+                        {% if room.has_wifi %}
+                        <span class="room-feature">
+                            <i class="fas fa-wifi"></i>
+                            WiFi
+                        </span>
+                        {% endif %}
+                        {% if room.has_air_conditioning %}
+                        <span class="room-feature">
+                            <i class="fas fa-snowflake"></i>
+                            A/C
+                        </span>
+                        {% endif %}
+                        {% if room.has_video_conferencing %}
+                        <span class="room-feature">
+                            <i class="fas fa-video"></i>
+                            Video Conf
+                        </span>
+                        {% endif %}
+                        {% if room.has_secretary_space %}
+                        <span class="room-feature">
+                            <i class="fas fa-user-tie"></i>
+                            Secretary
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="room-actions">
+                        <a href="{% url 'conferences:room_detail' room.slug %}" class="btn btn-gold">
+                            View Details
+                        </a>
+                        <a href="{% url 'conferences:room_detail' room.slug %}#booking" class="btn btn-outline-gold">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center" style="padding: var(--space-12) 0;">
+            <i class="fas fa-door-closed fa-4x" style="color: var(--neutral-400); margin-bottom: var(--space-4);"></i>
+            <h3 style="margin-bottom: var(--space-2); color: var(--neutral-700);">No rooms available in this category</h3>
+            <p style="color: var(--neutral-600); max-width: 400px; margin: 0 auto;">
+                We're currently updating our facilities. Please check back later or contact us for more information.
+            </p>
+            <div style="margin-top: var(--space-6);">
+                <a href="{% url 'conferences:overview' %}" class="btn btn-gold">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to All Facilities
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose Our {{ category.name }}?</h2>
+        </div>
+        
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-glass-whiskey"></i>
+                </div>
+                <h3>Non-Alcoholic</h3>
+                <p>Professional environment focused on productivity</p>
+            </div>
+            
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Secure & Private</h3>
+                <p>Confidential meeting spaces for sensitive discussions</p>
+            </div>
+            
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-concierge-bell"></i>
+                </div>
+                <h3>Full Service</h3>
+                <p>Catering and support staff available</p>
+            </div>
+            
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h3>Garden Views</h3>
+                <p>Beautiful natural surroundings for inspiration</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to overview -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center">
+            <a href="{% url 'conferences:overview' %}" class="btn btn-gold btn-large">
+                <i class="fas fa-arrow-left"></i>
+                Back to All Facilities
+            </a>
+            <a href="{% url 'conferences:packages' %}" class="btn btn-outline-gold btn-large" style="margin-left: var(--space-4);">
+                <i class="fas fa-gift"></i>
+                View Packages
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for room links
+    const roomCards = document.querySelectorAll('.room-card');
+    roomCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' || e.target.closest('a')) {
+                return; // Let link clicks work normally
+            }
+            const viewDetailsLink = this.querySelector('.btn-gold');
+            if (viewDetailsLink) {
+                viewDetailsLink.click();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

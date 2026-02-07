@@ -1,0 +1,17 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}System Settings{% endblock %}
+
+{% block content %}
+<h2>System Settings</h2>
+
+<div class="card">
+    <h3>System Information</h3>
+    <p>This is the system management section. More features coming soon.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/admin/auth/user/" class="btn">User Management</a>
+        <a href="/admin/auth/group/" class="btn">Groups</a>
+    </div>
+</div>
+{% endblock %}

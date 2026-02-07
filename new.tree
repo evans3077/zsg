@@ -1,0 +1,289 @@
+├── apps
+│  ├── __init__.py
+│  ├── __pycache__
+│  │  └── apps.cpython-311.pyc
+│  ├── about
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── admin_dashboard
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  ├── models.cpython-311.pyc
+│  │  │  ├── urls.cpython-311.pyc
+│  │  │  └── views.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  ├── __pycache__
+│  │  │  │  ├── __init__.cpython-311.pyc
+│  │  │  │  └── 0001_initial.cpython-311.pyc
+│  │  │  └── 0001_initial.py
+│  │  ├── models.py
+│  │  ├── templates
+│  │  │  └── admin_dashboard
+│  │  │    ├── base.html
+│  │  │    ├── conferences
+│  │  │    │  ├── categories.html
+│  │  │    │  ├── dashboard.html
+│  │  │    │  ├── packages.html
+│  │  │    │  └── rooms.html
+│  │  │    ├── dashboard.html
+│  │  │    ├── home
+│  │  │    │  └── dashboard.html
+│  │  │    ├── partials
+│  │  │    │  ├── header.html
+│  │  │    │  └── sidebar.html
+│  │  │    └── system
+│  │  │      └── dashboard.html
+│  │  ├── tests.py
+│  │  ├── urls.py
+│  │  └── views.py
+│  ├── admin.py
+│  ├── apps.py
+│  ├── bookings
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── conferences
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  ├── models.cpython-311.pyc
+│  │  │  ├── urls.cpython-311.pyc
+│  │  │  └── views.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  ├── __pycache__
+│  │  │  │  ├── __init__.cpython-311.pyc
+│  │  │  │  └── 0001_initial.cpython-311.pyc
+│  │  │  └── 0001_initial.py
+│  │  ├── models.py
+│  │  ├── templates
+│  │  │  └── conferences
+│  │  │    ├── base.html
+│  │  │    ├── category_detail.html
+│  │  │    ├── overview.html
+│  │  │    ├── packages.html
+│  │  │    └── room_detail.html
+│  │  ├── tests.py
+│  │  ├── urls.py
+│  │  ├── views_admin.py
+│  │  └── views.py
+│  ├── contact
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── core
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── dining
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── gallery
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── gardens
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── home
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  ├── models.cpython-311.pyc
+│  │  │  ├── urls.cpython-311.pyc
+│  │  │  └── views.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  ├── __pycache__
+│  │  │  │  ├── __init__.cpython-311.pyc
+│  │  │  │  ├── 0001_initial.cpython-311.pyc
+│  │  │  │  └── 0002_feature_service_alter_homepagesettings_options_and_more.cpython-311.pyc
+│  │  │  ├── 0001_initial.py
+│  │  │  └── 0002_feature_service_alter_homepagesettings_options_and_more.py
+│  │  ├── models.py
+│  │  ├── templates
+│  │  │  └── home
+│  │  │    └── index.html
+│  │  ├── tests.py
+│  │  ├── urls.py
+│  │  └── views.py
+│  ├── kids
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── migrations
+│  │  └── __init__.py
+│  ├── models.py
+│  ├── packages
+│  │  ├── __init__.py
+│  │  ├── __pycache__
+│  │  │  ├── __init__.cpython-311.pyc
+│  │  │  ├── admin.cpython-311.pyc
+│  │  │  ├── apps.cpython-311.pyc
+│  │  │  └── models.cpython-311.pyc
+│  │  ├── admin.py
+│  │  ├── apps.py
+│  │  ├── migrations
+│  │  │  ├── __init__.py
+│  │  │  └── __pycache__
+│  │  │    └── __init__.cpython-311.pyc
+│  │  ├── models.py
+│  │  ├── tests.py
+│  │  └── views.py
+│  ├── tests.py
+│  └── views.py
+├── create_conference_data.py
+├── db.sqlite3
+├── manage.py
+├── media
+│  └── conferences
+│    ├── gallery
+│    │  ├── banquet-meeting-room-machakos-2.webp
+│    │  ├── big-meeting-room-machakos-u-2_QpoAQiV.webp
+│    │  ├── big-meeting-room-machakos-u-2.webp
+│    │  ├── classroom-conference-hall-machakos-2.webp
+│    │  ├── classroom-meeting-room-machakos-3.webp
+│    │  ├── executive-board-room-machakos-1.webp
+│    │  ├── executive-board-room-machakos-2.webp
+│    │  ├── executive-meeting-room-machakos-u-2.webp
+│    │  └── executive-meeting-room-machakos-u-3.webp
+│    └── rooms
+│      ├── banquet-meeting-room-machakos-2.webp
+│      └── executive-board-room-machakos-1.webp
+├── new.tree
+├── static
+│  ├── css
+│  │  ├── base.css
+│  │  ├── components.css
+│  │  ├── conference.css
+│  │  └── home.css
+│  ├── images
+│  └── js
+│    └── main.js
+├── templates
+│  ├── base.html
+│  └── partials
+└── zamar_springs
+  ├── __init__.py
+  ├── __pycache__
+  │  ├── __init__.cpython-311.pyc
+  │  ├── settings.cpython-311.pyc
+  │  ├── urls.cpython-311.pyc
+  │  └── wsgi.cpython-311.pyc
+  ├── asgi.py
+  ├── settings.py
+  ├── urls.py
+  └── wsgi.py

@@ -1,0 +1,60 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome to Admin Dashboard</h2>
+<p style="color: #666; margin-bottom: 2rem;">Manage your website content and settings</p>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.conferences.total_rooms }}</div>
+        <div class="stat-label">Conference Rooms</div>
+        <small>{{ stats.conferences.active_rooms }} active</small>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.conferences.total_packages }}</div>
+        <div class="stat-label">Packages</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.home.total_features }}</div>
+        <div class="stat-label">Home Features</div>
+        <small>{{ stats.home.active_features }} active</small>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.home.total_services }}</div>
+        <div class="stat-label">Home Services</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Quick Actions</h3>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <a href="/admin/conferences/conferenceroom/add/" class="btn btn-gold">Add Conference Room</a>
+        <a href="/admin/conferences/conferencepackage/add/" class="btn btn-gold">Add Package</a>
+        <a href="/admin/home/feature/add/" class="btn">Add Feature</a>
+        <a href="/admin/home/service/add/" class="btn">Add Service</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Quick Links</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/admin/conferences/conferenceroom/" style="padding: 1rem; background: #f8f9fa; border-radius: 0.25rem; text-decoration: none; color: var(--primary);">
+            Manage Rooms
+        </a>
+        <a href="/admin/conferences/conferencepackage/" style="padding: 1rem; background: #f8f9fa; border-radius: 0.25rem; text-decoration: none; color: var(--primary);">
+            Manage Packages
+        </a>
+        <a href="/admin/home/feature/" style="padding: 1rem; background: #f8f9fa; border-radius: 0.25rem; text-decoration: none; color: var(--primary);">
+            Manage Features
+        </a>
+        <a href="/admin/home/service/" style="padding: 1rem; background: #f8f9fa; border-radius: 0.25rem; text-decoration: none; color: var(--primary);">
+            Manage Services
+        </a>
+    </div>
+</div>
+{% endblock %}

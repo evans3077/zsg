@@ -1,0 +1,16 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Home Page Management{% endblock %}
+
+{% block content %}
+<h2>Home Page Management</h2>
+
+<div class="card">
+    <h3>Manage Home Content</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/admin/home/homepagesettings/" class="btn">Home Settings</a>
+        <a href="/admin/home/feature/" class="btn">Features</a>
+        <a href="/admin/home/service/" class="btn">Services</a>
+    </div>
+</div>
+{% endblock %}

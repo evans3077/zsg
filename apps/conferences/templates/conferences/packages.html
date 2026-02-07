@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Conference Packages & Deals | Zamar Springs Gardens{% endblock %}
+
+{% block meta_description %}Complete conference packages including room rental, equipment, and catering services at Zamar Springs Gardens{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/conference.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Packages Hero -->
+<section class="conference-hero">
+    <div class="container">
+        <div class="conference-hero-content">
+            <h1 class="conference-hero-title">Conference Packages</h1>
+            <p class="conference-hero-subtitle">Complete solutions for your meeting and conference needs</p>
+            <a href="#packages" class="btn btn-gold btn-large">
+                <i class="fas fa-gift"></i>
+                View All Packages
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+            <h2 class="section-title">Simplify Your Event Planning</h2>
+            <p class="section-subtitle" style="font-size: 1.125rem;">
+                Our curated packages include everything you need for a successful meeting or conference. 
+                From basic room rentals to all-inclusive corporate events, we've got you covered.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- All Packages -->
+<section class="packages-section" id="packages">
+    <div class="container">
+        {% if popular_packages %}
+        <div class="section-header">
+            <h2 class="section-title">Most Popular Packages</h2>
+            <p class="section-subtitle">Our customers' favorite choices</p>
+        </div>
+        
+        <div class="packages-grid">
+            {% for package in popular_packages %}
+            <div class="package-card package-card-popular">
+                <div class="package-header">
+                    <div class="package-price">Ksh {{ package.price|floatformat:0 }}</div>
+                    <div class="package-duration">{{ package.duration }}</div>
+                </div>
+                
+                <div class="package-content">
+                    <h3 class="package-title">{{ package.name }}</h3>
+                    <p class="package-description">
+                        {{ package.description }}
+                    </p>
+                    
+                    <div class="package-includes">
+                        <h4>Package Includes:</h4>
+                        <ul>
+                            {% for item in package.includes.splitlines %}
+                            {% if item.strip %}
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                {{ item }}
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="package-includes">
+                        <h4>Ideal For:</h4>
+                        <p style="color: var(--neutral-600); line-height: 1.6;">{{ package.suitable_for }}</p>
+                    </div>
+                    
+                    <div class="room-actions">
+                        <a href="#inquiry" class="btn btn-gold" onclick="selectPackage('{{ package.name }}')">
+                            <i class="fas fa-calendar-check"></i>
+                             Book This Package
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if packages %}
+        <div class="section-header" style="margin-top: var(--space-12);">
+            <h2 class="section-title">All Packages</h2>
+            <p class="section-subtitle">Browse our complete range of conference packages</p>
+        </div>
+        
+        <div class="packages-grid">
+            {% for package in packages %}
+            {% if not package.is_popular %}
+            <div class="package-card">
+                <div class="package-header">
+                    <div class="package-price">Ksh {{ package.price|floatformat:0 }}</div>
+                    <div class="package-duration">{{ package.duration }}</div>
+                </div>
+                
+                <div class="package-content">
+                    <h3 class="package-title">{{ package.name }}</h3>
+                    <p class="package-description">
+                        {{ package.description }}
+                    </p>
+                    
+                    <div class="package-includes">
+                        <h4>Package Includes:</h4>
+                        <ul>
+                            {% for item in package.includes.splitlines|slice:":5" %}
+                            {% if item.strip %}
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                {{ item }}
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="room-actions">
+                        <a href="#inquiry" class="btn btn-gold" onclick="selectPackage('{{ package.name }}')">
+                            <i class="fas fa-calendar-check"></i>
+                             Book Package
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Custom Package Section -->
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Need a Custom Package?</h2>
+            <p class="section-subtitle">We can create a package tailored to your specific needs</p>
+        </div>
+        
+        <div style="background: white; border-radius: 1rem; padding: var(--space-8); max-width: 800px; margin: 0 auto; box-shadow: var(--shadow-md);">
+            <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-6);">
+                <div>
+                    <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-3); color: var(--neutral-900);">
+                        Build Your Own Package
+                    </h3>
+                    <p style="color: var(--neutral-700); line-height: 1.7;">
+                        Don't see what you need? We can customize a package including:
+                    </p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
+                    <div style="text-align: center; padding: var(--space-4);">
+                        <i class="fas fa-door-open fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
+                        <p style="font-weight: 600;">Flexible Room Selection</p>
+                        <p style="color: var(--neutral-600); font-size: 0.875rem;">Choose any available room</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: var(--space-4);">
+                        <i class="fas fa-utensils fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
+                        <p style="font-weight: 600;">Custom Catering</p>
+                        <p style="color: var(--neutral-600); font-size: 0.875rem;">Tailored menu options</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: var(--space-4);">
+                        <i class="fas fa-tools fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
+                        <p style="font-weight: 600;">Special Equipment</p>
+                        <p style="color: var(--neutral-600); font-size: 0.875rem;">Additional AV equipment</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: var(--space-4);">
+                        <i class="fas fa-clock fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
+                        <p style="font-weight: 600;">Flexible Timing</p>
+                        <p style="color: var(--neutral-600); font-size: 0.875rem;">Extended or multiple days</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <a href="#inquiry" class="btn btn-gold btn-large">
+                        <i class="fas fa-comment-dots"></i>
+                        Request Custom Package
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Inquiry Form -->
+<section class="section-padding" id="inquiry">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Package Inquiry</h2>
+            <p class="section-subtitle">Get in touch to book a package or request more information</p>
+        </div>
+        
+        <div style="max-width: 800px; margin: 0 auto;">
+            <form class="booking-form" method="post" action="#">
+                {% csrf_token %}
+                <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-6);">
+                    <div>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                            Your Details
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-4);">
+                            <div class="form-group">
+                                <label for="inquiry_name">Full Name *</label>
+                                <input type="text" id="inquiry_name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inquiry_email">Email Address *</label>
+                                <input type="email" id="inquiry_email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inquiry_phone">Phone Number *</label>
+                                <input type="tel" id="inquiry_phone" name="phone" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inquiry_company">Company/Organization</label>
+                                <input type="text" id="inquiry_company" name="company">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                            Package Details
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-4);">
+                            <div class="form-group">
+                                <label for="package_selection">Package Interest *</label>
+                                <select id="package_selection" name="package" required>
+                                    <option value="">Select a package</option>
+                                    {% for package in packages %}
+                                    <option value="{{ package.name }}">{{ package.name }} - Ksh {{ package.price|floatformat:0 }}</option>
+                                    {% endfor %}
+                                    <option value="custom">Custom Package</option>
+                                    <option value="not_sure">Not sure, need advice</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="event_date">Preferred Event Date *</label>
+                                <input type="date" id="event_date" name="event_date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="attendees_count">Estimated Attendees *</label>
+                                <input type="number" id="attendees_count" name="attendees" min="1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="budget_range">Budget Range</label>
+                                <select id="budget_range" name="budget">
+                                    <option value="">Select budget</option>
+                                    <option value="under_30000">Under Ksh 30,000</option>
+                                    <option value="30000_60000">Ksh 30,000 - 60,000</option>
+                                    <option value="60000_100000">Ksh 60,000 - 100,000</option>
+                                    <option value="over_100000">Over Ksh 100,000</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="additional_info">Additional Information</label>
+                                <textarea id="additional_info" name="message" rows="4" placeholder="Tell us about your event, special requirements, preferred rooms, etc."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: var(--space-8);">
+                    <button type="submit" class="btn btn-gold btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Inquiry
+                    </button>
+                    <p style="color: var(--neutral-500); margin-top: var(--space-3); font-size: 0.875rem;">
+                        <i class="fas fa-info-circle"></i>
+                        We'll respond within 24 hours with availability and pricing
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Common questions about our conference packages</p>
+        </div>
+        
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: grid; gap: var(--space-4);">
+                <div class="faq-item" style="background: white; border-radius: 0.75rem; padding: var(--space-5);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--space-2); color: var(--neutral-900);">
+                        What's included in your packages?
+                    </h4>
+                    <p style="color: var(--neutral-700);">
+                        All packages include room rental, basic audiovisual equipment, high-speed WiFi, and water. 
+                        Higher-tier packages add catering, additional equipment, and support services.
+                    </p>
+                </div>
+                
+                <div class="faq-item" style="background: white; border-radius: 0.75rem; padding: var(--space-5);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--space-2); color: var(--neutral-900);">
+                        Can I modify a package?
+                    </h4>
+                    <p style="color: var(--neutral-700);">
+                        Yes! We're flexible and can adjust packages to meet your specific needs. 
+                        Contact us to discuss customizations.
+                    </p>
+                </div>
+                
+                <div class="faq-item" style="background: white; border-radius: 0.75rem; padding: var(--space-5);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--space-2); color: var(--neutral-900);">
+                        Is catering included?
+                    </h4>
+                    <p style="color: var(--neutral-700);">
+                        Catering is included in our Full Day Conference and Training Workshop packages. 
+                        For other packages, catering can be added as an optional extra.
+                    </p>
+                </div>
+                
+                <div class="faq-item" style="background: white; border-radius: 0.75rem; padding: var(--space-5);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--space-2); color: var(--neutral-900);">
+                        What's your cancellation policy?
+                    </h4>
+                    <p style="color: var(--neutral-700);">
+                        Cancellations made 7+ days before the event receive a full refund. 
+                        3-7 days notice receives a 50% refund. Less than 3 days notice is non-refundable.
+                    </p>
+                </div>
+                
+                <div class="faq-item" style="background: white; border-radius: 0.75rem; padding: var(--space-5);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--space-2); color: var(--neutral-900);">
+                        Can I book multiple rooms?
+                    </h4>
+                    <p style="color: var(--neutral-700);">
+                        Absolutely! We offer discounts for booking multiple rooms or for extended durations. 
+                        Contact us for group booking rates.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to facilities -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center">
+            <a href="{% url 'conferences:overview' %}" class="btn btn-gold btn-large">
+                <i class="fas fa-building"></i>
+                Back to Conference Facilities
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function selectPackage(packageName) {
+    const select = document.getElementById('package_selection');
+    if (select) {
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].text.includes(packageName)) {
+                select.selectedIndex = i;
+                break;
+            }
+        }
+    }
+    
+    // Scroll to inquiry form
+    document.getElementById('inquiry').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date
+    const dateInput = document.getElementById('event_date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+    
+    // Form submission
+    const inquiryForm = document.querySelector('.booking-form');
+    if (inquiryForm) {
+        inquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate submission
+            setTimeout(() => {
+                alert('Thank you for your inquiry! We\'ll contact you within 24 hours with package details and availability.');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Reset date to today
+                if (dateInput) {
+                    dateInput.value = new Date().toISOString().split('T')[0];
+                }
+            }, 1500);
+        });
+    }
+    
+    // FAQ toggle
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        item.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+});
+</script>
+
+<style>
+.faq-item {
+    cursor: pointer;
+    transition: var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.faq-item:hover {
+    border-color: var(--gold-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+</style>
+{% endblock %}

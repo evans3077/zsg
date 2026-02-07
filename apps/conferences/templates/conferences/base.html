@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/conference.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Conference Navigation -->
+<nav class="conference-nav">
+    <div class="container">
+        <ul class="conf-nav-list">
+            <li><a href="{% url 'conferences:overview' %}" class="{% if request.path == '/conferences/' %}active{% endif %}">Overview</a></li>
+            <li><a href="{% url 'conferences:category_detail' 'hall' %}" class="{% if 'hall' in request.path %}active{% endif %}">Meeting Hall</a></li>
+            <li><a href="{% url 'conferences:category_detail' 'meeting' %}" class="{% if 'meeting' in request.path %}active{% endif %}">Meeting Rooms</a></li>
+            <li><a href="{% url 'conferences:category_detail' 'board' %}" class="{% if 'board' in request.path %}active{% endif %}">Board Rooms</a></li>
+            <li><a href="{% url 'conferences:category_detail' 'training' %}" class="{% if 'training' in request.path %}active{% endif %}">Training & Workshops</a></li>
+            <li><a href="{% url 'conferences:packages' %}" class="{% if 'packages' in request.path %}active{% endif %}">Packages</a></li>
+        </ul>
+    </div>
+</nav>
+
+{% block conference_content %}
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Conference Packages - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="table-header" style="margin-bottom: var(--space-4);">
+    <h3>Conference Packages</h3>
+    <div class="table-actions">
+        <a href="{% url 'admin:conferences_conferencepackage_add' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i>
+            Add New Package
+        </a>
+        <a href="{% url 'conferences:packages' %}" target="_blank" class="btn btn-outline">
+            <i class="fas fa-eye"></i>
+            View Public Page
+        </a>
+    </div>
+</div>
+
+<div class="data-table">
+    <div class="table-header">
+        <div>
+            <h4>All Packages ({{ packages.count }})</h4>
+            <p style="color: var(--gray-500); font-size: 0.875rem; margin-top: 0.25rem;">
+                Manage conference packages and deals
+            </p>
+        </div>
+    </div>
+    
+    <div style="overflow-x: auto;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Popular</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for package in packages %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">
+                            {{ package.name }}
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--gray-600);">
+                            {{ package.description|truncatewords:10 }}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--gold-dark); font-size: 1.125rem;">
+                            Ksh {{ package.price|floatformat:0 }}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-info">
+                            {{ package.duration }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if package.is_popular %}
+                        <span class="badge badge-success">Popular</span>
+                        {% else %}
+                        <span class="badge badge-warning">Standard</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if package.is_active %}
+                        <span class="badge badge-success">Active</span>
+                        {% else %}
+                        <span class="badge badge-danger">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="{% url 'conferences:packages' %}#{{ package.slug }}" 
+                               target="_blank"
+                               class="btn btn-sm btn-outline"
+                               title="View on site">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'admin:conferences_conferencepackage_change' package.id %}" 
+                               class="btn btn-sm btn-primary"
+                               title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'admin:conferences_conferencepackage_delete' package.id %}" 
+                               class="btn btn-sm btn-danger"
+                               title="Delete"
+                               onclick="return confirm('Are you sure you want to delete {{ package.name }}?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: var(--space-8); color: var(--gray-500);">
+                        <i class="fas fa-gift fa-2x" style="margin-bottom: var(--space-3); opacity: 0.5;"></i>
+                        <p>No packages found</p>
+                        <a href="{% url 'admin:conferences_conferencepackage_add' %}" class="btn btn-success" style="margin-top: var(--space-3);">
+                            <i class="fas fa-plus"></i>
+                            Create Your First Package
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Package Inclusions -->
+<div class="data-table" style="margin-top: var(--space-6);">
+    <div class="table-header">
+        <h4>Package Inclusions Overview</h4>
+    </div>
+    
+    <div style="padding: var(--space-4);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4);">
+            {% for package in packages %}
+            <div style="background: white; border: 1px solid var(--gray-200); border-radius: 0.5rem; padding: var(--space-4);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
+                    <h5 style="font-weight: 600; color: var(--gray-800);">{{ package.name }}</h5>
+                    <span style="font-weight: 700; color: var(--gold-dark);">
+                        Ksh {{ package.price|floatformat:0 }}
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: var(--space-3);">
+                    <div style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: var(--space-2);">
+                        <strong>Includes:</strong>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        {% for line in package.includes|slice:":3" %}
+                        <li style="display: flex; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-2);">
+                            <i class="fas fa-check" style="color: var(--admin-success); font-size: 0.75rem; margin-top: 0.25rem;"></i>
+                            <span style="font-size: 0.875rem; color: var(--gray-700);">{{ line|truncatewords:8 }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="badge badge-info" style="font-size: 0.75rem;">
+                        {{ package.duration }}
+                    </span>
+                    <a href="{% url 'admin:conferences_conferencepackage_change' package.id %}" 
+                       class="btn btn-sm btn-outline">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

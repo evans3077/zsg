@@ -1,0 +1,69 @@
+<header class="admin-header">
+    <div class="header-title">
+        <h2>
+            {% if active_module == 'dashboard' %}
+            Dashboard Overview
+            {% elif active_module == 'conferences' %}
+            Conference Management
+            {% elif active_module == 'home' %}
+            Home Page Management
+            {% elif active_module == 'system' %}
+            System Settings
+            {% else %}
+            Admin Dashboard
+            {% endif %}
+        </h2>
+        <p>
+            {% if active_module == 'dashboard' %}
+            Welcome back, {{ user.first_name|default:user.username }}
+            {% elif active_module == 'conferences' %}
+            Manage conference rooms, packages, and categories
+            {% elif active_module == 'home' %}
+            Manage homepage content and features
+            {% elif active_module == 'system' %}
+            System settings and notifications
+            {% else %}
+            Admin dashboard for Zamar Springs Gardens
+            {% endif %}
+        </p>
+    </div>
+    
+    <div class="header-actions">
+        <!-- Notifications -->
+        <div class="notification-bell">
+            <i class="fas fa-bell fa-lg" style="color: var(--gray-500);"></i>
+            {% if stats.system.unread_notifications > 0 %}
+            <span class="notification-count">{{ stats.system.unread_notifications }}</span>
+            {% endif %}
+        </div>
+        
+        <!-- User Menu -->
+        <div class="user-dropdown">
+            <div class="user-menu">
+                <div class="user-avatar">
+                    {{ user.first_name|first|default:user.username|first|upper }}
+                </div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.875rem;">
+                        {{ user.first_name|default:user.username }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--gray-500);">
+                        {{ user.email }}
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+            </div>
+            
+            <div class="dropdown-content">
+                <a href="{% url 'admin:password_change' %}" class="dropdown-item">
+                    <i class="fas fa-key"></i>
+                    Change Password
+                </a>
+                <a href="{% url 'admin:logout' %}" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</header>

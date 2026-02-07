@@ -1,0 +1,196 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Conference Rooms - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="table-header" style="margin-bottom: var(--space-4);">
+    <h3>Conference Rooms</h3>
+    <div class="table-actions">
+        <a href="{% url 'admin:conferences_conferenceroom_add' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i>
+            Add New Room
+        </a>
+        <a href="{% url 'admin_dashboard:conference_categories' %}" class="btn btn-outline">
+            <i class="fas fa-folder"></i>
+            Categories
+        </a>
+    </div>
+</div>
+
+<div class="data-table">
+    <div class="table-header">
+        <div>
+            <h4>All Rooms ({{ rooms.count }})</h4>
+            <p style="color: var(--gray-500); font-size: 0.875rem; margin-top: 0.25rem;">
+                Manage conference and meeting rooms
+            </p>
+        </div>
+        <div class="table-actions">
+            <input type="text" placeholder="Search rooms..." style="padding: var(--space-2) var(--space-3); border: 1px solid var(--gray-300); border-radius: 0.5rem; font-size: 0.875rem;">
+        </div>
+    </div>
+    
+    <div style="overflow-x: auto;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Category</th>
+                    <th>Capacity</th>
+                    <th>Amenities</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: var(--space-3);">
+                            {% if room.featured_image %}
+                            <div style="width: 40px; height: 40px; border-radius: 0.5rem; overflow: hidden;">
+                                <img src="{{ room.featured_image.url }}" alt="{{ room.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            {% else %}
+                            <div style="width: 40px; height: 40px; background: var(--gray-200); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--gray-500);">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <div style="font-weight: 600;">{{ room.name }}</div>
+                                <div style="font-size: 0.75rem; color: var(--gray-500);">
+                                    {{ room.get_room_type_display }}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-gold">
+                            {{ room.category.name }}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; color: var(--gray-800);">
+                            {{ room.get_max_capacity }}
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--gray-500);">
+                            max
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
+                            {% if room.has_projector %}
+                            <span style="font-size: 0.75rem; background: var(--gray-100); padding: 0.125rem 0.5rem; border-radius: 2rem;">Projector</span>
+                            {% endif %}
+                            {% if room.has_wifi %}
+                            <span style="font-size: 0.75rem; background: var(--gray-100); padding: 0.125rem 0.5rem; border-radius: 2rem;">WiFi</span>
+                            {% endif %}
+                            {% if room.has_video_conferencing %}
+                            <span style="font-size: 0.75rem; background: var(--gray-100); padding: 0.125rem 0.5rem; border-radius: 2rem;">Video</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                            {% if room.is_featured %}
+                            <span class="badge badge-warning">Featured</span>
+                            {% endif %}
+                            {% if room.is_active %}
+                            <span class="badge badge-success">Active</span>
+                            {% else %}
+                            <span class="badge badge-danger">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; color: var(--gray-800);">
+                            {% if room.hourly_rate %}
+                            Ksh {{ room.hourly_rate|floatformat:0 }}/hr
+                            {% elif room.half_day_rate %}
+                            Ksh {{ room.half_day_rate|floatformat:0 }}
+                            {% else %}
+                            Contact
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="{% url 'conferences:room_detail' room.slug %}" 
+                               target="_blank"
+                               class="btn btn-sm btn-outline"
+                               title="View on site">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'admin:conferences_conferenceroom_change' room.id %}" 
+                               class="btn btn-sm btn-primary"
+                               title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'admin:conferences_conferenceroom_delete' room.id %}" 
+                               class="btn btn-sm btn-danger"
+                               title="Delete"
+                               onclick="return confirm('Are you sure you want to delete {{ room.name }}?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: var(--space-8); color: var(--gray-500);">
+                        <i class="fas fa-door-closed fa-2x" style="margin-bottom: var(--space-3); opacity: 0.5;"></i>
+                        <p>No conference rooms found</p>
+                        <a href="{% url 'admin:conferences_conferenceroom_add' %}" class="btn btn-success" style="margin-top: var(--space-3);">
+                            <i class="fas fa-plus"></i>
+                            Add Your First Room
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="stats-grid" style="margin-top: var(--space-6);">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ rooms.count }}</div>
+                <div class="stat-label">Total Rooms</div>
+            </div>
+            <div class="stat-icon blue">
+                <i class="fas fa-building"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card gold">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ rooms|length }}</div>
+                <div class="stat-label">Active Rooms</div>
+            </div>
+            <div class="stat-icon gold">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card green">
+        <div class="stat-header">
+            <div>
+                {% with featured_count=rooms|length %}
+                <div class="stat-value">{{ featured_count }}</div>
+                {% endwith %}
+                <div class="stat-label">Featured</div>
+            </div>
+            <div class="stat-icon green">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

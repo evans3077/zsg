@@ -1,0 +1,77 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Conference Management{% endblock %}
+
+{% block content %}
+<h2>Conference Management</h2>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ room_stats.total }}</div>
+        <div class="stat-label">Total Rooms</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value">{{ room_stats.active }}</div>
+        <div class="stat-label">Active Rooms</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value">{{ room_stats.featured }}</div>
+        <div class="stat-label">Featured Rooms</div>
+    </div>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="margin: 0;">Conference Rooms</h3>
+        <a href="/admin/conferences/conferenceroom/add/" class="btn btn-gold">Add New Room</a>
+    </div>
+    
+    {% if rooms %}
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f8f9fa;">
+                <th style="padding: 0.75rem; text-align: left;">Room Name</th>
+                <th style="padding: 0.75rem; text-align: left;">Status</th>
+                <th style="padding: 0.75rem; text-align: left;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 0.75rem;">{{ room.name }}</td>
+                <td style="padding: 0.75rem;">
+                    {% if room.is_active %}
+                    <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">
+                        Active
+                    </span>
+                    {% else %}
+                    <span style="background: #f8d7da; color: #721c24; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">
+                        Inactive
+                    </span>
+                    {% endif %}
+                </td>
+                <td style="padding: 0.75rem;">
+                    <a href="/admin/conferences/conferenceroom/{{ room.id }}/change/" style="margin-right: 0.5rem;">Edit</a>
+                    <a href="/conferences/room/{{ room.slug }}/" target="_blank">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #666; text-align: center; padding: 2rem;">No rooms found.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Quick Links</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/admin/conferences/conferenceroom/" class="btn">All Rooms</a>
+        <a href="/admin/conferences/conferencepackage/" class="btn">All Packages</a>
+        <a href="/admin/conferences/conferencecategory/" class="btn">Categories</a>
+        <a href="/conferences/" target="_blank" class="btn">View Public Page</a>
+    </div>
+</div>
+{% endblock %}
