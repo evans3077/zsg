@@ -720,6 +720,7 @@
         background: var(--neutral-900);
         color: var(--neutral-300);
         padding: var(--space-10) 0 var(--space-6);
+        margin-top: var(--space-10);
     }
 
     .footer-grid {

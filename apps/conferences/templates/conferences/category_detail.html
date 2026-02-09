@@ -31,8 +31,11 @@
             {% for cat in all_categories %}
             <a href="{% url 'conferences:category_detail' cat.slug %}" 
                class="category-card {% if cat.slug == category.slug %}active{% endif %}">
-                <i class="{{ cat.icon }}"></i>
-                <div>
+                <div class="category-card-icon">
+                    <i class="{{ cat.icon }}"></i>
+                </div>
+                <div class="category-card-content">
+
                     <h3>{{ cat.name }}</h3>
                     <p>{{ cat.description|truncatewords:8 }}</p>
                 </div>
@@ -54,11 +57,13 @@
         <div class="rooms-grid">
             {% for room in rooms %}
             <div class="room-card {% if room.is_featured %}room-card-featured{% endif %}">
-                <div class="room-image">
+                <div class="room-image-container">
                     {% if room.featured_image %}
-                    <img src="{{ room.featured_image.url }}" alt="{{ room.name }}" loading="lazy">
+                    <img class="room-image" src="{{ room.featured_image.url }}" alt="{{ room.name }}" loading="lazy">>
                     {% else %}
-                    <i class="fas fa-building fa-4x"></i>
+                    <div class="room-image-placeholder">
+                        <i class="fas fa-building fa-4x"></i>
+                    </div>
                     {% endif %}
                     {% if room.room_type == 'executive' %}
                     <span class="room-badge">Executive</span>
