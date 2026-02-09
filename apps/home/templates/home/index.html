@@ -2,9 +2,23 @@
 {% block title %}Home - Zamar Springs Gardens{% endblock %}
 
 {% block content %}
+
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="container">
+    <div class="hero-slider" aria-hidden="true">
+        <div class="hero-slide is-active">
+            <img src="/media/conferences/gallery/banquet-meeting-room-machakos-2.webp" alt="" loading="eager" decoding="async">
+        </div>
+        <div class="hero-slide">
+            <img src="/media/conferences/gallery/executive-board-room-machakos-1.webp" alt="" loading="lazy" decoding="async">
+        </div>
+        <div class="hero-slide">
+            <img src="/media/conferences/gallery/classroom-conference-hall-machakos-2.webp" alt="" loading="lazy" decoding="async">
+        </div>
+    </div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+   
+   <div class="container">
         <div class="hero-content">
             <h1 class="hero-title">Zamar Springs Gardens</h1>
             <p class="hero-subtitle">A serene, non-alcoholic garden venue for conferences, events, dining, and family fun - just 45 minutes from Nairobi</p>

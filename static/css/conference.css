@@ -311,6 +311,33 @@
     overflow: hidden;
 }
 
+.conference-why {
+    margin-bottom: var(--space-8);
+}
+
+.conference-intro .text-center {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.facility-cta {
+    margin-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .facility-cta {
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--space-4);
+    }
+}
+
+
 /* ===== ROOM CARDS - ENHANCED ===== */
 .rooms-section {
     padding: var(--space-3xl) 0;
@@ -362,6 +389,7 @@
     mask-composite: exclude;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .room-card:hover::after {
@@ -599,6 +627,7 @@
     mask-composite: exclude;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .package-card:hover::before {
@@ -619,12 +648,12 @@
     content: '🔥 Most Popular';
     position: absolute;
     top: var(--space-md);
-    right: var(--space-md);
+    left: var(--space-md);
     background: linear-gradient(135deg, var(--gold-dark), var(--gold-darker));
     color: white;
     padding: 0.5rem 1.25rem;
     border-radius: 3rem;
-    font-size: 0.75rem;
+    font-size: 0.5rem;
     font-weight: 700;
     z-index: 10;
     text-transform: uppercase;
@@ -885,6 +914,36 @@
     margin-bottom: var(--space-2xl);
 }
 
+.facility-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.facility-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    background: var(--neutral-50);
+    border: 1px solid var(--neutral-200);
+    color: var(--neutral-700);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.facility-nav-link:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-medium);
+    color: var(--gold-darker);
+    transform: translateY(-1px);
+}
+
+
 .room-detail-title {
     font-family: var(--font-serif);
     font-size: clamp(2rem, 4vw, 3rem);
@@ -1083,6 +1142,10 @@
     border: 2px solid var(--gold-light);
     position: sticky;
     top: 120px;
+}
+
+.booking-cta {
+    margin-top: var(--space-4);
 }
 
 .booking-sidebar h3 {

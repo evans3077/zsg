@@ -42,6 +42,15 @@
             </div>
         </div>
 
+        <div class="facility-nav">
+                {% for category in conference_categories %}
+                <a class="facility-nav-link" href="{% url 'conferences:category_detail' category.slug %}">
+                    <i class="{{ category.icon }}"></i>
+                    {{ category.name }}
+                </a>
+                {% endfor %}
+            </div>
+
         <div class="room-detail-content">
             <!-- Main Content -->
             <div class="room-detail-main">

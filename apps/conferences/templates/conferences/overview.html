@@ -19,7 +19,7 @@
 </section>
 
 <!-- Introduction -->
-<section class="section-padding">
+<section class="section-padding conference-intro">
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Perfect Meeting Environment</h2>
@@ -131,7 +131,7 @@
                     <div class="package-includes">
                         <h4>Includes:</h4>
                         <ul>
-                            {% for item in package.includes|linebreaksbr|slice:":3" %}
+                            {% for item in package.includes.splitlines|slice:":3" %}
                             {% if item.strip %}
                             <li><i class="fas fa-check-circle"></i> {{ item|truncatewords:8 }}</li>
                             {% endif %}
@@ -152,7 +152,7 @@
 </section>
 
 <!-- Why Choose Us -->
-<section class="section-padding bg-gold-light">
+<section class="section-padding bg-gold-light conference-why">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Why Choose Our Facilities?</h2>

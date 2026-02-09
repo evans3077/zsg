@@ -149,8 +149,8 @@
             <p class="section-subtitle">We can create a package tailored to your specific needs</p>
         </div>
         
-        <div style="background: white; border-radius: 1rem; padding: var(--space-8); max-width: 800px; margin: 0 auto; box-shadow: var(--shadow-md);">
-            <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-6);">
+        <div lass="custom-package-card">
+            <div class="custom-package-content">
                 <div>
                     <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-3); color: var(--neutral-900);">
                         Build Your Own Package
@@ -159,27 +159,27 @@
                         Don't see what you need? We can customize a package including:
                     </p>
                 </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
-                    <div style="text-align: center; padding: var(--space-4);">
+
+                <div class="custom-package-grid">
+                    <div class="custom-package-item">
                         <i class="fas fa-door-open fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
                         <p style="font-weight: 600;">Flexible Room Selection</p>
                         <p style="color: var(--neutral-600); font-size: 0.875rem;">Choose any available room</p>
                     </div>
                     
-                    <div style="text-align: center; padding: var(--space-4);">
+                    <div class="custom-package-item">
                         <i class="fas fa-utensils fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
                         <p style="font-weight: 600;">Custom Catering</p>
                         <p style="color: var(--neutral-600); font-size: 0.875rem;">Tailored menu options</p>
                     </div>
                     
-                    <div style="text-align: center; padding: var(--space-4);">
+                    <div class="custom-package-item">
                         <i class="fas fa-tools fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
                         <p style="font-weight: 600;">Special Equipment</p>
                         <p style="color: var(--neutral-600); font-size: 0.875rem;">Additional AV equipment</p>
                     </div>
                     
-                    <div style="text-align: center; padding: var(--space-4);">
+                    <div class="custom-package-item">
                         <i class="fas fa-clock fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
                         <p style="font-weight: 600;">Flexible Timing</p>
                         <p style="color: var(--neutral-600); font-size: 0.875rem;">Extended or multiple days</p>
@@ -205,16 +205,16 @@
             <p class="section-subtitle">Get in touch to book a package or request more information</p>
         </div>
         
-        <div style="max-width: 800px; margin: 0 auto;">
+        <div class="package-inquiry">
             <form class="booking-form" method="post" action="#">
                 {% csrf_token %}
-                <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-6);">
+                <div class="booking-form-grid">
                     <div>
                         <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
                             Your Details
                         </h3>
                         
-                        <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-4);">
+                        <div class="booking-form-fields">
                             <div class="form-group">
                                 <label for="inquiry_name">Full Name *</label>
                                 <input type="text" id="inquiry_name" name="name" required>
@@ -242,7 +242,7 @@
                             Package Details
                         </h3>
                         
-                        <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-4);">
+                        <div class="booking-form-fields">
                             <div class="form-group">
                                 <label for="package_selection">Package Interest *</label>
                                 <select id="package_selection" name="package" required>
