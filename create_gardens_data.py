@@ -16,18 +16,20 @@ from gardens.models import GardensPage, Garden, EventType
 
 def create_sample_data():
     # Create Gardens Page
-    page, created = GardensPage.objects.get_or_create(
-        defaults={
-            'hero_title': 'Gardens & Events',
-            'hero_subtitle': 'Beautiful garden venues for weddings, events, and celebrations in a serene, non-alcoholic environment',
-            'intro_text': 'From intimate garden weddings to large corporate events, our beautifully maintained gardens provide the perfect backdrop for your special occasions.',
-            'why_title': 'Why Choose Our Gardens',
-            'why_subtitle': 'Experience the perfect blend of natural beauty and professional event hosting',
-            'meta_title': 'Gardens & Events | Zamar Springs Gardens',
-            'meta_description': 'Beautiful garden venues for weddings, birthdays, corporate events and photoshoots in Machakos',
-            'meta_keywords': 'garden weddings, event venues, birthday parties, photoshoots, machakos',
-            'is_active': True,
-        }
+    page_defaults = {
+        'hero_title': 'Gardens & Events',
+        'hero_subtitle': 'Beautiful garden venues for weddings, events, and celebrations in a serene, non-alcoholic environment',
+        'intro_text': 'From intimate garden weddings to large corporate events, our beautifully maintained gardens provide the perfect backdrop for your special occasions.',
+        'why_title': 'Why Choose Our Gardens',
+        'why_subtitle': 'Experience the perfect blend of natural beauty and professional event hosting',
+        'meta_title': 'Gardens & Events | Zamar Springs Gardens',
+        'meta_description': 'Beautiful garden venues for weddings, birthdays, corporate events and photoshoots in Machakos',
+        'meta_keywords': 'garden weddings, event venues, birthday parties, photoshoots, machakos',
+        'is_active': True,
+    }
+    page, created = GardensPage.objects.update_or_create(
+        pk=1,
+        defaults=page_defaults,
     )
     
     # Create Gardens
@@ -68,7 +70,7 @@ def create_sample_data():
     ]
     
     for garden_data in gardens_data:
-        garden, created = Garden.objects.get_or_create(
+        Garden.objects.update_or_create(
             slug=garden_data['slug'],
             defaults={
                 **garden_data,
@@ -79,7 +81,7 @@ def create_sample_data():
                 'has_parking': True,
                 'is_wheelchair_accessible': True,
                 'is_active': True,
-            }
+            },
         )
     
     # Create Event Types - Weddings
@@ -111,9 +113,9 @@ def create_sample_data():
     ]
     
     for event_data in wedding_events:
-        event, created = EventType.objects.get_or_create(
+        EventType.objects.update_or_create(
             slug=event_data['slug'],
-            defaults=event_data
+            defaults=event_data,
         )
     
     # Create Event Types - Private Events
@@ -176,9 +178,9 @@ def create_sample_data():
     ]
     
     for event_data in private_events:
-        event, created = EventType.objects.get_or_create(
+        EventType.objects.update_or_create(
             slug=event_data['slug'],
-            defaults=event_data
+            defaults=event_data,
         )
     
     # Create Event Types - General Events
@@ -230,15 +232,15 @@ def create_sample_data():
     ]
     
     for event_data in general_events:
-        event, created = EventType.objects.get_or_create(
+        EventType.objects.update_or_create(
             slug=event_data['slug'],
-            defaults=event_data
+            defaults=event_data,
         )
     
-    print("✅ Gardens sample data created successfully!")
-    print(f"📊 Created: {GardensPage.objects.count()} page settings")
-    print(f"🌿 Created: {Garden.objects.count()} gardens")
-    print(f"🎉 Created: {EventType.objects.count()} event types")
+    print("Gardens sample data created successfully!")
+    print(f"Created: {GardensPage.objects.count()} page settings")
+    print(f"Created: {Garden.objects.count()} gardens")
+    print(f"Created: {EventType.objects.count()} event types")
 
 if __name__ == '__main__':
     create_sample_data()

@@ -3,8 +3,8 @@
 {% load static %}
 
 {% block title %}{{ page_settings.meta_title|default:"Gardens & Events" }} | Zamar Springs Gardens{% endblock %}
-{% block meta_description %}{{ page_settings.meta_description }}{% endblock %}
-{% block meta_keywords %}{{ page_settings.meta_keywords }}{% endblock %}
+{% block meta_description %}{{ page_settings.meta_description|default:"Beautiful garden venues for weddings, birthdays, corporate events and photoshoots in Machakos." }}{% endblock %}
+{% block meta_keywords %}{{ page_settings.meta_keywords|default:"garden weddings, event venues, birthday parties, photoshoots, machakos" }}{% endblock %}
 
 {% block gardens_content %}
 <!-- Hero Section -->

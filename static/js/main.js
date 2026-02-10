@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Smooth Scrolling
     initSmoothScrolling();
+
+    // Sub-navigation auto hide
+    initSubNavAutoHide();
     
     // Newsletter Form
     initNewsletterForm();
@@ -177,6 +180,43 @@ function initSmoothScrolling() {
             }
         });
     });
+}
+
+// Sub-navigation auto hide (Gardens & Conferences)
+function initSubNavAutoHide() {
+    const subnavs = document.querySelectorAll('.conference-nav, .gardens-nav');
+    if (!subnavs.length) return;
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const onScroll = () => {
+        const currentY = window.scrollY;
+        const scrollingDown = currentY > lastScrollY;
+
+        subnavs.forEach(nav => {
+            if (currentY < 120) {
+                nav.classList.remove('subnav-hidden');
+                return;
+            }
+
+            if (scrollingDown) {
+                nav.classList.add('subnav-hidden');
+            } else {
+                nav.classList.remove('subnav-hidden');
+            }
+        });
+
+        lastScrollY = currentY;
+        ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(onScroll);
+            ticking = true;
+        }
+    }, { passive: true });
 }
 
 // Newsletter Form

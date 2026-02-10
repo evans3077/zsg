@@ -1,10 +1,10 @@
 /* zamar_springs/static/css/gardens.css */
 /* ===== GARDENS CSS VARIABLES ===== */
 :root {
-    /* Gardens specific colors */
-    --gardens-primary: #2e7d32; /* Green theme for gardens */
-    --gardens-secondary: #e8f5e9;
-    --gardens-accent: #4caf50;
+    /* Gardens aligned with brand gold palette */
+    --gardens-primary: var(--gold-dark);
+    --gardens-secondary: var(--gold-light);
+    --gardens-accent: var(--gold-medium);
     
     /* Add these to your existing :root if they don't exist */
     --radius-sm: 0.5rem;
@@ -26,8 +26,14 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    
+
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
+    --card-shadow-elevated: 0 20px 40px rgba(0, 0, 0, 0.15);
+
     --transition-base: all 0.3s ease;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* ===== GARDENS NAVIGATION ===== */
@@ -39,6 +45,14 @@
     z-index: 999;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
     border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    will-change: transform;
+}
+
+.gardens-nav.subnav-hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .gardens-nav-list {
@@ -100,13 +114,13 @@
     align-items: center;
     background: 
         linear-gradient(135deg, 
-            rgba(23, 37, 42, 0.92) 0%, 
-            rgba(28, 49, 58, 0.94) 100%),
+            rgba(28, 25, 23, 0.92) 0%, 
+            rgba(41, 37, 36, 0.94) 100%),
         radial-gradient(circle at 20% 50%, 
-            rgba(46, 125, 50, 0.15) 0%, 
+            rgba(196, 167, 71, 0.15) 0%, 
             transparent 50%),
         radial-gradient(circle at 80% 20%, 
-            rgba(76, 175, 80, 0.1) 0%, 
+            rgba(156, 126, 46, 0.12) 0%, 
             transparent 50%);
     color: white;
     padding: 140px 0 80px;
@@ -128,10 +142,10 @@
     font-size: clamp(2.5rem, 5vw, 4rem);
     line-height: 1.1;
     margin-bottom: var(--space-md);
-    color: #a5d6a7;
+    color: var(--gold-medium);
     font-weight: 700;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #a5d6a7 0%, #fff 100%);
+    background: linear-gradient(135deg, var(--gold-medium) 0%, #fff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -181,7 +195,7 @@
 }
 
 .garden-card-featured::before {
-    content: '⭐ Featured';
+    content: 'Featured';
     position: absolute;
     top: var(--space-md);
     right: var(--space-md);
@@ -474,10 +488,383 @@
     margin: 0;
 }
 
+/* ===== UTILITIES ===== */
+.bg-gardens-secondary {
+    background: var(--gardens-secondary);
+}
+
+.room-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: auto;
+}
+
+.room-actions .btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.room-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: white;
+    background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-700) 100%);
+}
+
+/* ===== DETAIL PAGES ===== */
+.room-detail {
+    padding: var(--space-3xl) 0;
+    background: linear-gradient(180deg, var(--neutral-50) 0%, white 100%);
+}
+
+.room-detail-header {
+    margin-bottom: var(--space-2xl);
+}
+
+.room-detail-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--neutral-900);
+    margin-bottom: var(--space-md);
+    font-weight: 700;
+    line-height: 1.2;
+    position: relative;
+    padding-bottom: var(--space-md);
+}
+
+.room-detail-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold-medium), var(--gold-dark));
+    border-radius: 2px;
+}
+
+.room-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    color: var(--neutral-700);
+    margin-top: var(--space-lg);
+}
+
+.room-detail-meta > div {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.75rem 1.25rem;
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--neutral-200);
+    transition: var(--transition-smooth);
+}
+
+.room-detail-meta > div:hover {
+    border-color: var(--gold-medium);
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+.room-detail-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+}
+
+.room-detail-main .room-section {
+    margin-bottom: var(--space-2xl);
+}
+
+.room-detail-sidebar {
+    position: relative;
+}
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--neutral-50);
+    border: 2px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-smooth);
+}
+
+.amenity-item:hover {
+    border-color: var(--gold-medium);
+    background: var(--gold-light);
+    transform: translateX(6px);
+}
+
+.amenity-item i {
+    color: var(--gold-dark);
+    font-size: 1.5rem;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.amenity-item span {
+    font-weight: 600;
+    color: var(--neutral-800);
+    font-size: 0.9375rem;
+}
+
+.booking-sidebar {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    box-shadow: var(--card-shadow-elevated);
+    border: 2px solid var(--gold-light);
+    position: sticky;
+    top: 120px;
+}
+
+.booking-cta {
+    margin-top: var(--space-4);
+}
+
+/* ===== BOOKING FORMS ===== */
+.booking-form {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--neutral-200);
+}
+
+.booking-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+.booking-form-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
+.booking-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.booking-form label {
+    font-weight: 600;
+    color: var(--neutral-800);
+    font-size: 0.9375rem;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--neutral-300);
+    border-radius: 0.75rem;
+    background: white;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--neutral-800);
+    transition: var(--transition-smooth);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.booking-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.booking-form input:focus,
+.booking-form select:focus,
+.booking-form textarea:focus {
+    outline: none;
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 3px rgba(196, 167, 71, 0.2);
+}
+
+.booking-form select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gold-dark) 50%),
+        linear-gradient(135deg, var(--gold-dark) 50%, transparent 50%);
+    background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 2.5rem;
+}
+
+/* ===== HIGHLIGHTS & CTA ===== */
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-2xl);
+}
+
+.highlight-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-bounce);
+    border: 2px solid var(--neutral-200);
+    position: relative;
+    overflow: hidden;
+}
+
+.highlight-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold-medium), var(--gold-dark));
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.highlight-card:hover::before {
+    transform: translateX(0);
+}
+
+.highlight-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--card-shadow-elevated);
+    border-color: var(--gold-medium);
+}
+
+.highlight-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--gold-medium) 0%, var(--gold-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-md);
+    color: white;
+    font-size: 1.75rem;
+    transition: var(--transition-smooth);
+}
+
+.highlight-card:hover .highlight-icon {
+    transform: rotateY(180deg) scale(1.1);
+}
+
+.highlight-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-sm);
+    color: var(--neutral-900);
+    font-weight: 700;
+}
+
+.highlight-card p {
+    color: var(--neutral-600);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.cta-section {
+    padding: var(--space-3xl) 0;
+    background: 
+        linear-gradient(135deg, var(--neutral-900) 0%, var(--neutral-800) 100%),
+        radial-gradient(circle at 10% 20%, rgba(196, 167, 71, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(156, 126, 46, 0.2) 0%, transparent 40%);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 30s linear infinite;
+}
+
+@keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+
+.cta-content {
+    position: relative;
+    z-index: 10;
+}
+
+.cta-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: var(--space-md);
+    color: var(--gold-medium);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--gold-medium) 0%, #fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cta-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-2xl);
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto var(--space-2xl);
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.cta-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    justify-content: center;
+    margin-bottom: var(--space-2xl);
+}
+
+@media (min-width: 640px) {
+    .cta-actions {
+        flex-direction: row;
+    }
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
+    .gardens-hero {
+        min-height: 400px;
+        padding: 120px 0 60px;
+    }
+
     .gardens-nav-list {
+        overflow-x: hidden;
+        flex-wrap: wrap;
+        justify-content: center;
         padding: var(--space-sm) var(--space-md);
+        gap: var(--space-sm);
     }
     
     .gardens-grid,
@@ -489,11 +876,54 @@
     .gardens-category-grid {
         grid-template-columns: 1fr;
     }
+
+    .room-actions {
+        flex-direction: column;
+    }
+
+    .room-actions .btn {
+        width: 100%;
+    }
+
+    .room-detail-meta {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .amenities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .booking-form {
+        padding: var(--space-6);
+    }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
     .gardens-grid,
     .event-types-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .amenities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .garden-image-container {
+        max-height: 200px;
+    }
+}
+
+@media (min-width: 900px) {
+    .booking-form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-8);
+    }
+
+    .room-detail-content {
+        grid-template-columns: 2fr 1fr;
+        gap: var(--space-3xl);
     }
 }

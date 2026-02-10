@@ -124,6 +124,14 @@
     z-index: 1000;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
     border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    will-change: transform;
+}
+
+.conference-nav.subnav-hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .conf-nav-list {
@@ -194,6 +202,16 @@
         flex-wrap: wrap;
         justify-content: center;
         padding: var(--space-md) 0;
+        gap: var(--space-sm);
+    }
+}
+
+@media (max-width: 767px) {
+    .conf-nav-list {
+        overflow-x: hidden;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: var(--space-sm) var(--space-md);
         gap: var(--space-sm);
     }
 }
