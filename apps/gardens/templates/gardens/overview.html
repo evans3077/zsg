@@ -1,0 +1,386 @@
+<!-- zamar_springs/apps/gardens/templates/gardens/overview.html -->
+{% extends "gardens/base.html" %}
+{% load static %}
+
+{% block title %}{{ page_settings.meta_title|default:"Gardens & Events" }} | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}{{ page_settings.meta_description }}{% endblock %}
+{% block meta_keywords %}{{ page_settings.meta_keywords }}{% endblock %}
+
+{% block gardens_content %}
+<!-- Hero Section -->
+<section class="gardens-hero">
+    <div class="container">
+        <div class="gardens-hero-content">
+            <h1 class="gardens-hero-title">{{ page_settings.hero_title }}</h1>
+            <p class="gardens-hero-subtitle">{{ page_settings.hero_subtitle }}</p>
+            <a href="#categories" class="btn btn-gold btn-large">
+                <i class="fas fa-search"></i> Explore Our Gardens
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+            <h2 class="section-title">Perfect Events in Nature</h2>
+            <p class="section-subtitle" style="font-size: 1.125rem;">
+                {{ page_settings.intro_text }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Category Navigation -->
+<section class="gardens-category-nav" id="categories">
+    <div class="container">
+        <h2 class="section-title text-center" style="margin-bottom: 2rem;">What We Offer</h2>
+        <div class="gardens-category-grid">
+            <a href="{% url 'gardens:gardens_list' %}" class="garden-category-card">
+                <div class="garden-category-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h3 class="garden-category-title">Our Gardens</h3>
+                <p class="garden-category-description">
+                    Beautiful garden venues for all types of events
+                </p>
+            </a>
+            
+            <a href="{% url 'gardens:weddings' %}" class="garden-category-card">
+                <div class="garden-category-icon">
+                    <i class="fas fa-ring"></i>
+                </div>
+                <h3 class="garden-category-title">Weddings</h3>
+                <p class="garden-category-description">
+                    Romantic garden weddings and receptions
+                </p>
+            </a>
+            
+            <a href="{% url 'gardens:private_events' %}" class="garden-category-card">
+                <div class="garden-category-icon">
+                    <i class="fas fa-birthday-cake"></i>
+                </div>
+                <h3 class="garden-category-title">Private Events</h3>
+                <p class="garden-category-description">
+                    Celebrations with family and friends
+                </p>
+            </a>
+            
+            <a href="{% url 'gardens:general_events' %}" class="garden-category-card">
+                <div class="garden-category-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="garden-category-title">General Events</h3>
+                <p class="garden-category-description">
+                    Corporate and group gatherings
+                </p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Gardens -->
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Our Featured Gardens</h2>
+            <p class="section-subtitle">Most popular garden venues for events</p>
+        </div>
+        
+        {% if featured_gardens %}
+        <div class="gardens-grid">
+            {% for garden in featured_gardens %}
+            <div class="garden-card {% if garden.is_featured %}garden-card-featured{% endif %}">
+                <div class="garden-image-container">
+                    {% if garden.featured_image %}
+                    <img class="garden-image" src="{{ garden.featured_image.url }}" alt="{{ garden.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder">
+                        <i class="fas fa-tree fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <span class="garden-badge">{{ garden.garden_type|title }}</span>
+                </div>
+                
+                <div class="garden-content">
+                    <div class="garden-header">
+                        <div>
+                            <h3 class="garden-title">{{ garden.name }}</h3>
+                            <p style="color: var(--neutral-600); font-size: 0.875rem;">
+                                {{ garden.area }}
+                            </p>
+                        </div>
+                        <div class="garden-capacity">
+                            <i class="fas fa-users"></i>
+                            {{ garden.capacity }}
+                        </div>
+                    </div>
+                    
+                    <p class="garden-description">
+                        {{ garden.description|truncatewords:25 }}
+                    </p>
+                    
+                    <div class="garden-features">
+                        {% if garden.has_covered_area %}
+                        <span class="garden-feature">
+                            <i class="fas fa-umbrella-beach"></i>
+                            Covered Area
+                        </span>
+                        {% endif %}
+                        {% if garden.has_parking %}
+                        <span class="garden-feature">
+                            <i class="fas fa-parking"></i>
+                            Parking
+                        </span>
+                        {% endif %}
+                        {% if garden.has_lighting %}
+                        <span class="garden-feature">
+                            <i class="fas fa-lightbulb"></i>
+                            Lighting
+                        </span>
+                        {% endif %}
+                        {% if garden.is_wheelchair_accessible %}
+                        <span class="garden-feature">
+                            <i class="fas fa-wheelchair"></i>
+                            Accessible
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="room-actions">
+                        <a href="{% url 'gardens:garden_detail' garden.slug %}" class="btn btn-gold">
+                            View Details
+                        </a>
+                        <a href="#inquiry" class="btn btn-outline-gold">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="text-center" style="margin-top: var(--space-8);">
+            <a href="{% url 'gardens:gardens_list' %}" class="btn btn-outline-gold btn-large">
+                <i class="fas fa-trees"></i>
+                View All Gardens
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">{{ page_settings.why_title }}</h2>
+            <p class="section-subtitle">{{ page_settings.why_subtitle }}</p>
+        </div>
+        
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-glass-whiskey"></i>
+                </div>
+                <h3>Non-Alcoholic</h3>
+                <p>Family-friendly environment for all ages</p>
+            </div>
+            
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h3>Natural Beauty</h3>
+                <p>Beautifully maintained gardens and landscapes</p>
+            </div>
+            
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Secure & Private</h3>
+                <p>Safe and exclusive environment for your event</p>
+            </div>
+            
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i class="fas fa-concierge-bell"></i>
+                </div>
+                <h3>Full Service</h3>
+                <p>Event planning and support services available</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="section-padding bg-gardens-secondary">
+    <div class="container">
+        <div class="text-center">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-8);">
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--gardens-primary); margin-bottom: var(--space-2);">
+                        3+
+                    </div>
+                    <div style="font-weight: 600; color: var(--neutral-800);">Beautiful Gardens</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--gardens-primary); margin-bottom: var(--space-2);">
+                        1000+
+                    </div>
+                    <div style="font-weight: 600; color: var(--neutral-800);">Max Capacity</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--gardens-primary); margin-bottom: var(--space-2);">
+                        12+
+                    </div>
+                    <div style="font-weight: 600; color: var(--neutral-800);">Event Types</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--gardens-primary); margin-bottom: var(--space-2);">
+                        45min
+                    </div>
+                    <div style="font-weight: 600; color: var(--neutral-800);">From Nairobi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Plan Your Perfect Event</h2>
+            <p class="cta-subtitle">Contact us to discuss your event requirements and get a customized quote</p>
+            
+            <div class="cta-actions">
+                <a href="tel:+254112394681" class="btn btn-gold btn-large">
+                    <i class="fas fa-phone"></i> Call Now
+                </a>
+                <a href="#inquiry" class="btn btn-outline-gold btn-large">
+                    <i class="fas fa-envelope"></i> Send Inquiry
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Inquiry Form -->
+<section class="section-padding" id="inquiry">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Event Inquiry</h2>
+            <p class="section-subtitle">Get in touch for availability and pricing</p>
+        </div>
+        
+        <div style="max-width: 800px; margin: 0 auto;">
+            <form class="booking-form" method="post" action="#">
+                {% csrf_token %}
+                <div class="booking-form-grid">
+                    <div>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                            Your Details
+                        </h3>
+                        
+                        <div class="booking-form-fields">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                            Event Details
+                        </h3>
+                        
+                        <div class="booking-form-fields">
+                            <div class="form-group">
+                                <label for="event_type">Event Type *</label>
+                                <select id="event_type" name="event_type" required>
+                                    <option value="">Select event type</option>
+                                    <option value="wedding">Wedding</option>
+                                    <option value="birthday">Birthday Party</option>
+                                    <option value="corporate">Corporate Event</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="event_date">Preferred Date *</label>
+                                <input type="date" id="event_date" name="event_date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="attendees">Estimated Guests *</label>
+                                <input type="number" id="attendees" name="attendees" min="1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Event Description</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Tell us about your event..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: var(--space-8);">
+                    <button type="submit" class="btn btn-gold btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Inquiry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const dateInput = document.getElementById('event_date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+    
+    // Form submission
+    const inquiryForm = document.querySelector('.booking-form');
+    if (inquiryForm) {
+        inquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate submission
+            setTimeout(() => {
+                alert('Thank you for your inquiry! We\'ll contact you within 24 hours with availability and pricing.');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+    }
+});
+</script>
+{% endblock %}

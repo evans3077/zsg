@@ -1,0 +1,309 @@
+<!-- zamar_springs/apps/gardens/templates/gardens/category_detail.html -->
+{% extends "gardens/base.html" %}
+{% load static %}
+
+{% block title %}{{ category }} | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}{{ category_description }}{% endblock %}
+
+{% block gardens_content %}
+<!-- Hero Section -->
+<section class="gardens-hero">
+    <div class="container">
+        <div class="gardens-hero-content">
+            <h1 class="gardens-hero-title">{{ category }}</h1>
+            <p class="gardens-hero-subtitle">{{ category_description }}</p>
+            <a href="#events" class="btn btn-gold btn-large">
+                <i class="fas fa-calendar-alt"></i>
+                View Event Options
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Event Types -->
+<section class="section-padding" id="events">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">{{ category }} Services</h2>
+            <p class="section-subtitle">Choose from our range of {{ category|lower }} services</p>
+        </div>
+        
+        {% if event_types %}
+        <div class="event-types-grid">
+            {% for event in event_types %}
+            <div class="event-type-card">
+                <div class="event-type-header">
+                    <div class="event-type-icon">
+                        <i class="{{ event.icon }}"></i>
+                    </div>
+                    <h3 class="event-type-title">{{ event.name }}</h3>
+                </div>
+                
+                <p class="event-type-description">
+                    {{ event.description }}
+                </p>
+                
+                {% if event.detailed_description %}
+                <div style="margin-bottom: var(--space-lg);">
+                    <p style="font-weight: 600; color: var(--neutral-800); margin-bottom: var(--space-2);">
+                        Details:
+                    </p>
+                    <p style="color: var(--neutral-700); font-size: 0.9375rem; line-height: 1.5;">
+                        {{ event.detailed_description }}
+                    </p>
+                </div>
+                {% endif %}
+                
+                {% if event.includes %}
+                <div style="margin-bottom: var(--space-lg);">
+                    <p style="font-weight: 600; color: var(--neutral-800); margin-bottom: var(--space-2);">
+                        Includes:
+                    </p>
+                    <ul style="color: var(--neutral-700); font-size: 0.9375rem; line-height: 1.6; padding-left: var(--space-4);">
+                        {% for item in event.includes.splitlines|slice:":3" %}
+                        {% if item.strip %}
+                        <li>{{ item }}</li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if event.includes.splitlines|length > 3 %}
+                        <li>And more...</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                {% if event.starting_price %}
+                <div class="event-type-price">
+                    Starting from Ksh {{ event.starting_price|floatformat:0 }}
+                </div>
+                {% endif %}
+                
+                <div class="room-actions" style="margin-top: var(--space-lg);">
+                    <a href="#inquiry" class="btn btn-gold" onclick="selectEvent('{{ event.name }}')">
+                        <i class="fas fa-calendar-check"></i>
+                        Book Now
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center" style="padding: var(--space-12) 0;">
+            <i class="fas fa-calendar-times fa-4x" style="color: var(--neutral-400); margin-bottom: var(--space-4);"></i>
+            <h3 style="margin-bottom: var(--space-2); color: var(--neutral-700);">No {{ category|lower }} services available</h3>
+            <p style="color: var(--neutral-600); max-width: 400px; margin: 0 auto;">
+                Please check back later or contact us for custom event planning.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Suitable Gardens -->
+{% if gardens %}
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Recommended Gardens</h2>
+            <p class="section-subtitle">Perfect garden venues for {{ category|lower }}</p>
+        </div>
+        
+        <div class="gardens-grid">
+            {% for garden in gardens|slice:":3" %}
+            <div class="garden-card">
+                <div class="garden-image-container">
+                    {% if garden.featured_image %}
+                    <img class="garden-image" src="{{ garden.featured_image.url }}" alt="{{ garden.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder">
+                        <i class="fas fa-tree fa-3x"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="garden-content">
+                    <div class="garden-header">
+                        <div>
+                            <h3 class="garden-title">{{ garden.name }}</h3>
+                            <p style="color: var(--neutral-600); font-size: 0.875rem;">
+                                {{ garden.area }}
+                            </p>
+                        </div>
+                        <div class="garden-capacity">
+                            <i class="fas fa-users"></i>
+                            {{ garden.capacity }}
+                        </div>
+                    </div>
+                    
+                    <p class="garden-description">
+                        {{ garden.description|truncatewords:20 }}
+                    </p>
+                    
+                    <div class="room-actions">
+                        <a href="{% url 'gardens:garden_detail' garden.slug %}" class="btn btn-gold">
+                            View Garden
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center" style="margin-top: var(--space-8);">
+            <a href="{% url 'gardens:gardens_list' %}" class="btn btn-outline-gold">
+                <i class="fas fa-trees"></i>
+                View All Gardens
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Plan Your {{ category }}?</h2>
+            <p class="cta-subtitle">Contact us for availability, pricing, and customized packages</p>
+            
+            <div class="cta-actions">
+                <a href="tel:+254112394681" class="btn btn-gold btn-large">
+                    <i class="fas fa-phone"></i> Call Now
+                </a>
+                <a href="#inquiry" class="btn btn-outline-gold btn-large">
+                    <i class="fas fa-envelope"></i> Send Inquiry
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Inquiry Form -->
+<section class="section-padding" id="inquiry">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">{{ category }} Inquiry</h2>
+            <p class="section-subtitle">Get a customized quote for your event</p>
+        </div>
+        
+        <div style="max-width: 800px; margin: 0 auto;">
+            <form class="booking-form" method="post" action="#">
+                {% csrf_token %}
+                <input type="hidden" name="event_category" value="{{ category }}">
+                
+                <div class="booking-form-fields">
+                    <div class="form-group">
+                        <label for="event_selection">Event Type *</label>
+                        <select id="event_selection" name="event_type" required>
+                            <option value="">Select event type</option>
+                            {% for event in event_types %}
+                            <option value="{{ event.name }}">{{ event.name }}</option>
+                            {% endfor %}
+                            <option value="custom">Custom Package</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inquiry_name">Full Name *</label>
+                        <input type="text" id="inquiry_name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inquiry_email">Email Address *</label>
+                        <input type="email" id="inquiry_email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inquiry_phone">Phone Number *</label>
+                        <input type="tel" id="inquiry_phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event_date">Preferred Date *</label>
+                        <input type="date" id="event_date" name="event_date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendees_count">Estimated Guests *</label>
+                        <input type="number" id="attendees_count" name="attendees" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additional_info">Additional Information</label>
+                        <textarea id="additional_info" name="message" rows="4" placeholder="Tell us about your event requirements, preferred garden, budget, etc."></textarea>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: var(--space-8);">
+                    <button type="submit" class="btn btn-gold btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Send {{ category }} Inquiry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Overview -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center">
+            <a href="{% url 'gardens:overview' %}" class="btn btn-gold btn-large">
+                <i class="fas fa-arrow-left"></i>
+                Back to Gardens Overview
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function selectEvent(eventName) {
+    const select = document.getElementById('event_selection');
+    if (select) {
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].text === eventName) {
+                select.selectedIndex = i;
+                break;
+            }
+        }
+    }
+    
+    // Scroll to inquiry form
+    document.getElementById('inquiry').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date
+    const dateInput = document.getElementById('event_date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+    
+    // Form submission
+    const inquiryForm = document.querySelector('.booking-form');
+    if (inquiryForm) {
+        inquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate submission
+            setTimeout(() => {
+                alert('Thank you! Your {{ category }} inquiry has been sent. We\'ll contact you within 24 hours.');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+    }
+});
+</script>
+{% endblock %}

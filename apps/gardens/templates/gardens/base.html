@@ -1,0 +1,50 @@
+<!-- zamar_springs/apps/gardens/templates/gardens/base.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/gardens.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Gardens Navigation -->
+<nav class="gardens-nav">
+    <div class="container">
+        <ul class="gardens-nav-list">
+            <li>
+                <a href="{% url 'gardens:overview' %}" 
+                   class="{% if request.resolver_match.url_name == 'overview' %}active{% endif %}">
+                    Overview
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'gardens:gardens_list' %}" 
+                   class="{% if request.resolver_match.url_name == 'gardens_list' %}active{% endif %}">
+                    Our Gardens
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'gardens:weddings' %}" 
+                   class="{% if request.resolver_match.url_name == 'weddings' %}active{% endif %}">
+                    Weddings
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'gardens:private_events' %}" 
+                   class="{% if request.resolver_match.url_name == 'private_events' %}active{% endif %}">
+                    Private Events
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'gardens:general_events' %}" 
+                   class="{% if request.resolver_match.url_name == 'general_events' %}active{% endif %}">
+                    General Events
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{% block gardens_content %}
+{% endblock %}
+{% endblock %}

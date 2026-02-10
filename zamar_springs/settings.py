@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'conferences.context_processors.conference_categories',
+                'gardens.context_processors.gardens_categories',
             ],
         },
     },

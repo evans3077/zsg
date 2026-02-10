@@ -1,0 +1,393 @@
+<!-- zamar_springs/apps/gardens/templates/gardens/garden_detail.html -->
+{% extends "gardens/base.html" %}
+{% load static %}
+
+{% block title %}{{ garden.name }} - {{ garden.capacity }} pax | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}{{ garden.description|truncatewords:30 }}{% endblock %}
+
+{% block gardens_content %}
+<div class="room-detail">
+    <div class="container">
+        <!-- Garden Header -->
+        <div class="room-detail-header">
+            <nav style="margin-bottom: var(--space-4);">
+                <a href="{% url 'gardens:overview' %}" class="text-gold" style="text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i> Gardens Overview
+                </a>
+                <span style="color: var(--neutral-400); margin: 0 var(--space-2);">/</span>
+                <a href="{% url 'gardens:gardens_list' %}" class="text-gold" style="text-decoration: none;">
+                    Our Gardens
+                </a>
+            </nav>
+            
+            <h1 class="room-detail-title">{{ garden.name }}</h1>
+            
+            <div class="room-detail-meta">
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                    <i class="fas fa-users" style="color: var(--gardens-primary);"></i>
+                    <span>Capacity: <strong>{{ garden.capacity }} people</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                    <i class="fas fa-ruler-combined" style="color: var(--gardens-primary);"></i>
+                    <span>Area: <strong>{{ garden.area }}</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                    <i class="fas fa-tree" style="color: var(--gardens-primary);"></i>
+                    <span>Type: <strong>{{ garden.get_garden_type_display }}</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="room-detail-content">
+            <!-- Main Content -->
+            <div class="room-detail-main">
+                <!-- Garden Description -->
+                <section class="room-section">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Garden Description</h2>
+                    <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
+                        <p style="font-size: 1.125rem; line-height: 1.7; color: var(--neutral-700); margin-bottom: var(--space-4);">
+                            {{ garden.description }}
+                        </p>
+                        
+                        {% if garden.special_features %}
+                        <div style="margin-top: var(--space-6); padding: var(--space-4); background: var(--gardens-secondary); border-radius: 0.5rem; border-left: 4px solid var(--gardens-primary);">
+                            <p style="font-weight: 600; color: var(--neutral-900); margin-bottom: var(--space-2);">
+                                <i class="fas fa-star" style="color: var(--gardens-primary);"></i>
+                                Special Features:
+                            </p>
+                            <p style="color: var(--neutral-700);">{{ garden.special_features }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </section>
+
+                <!-- Amenities -->
+                <section class="room-section">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Amenities & Facilities</h2>
+                    <div class="amenities-grid">
+                        {% if garden.has_covered_area %}
+                        <div class="amenity-item">
+                            <i class="fas fa-umbrella-beach"></i>
+                            <span>Covered Area</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if garden.has_power %}
+                        <div class="amenity-item">
+                            <i class="fas fa-plug"></i>
+                            <span>Power Supply</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if garden.has_lighting %}
+                        <div class="amenity-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Evening Lighting</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if garden.has_restrooms %}
+                        <div class="amenity-item">
+                            <i class="fas fa-restroom"></i>
+                            <span>Restrooms</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if garden.has_parking %}
+                        <div class="amenity-item">
+                            <i class="fas fa-parking"></i>
+                            <span>Ample Parking</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if garden.is_wheelchair_accessible %}
+                        <div class="amenity-item">
+                            <i class="fas fa-wheelchair"></i>
+                            <span>Wheelchair Accessible</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="amenity-item">
+                            <i class="fas fa-water"></i>
+                            <span>Water Supply</span>
+                        </div>
+                        
+                        <div class="amenity-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Security</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ideal For -->
+                <section class="room-section">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Ideal For</h2>
+                    <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-4);">
+                            {% if garden.capacity >= 800 %}
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-glass-cheers fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Large Weddings</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-users fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Corporate Events</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-graduation-cap fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Graduations</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-music fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Concerts</p>
+                            </div>
+                            
+                            {% elif garden.capacity >= 500 %}
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-ring fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Medium Weddings</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-birthday-cake fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Birthday Parties</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-handshake fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Team Building</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-camera fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Photoshoots</p>
+                            </div>
+                            
+                            {% else %}
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-heart fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Intimate Weddings</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-users fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Family Events</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-champagne-glasses fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Engagements</p>
+                            </div>
+                            <div style="text-align: center; padding: var(--space-4);">
+                                <i class="fas fa-calendar-day fa-2x" style="color: var(--gardens-primary); margin-bottom: var(--space-3);"></i>
+                                <p style="font-weight: 600;">Anniversaries</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Suitable Events -->
+                {% if suitable_events %}
+                <section class="room-section">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Recommended Events</h2>
+                    <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
+                            {% for event in suitable_events %}
+                            <div style="padding: var(--space-4); border: 1px solid var(--neutral-200); border-radius: 0.5rem; transition: var(--transition-base);">
+                                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+                                    <div style="width: 40px; height: 40px; background: var(--gardens-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gardens-primary);">
+                                        <i class="{{ event.icon }}"></i>
+                                    </div>
+                                    <div style="font-weight: 600; color: var(--neutral-900);">{{ event.name }}</div>
+                                </div>
+                                <p style="color: var(--neutral-600); font-size: 0.875rem; line-height: 1.5;">
+                                    {{ event.description|truncatewords:15 }}
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+
+            <!-- Sidebar - Booking -->
+            <div class="room-detail-sidebar">
+                <!-- Booking Widget -->
+                <div class="booking-sidebar" id="booking">
+                    <h3 class="booking-sidebar-title">Book This Garden</h3>
+                    
+                    <div class="price-display">
+                        <div class="price-amount">
+                            Contact for Quote
+                        </div>
+                        <div class="price-duration">
+                            Custom pricing based on event
+                        </div>
+                    </div>
+                    
+                    <form class="booking-form" method="post" action="#">
+                        {% csrf_token %}
+                        <input type="hidden" name="garden" value="{{ garden.name }}">
+                        
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="event_type">Event Type *</label>
+                            <select id="event_type" name="event_type" required>
+                                <option value="">Select event</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="birthday">Birthday Party</option>
+                                <option value="corporate">Corporate Event</option>
+                                <option value="graduation">Graduation</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="date">Preferred Date *</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="attendees">Number of Guests *</label>
+                            <input type="number" id="attendees" name="attendees" min="1" max="{{ garden.capacity }}" required>
+                            <small style="color: var(--neutral-500);">Max: {{ garden.capacity }} people</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Event Details</label>
+                            <textarea id="message" name="message" rows="3" placeholder="Tell us about your event..."></textarea>
+                        </div>
+                        
+                        <div class="booking-cta">
+                            <button type="submit" class="btn btn-gold" style="width: 100%;">
+                                <i class="fas fa-paper-plane"></i>
+                                Send Booking Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Quick Info -->
+                <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm); margin-top: var(--space-6);">
+                    <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                        Quick Info
+                    </h4>
+                    
+                    <div style="display: grid; gap: var(--space-3);">
+                        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--neutral-50); border-radius: 0.5rem;">
+                            <i class="fas fa-users" style="color: var(--gardens-primary);"></i>
+                            <div>
+                                <div style="font-weight: 600; color: var(--neutral-800);">Capacity</div>
+                                <div style="color: var(--neutral-600); font-size: 0.875rem;">{{ garden.capacity }} people</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--neutral-50); border-radius: 0.5rem;">
+                            <i class="fas fa-ruler-combined" style="color: var(--gardens-primary);"></i>
+                            <div>
+                                <div style="font-weight: 600; color: var(--neutral-800);">Area</div>
+                                <div style="color: var(--neutral-600); font-size: 0.875rem;">{{ garden.area }}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--neutral-50); border-radius: 0.5rem;">
+                            <i class="fas fa-clock" style="color: var(--gardens-primary);"></i>
+                            <div>
+                                <div style="font-weight: 600; color: var(--neutral-800);">Availability</div>
+                                <div style="color: var(--neutral-600); font-size: 0.875rem;">Daily 8AM - 10PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Gardens -->
+                {% if related_gardens %}
+                <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm); margin-top: var(--space-6);">
+                    <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                        Other Gardens
+                    </h4>
+                    
+                    <div style="display: grid; gap: var(--space-4);">
+                        {% for related in related_gardens %}
+                        <a href="{% url 'gardens:garden_detail' related.slug %}" style="display: block; text-decoration: none; color: inherit;">
+                            <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border: 1px solid var(--neutral-200); border-radius: 0.5rem; transition: var(--transition-base);">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-700) 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-tree"></i>
+                                </div>
+                                <div>
+                                    <p style="font-weight: 600; margin-bottom: 0.25rem; color: var(--neutral-900);">{{ related.name }}</p>
+                                    <div style="display: flex; align-items: center; gap: var(--space-2);">
+                                        <span style="font-size: 0.875rem; color: var(--neutral-600);">{{ related.area }}</span>
+                                        <span style="font-size: 0.75rem; background: var(--gardens-secondary); color: var(--gardens-primary); padding: 0.125rem 0.5rem; border-radius: 2rem;">
+                                            {{ related.capacity }} <i class="fas fa-users"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        dateInput.value = today;
+    }
+    
+    // Update attendees max based on garden capacity
+    const attendeesInput = document.getElementById('attendees');
+    if (attendeesInput) {
+        const maxCapacity = {{ garden.capacity }};
+        attendeesInput.max = maxCapacity;
+        attendeesInput.addEventListener('input', function() {
+            if (parseInt(this.value) > maxCapacity) {
+                this.value = maxCapacity;
+            }
+        });
+    }
+    
+    // Form submission
+    const bookingForm = document.querySelector('.booking-form');
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Thank you! Your booking request for {{ garden.name }} has been sent. We\'ll contact you within 24 hours.');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+    }
+});
+</script>
+{% endblock %}

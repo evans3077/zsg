@@ -1,0 +1,206 @@
+<!-- zamar_springs/apps/gardens/templates/gardens/gardens_detail.html -->
+{% extends "gardens/base.html" %}
+{% load static %}
+
+{% block title %}Our Gardens | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Explore our beautiful garden venues in Machakos. Muuo Garden, Wendo Garden (1000 Pax), Utanu Garden (600 Pax) and more.{% endblock %}
+{% block meta_keywords %}garden venues, event gardens, machakos gardens, outdoor venues{% endblock %}
+
+{% block gardens_content %}
+<!-- Hero Section -->
+<section class="gardens-hero">
+    <div class="container">
+        <div class="gardens-hero-content">
+            <h1 class="gardens-hero-title">Our Gardens</h1>
+            <p class="gardens-hero-subtitle">Beautiful garden venues for all types of events and celebrations</p>
+        </div>
+    </div>
+</section>
+
+<!-- Gardens List -->
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Explore Our Garden Venues</h2>
+            <p class="section-subtitle">Each garden offers unique features and capacities for different events</p>
+        </div>
+        
+        {% if gardens %}
+        <div class="gardens-grid">
+            {% for garden in gardens %}
+            <div class="garden-card {% if garden.is_featured %}garden-card-featured{% endif %}">
+                <div class="garden-image-container">
+                    {% if garden.featured_image %}
+                    <img class="garden-image" src="{{ garden.featured_image.url }}" alt="{{ garden.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder">
+                        <i class="fas fa-tree fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <span class="garden-badge">{{ garden.get_garden_type_display }}</span>
+                </div>
+                
+                <div class="garden-content">
+                    <div class="garden-header">
+                        <div>
+                            <h3 class="garden-title">{{ garden.name }}</h3>
+                            <p style="color: var(--neutral-600); font-size: 0.875rem;">
+                                {{ garden.area }}
+                            </p>
+                        </div>
+                        <div class="garden-capacity">
+                            <i class="fas fa-users"></i>
+                            {{ garden.capacity }} pax
+                        </div>
+                    </div>
+                    
+                    <p class="garden-description">
+                        {{ garden.description }}
+                    </p>
+                    
+                    {% if garden.special_features %}
+                    <div style="margin-bottom: var(--space-lg);">
+                        <p style="font-weight: 600; color: var(--neutral-800); margin-bottom: var(--space-2);">
+                            Special Features:
+                        </p>
+                        <p style="color: var(--neutral-700); font-size: 0.9375rem; line-height: 1.5;">
+                            {{ garden.special_features }}
+                        </p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="garden-features">
+                        {% if garden.has_covered_area %}
+                        <span class="garden-feature">
+                            <i class="fas fa-umbrella-beach"></i>
+                            Covered Area
+                        </span>
+                        {% endif %}
+                        {% if garden.has_power %}
+                        <span class="garden-feature">
+                            <i class="fas fa-plug"></i>
+                            Power
+                        </span>
+                        {% endif %}
+                        {% if garden.has_lighting %}
+                        <span class="garden-feature">
+                            <i class="fas fa-lightbulb"></i>
+                            Lighting
+                        </span>
+                        {% endif %}
+                        {% if garden.has_restrooms %}
+                        <span class="garden-feature">
+                            <i class="fas fa-restroom"></i>
+                            Restrooms
+                        </span>
+                        {% endif %}
+                        {% if garden.has_parking %}
+                        <span class="garden-feature">
+                            <i class="fas fa-parking"></i>
+                            Parking
+                        </span>
+                        {% endif %}
+                        {% if garden.is_wheelchair_accessible %}
+                        <span class="garden-feature">
+                            <i class="fas fa-wheelchair"></i>
+                            Accessible
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="room-actions">
+                        <a href="{% url 'gardens:garden_detail' garden.slug %}" class="btn btn-gold">
+                            View Details
+                        </a>
+                        <a href="{% url 'gardens:garden_detail' garden.slug %}#booking" class="btn btn-outline-gold">
+                            Book This Garden
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center" style="padding: var(--space-12) 0;">
+            <i class="fas fa-tree fa-4x" style="color: var(--neutral-400); margin-bottom: var(--space-4);"></i>
+            <h3 style="margin-bottom: var(--space-2); color: var(--neutral-700);">No gardens available at the moment</h3>
+            <p style="color: var(--neutral-600); max-width: 400px; margin: 0 auto;">
+                We're currently updating our garden venues. Please check back later.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Garden Comparison -->
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Garden Comparison</h2>
+            <p class="section-subtitle">Find the perfect garden for your event</p>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; background: white; border-radius: 1rem; overflow: hidden; box-shadow: var(--card-shadow);">
+                <thead>
+                    <tr style="background: linear-gradient(135deg, var(--gardens-primary) 0%, var(--gardens-accent) 100%); color: white;">
+                        <th style="padding: var(--space-4); text-align: left;">Garden</th>
+                        <th style="padding: var(--space-4); text-align: center;">Capacity</th>
+                        <th style="padding: var(--space-4); text-align: center;">Best For</th>
+                        <th style="padding: var(--space-4); text-align: center;">Covered Area</th>
+                        <th style="padding: var(--space-4); text-align: center;">Parking</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for garden in gardens|slice:":3" %}
+                    <tr style="border-bottom: 1px solid var(--neutral-200);">
+                        <td style="padding: var(--space-4);">
+                            <div style="font-weight: 600; color: var(--neutral-900);">{{ garden.name }}</div>
+                            <div style="font-size: 0.875rem; color: var(--neutral-600);">{{ garden.area }}</div>
+                        </td>
+                        <td style="padding: var(--space-4); text-align: center; font-weight: 700; color: var(--gardens-primary);">
+                            {{ garden.capacity }} pax
+                        </td>
+                        <td style="padding: var(--space-4); text-align: center;">
+                            {% if garden.capacity >= 800 %}
+                            Large Events
+                            {% elif garden.capacity >= 500 %}
+                            Medium Events
+                            {% else %}
+                            Intimate Events
+                            {% endif %}
+                        </td>
+                        <td style="padding: var(--space-4); text-align: center;">
+                            {% if garden.has_covered_area %}
+                            <i class="fas fa-check" style="color: var(--gardens-primary);"></i>
+                            {% else %}
+                            <i class="fas fa-times" style="color: var(--neutral-400);"></i>
+                            {% endif %}
+                        </td>
+                        <td style="padding: var(--space-4); text-align: center;">
+                            {% if garden.has_parking %}
+                            <i class="fas fa-check" style="color: var(--gardens-primary);"></i>
+                            {% else %}
+                            <i class="fas fa-times" style="color: var(--neutral-400);"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Overview -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center">
+            <a href="{% url 'gardens:overview' %}" class="btn btn-gold btn-large">
+                <i class="fas fa-arrow-left"></i>
+                Back to Gardens Overview
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

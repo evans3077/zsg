@@ -55,12 +55,15 @@
                             </div>
                         </li>
                         <li class="nav-dropdown">
-                            <a href="#" class="nav-link">Gardens <i class="fas fa-chevron-down"></i></a>
+                            <a href="{% url 'gardens:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'gardens' %}active{% endif %}">
+                                Gardens & Events <i class="fas fa-chevron-down"></i>
+                            </a>
                             <div class="dropdown-menu">
-                                <a href="#">Wedding Gardens</a>
-                                <a href="#">Event Gardens</a>
-                                <a href="#">Photoshoots</a>
-                                <a href="#">Birthdays</a>
+                                <a href="{% url 'gardens:overview' %}">Overview</a>
+                                <a href="{% url 'gardens:gardens_list' %}">Our Gardens</a>
+                                <a href="{% url 'gardens:weddings' %}">Weddings</a>
+                                <a href="{% url 'gardens:private_events' %}">Private Events</a>
+                                <a href="{% url 'gardens:general_events' %}">General Events</a>
                             </div>
                         </li>
                         <li><a href="#" class="nav-link">Dining</a></li>
