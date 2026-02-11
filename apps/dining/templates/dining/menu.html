@@ -1,0 +1,106 @@
+{% extends "dining/base.html" %}
+{% load static %}
+
+{% block title %}{{ page_settings.menu_title|default:"Our Menu" }} | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Farm-to-fork menu featuring kitchen meals, coffee shop favorites, platters and open BBQ grill specialties.{% endblock %}
+{% block meta_keywords %}menu, farm to fork, coffee shop, bbq grill, platters, fresh juices{% endblock %}
+
+{% block dining_content %}
+<section class="dining-hero">
+    <div class="container">
+        <div class="dining-hero-content">
+            <h1 class="dining-hero-title">{{ page_settings.menu_title|default:"Our Menu" }}</h1>
+            <p class="dining-hero-subtitle">{{ page_settings.menu_subtitle|default:"Fresh, organic, and delicious" }}</p>
+            <a href="#menu-list" class="btn btn-gold btn-large">
+                <i class="fas fa-book-open"></i> Browse Menu
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Menu Files</h2>
+            <p class="section-subtitle">Preview and download printable menus</p>
+        </div>
+        <div class="pdf-viewer-container">
+            <div class="room-actions">
+                <a class="btn btn-gold" href="{% static 'menus/Menu-1.pdf' %}" target="_blank" rel="noopener">Main Menu PDF</a>
+                <a class="btn btn-outline-gold" href="{% static 'menus/platter Menu_20250924_114324_0000.pdf' %}" target="_blank" rel="noopener">Platter Menu PDF</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="pdf-viewer-container">
+            <div class="section-header" style="margin-bottom: var(--space-5);">
+                <h2 class="section-title">Need a Customized Menu?</h2>
+                <p class="section-subtitle">We customize food combinations and serving plans based on your event request.</p>
+            </div>
+            <div class="room-actions">
+                <a class="btn btn-gold" href="{% url 'dining:overview' %}#custom-menu">See Custom Menu Options</a>
+                <a class="btn btn-outline-gold" href="{% url 'dining:overview' %}#reservation">Request Custom Menu</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-dining-secondary" id="menu-list">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Foods and Drinks</h2>
+            <p class="section-subtitle">A curated selection from kitchen, coffee shop, and open BBQ grill</p>
+        </div>
+
+        {% for group in menu_data %}
+        <div class="menu-category">
+            <div class="menu-category-header">
+                <div class="menu-category-icon"><i class="{{ group.category.icon }}"></i></div>
+                <h3 class="menu-category-title">{{ group.category.name }}</h3>
+                {% if group.category.description %}
+                <p class="section-subtitle">{{ group.category.description }}</p>
+                {% endif %}
+            </div>
+
+            {% for item in group.items|slice:":6" %}
+            <article class="menu-item">
+                <div class="menu-item-image">
+                    {% if item.featured_image %}
+                    <img src="{{ item.featured_image.url }}" alt="{{ item.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder" style="height:100%;">
+                        <i class="fas fa-utensils fa-2x"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h4 class="menu-item-name">{{ item.name }}</h4>
+                        {% if item.price %}
+                        <div class="menu-item-price">Ksh {{ item.price|floatformat:0 }}</div>
+                        {% endif %}
+                    </div>
+                    <p class="menu-item-description">{{ item.description }}</p>
+                    {% if item.is_from_farm %}
+                    <div class="menu-item-ingredients">
+                        <span class="menu-item-ingredient">Farm Fresh</span>
+                        {% for ing in item.get_farm_ingredients_list|slice:":3" %}
+                        <span class="menu-item-ingredient">{{ ing }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% empty %}
+        <div class="text-center">
+            <p class="section-subtitle">Menu items are being updated. Please check back shortly.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

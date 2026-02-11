@@ -24,9 +24,13 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'dining:spaces' %}" 
-                   class="{% if request.resolver_match.url_name == 'spaces' %}active{% endif %}">
+                <a href="{% url 'dining:overview' %}#spaces">
                     Dining Spaces
+                </a>
+            </li>
+             <li>
+                <a href="{% url 'dining:overview' %}#custom-menu">
+                    Custom Menus
                 </a>
             </li>
             <li>

@@ -1,0 +1,83 @@
+{% extends "dining/base.html" %}
+{% load static %}
+
+{% block title %}{{ space.name }} | Dining Spaces{% endblock %}
+{% block meta_description %}{{ space.description|truncatewords:30 }}{% endblock %}
+{% block meta_keywords %}{{ space.name }}, dining space, gazebo, pergola, outdoor dining{% endblock %}
+
+{% block dining_content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="room-detail-header">
+            <nav style="margin-bottom: var(--space-4);">
+                <a href="{% url 'dining:overview' %}" class="text-gold" style="text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i> Dining Overview
+                </a>
+                <span style="color: var(--neutral-400); margin: 0 var(--space-2);">/</span>
+                <a href="{% url 'dining:spaces' %}" class="text-gold" style="text-decoration: none;">
+                    Dining Spaces
+                </a>
+            </nav>
+
+            <h1 class="room-detail-title">{{ space.name }}</h1>
+            <div class="room-detail-meta">
+                <div><i class="fas fa-users"></i><span>{{ space.capacity }} guests</span></div>
+                <div><i class="fas fa-map"></i><span>{{ space.get_space_type_display }}</span></div>
+                <div><i class="fas fa-lightbulb"></i><span>{% if space.has_lighting %}Lit{% else %}No fixed lighting{% endif %}</span></div>
+            </div>
+        </div>
+
+        <div class="room-detail-content">
+            <div>
+                <section class="detail-section">
+                    <h3>About This Space</h3>
+                    <p>{{ space.description }}</p>
+                </section>
+
+                <section class="detail-section">
+                    <h3>Ideal For</h3>
+                    <div class="space-ideal-list">
+                        {% for item in space.get_ideal_for_list %}
+                        <span class="space-ideal-item">{{ item }}</span>
+                        {% empty %}
+                        <span class="space-ideal-item">Casual dining</span>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                {% if space.gallery.all %}
+                <section class="detail-section">
+                    <h3>Gallery</h3>
+                    <div class="room-gallery">
+                        {% for image in space.gallery.all %}
+                        <div class="gallery-item">
+                            <img src="{{ image.image.url }}" alt="{{ image.caption|default:space.name }}" loading="lazy">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+
+            <aside class="booking-sidebar">
+                <h3>Reserve This Space</h3>
+                <p style="margin-bottom: var(--space-4); color: var(--neutral-700);">Call or send a reservation request for this location.</p>
+                <div class="room-actions">
+                    <a href="tel:+254112394681" class="btn btn-gold">Call Now</a>
+                    <a href="{% url 'dining:overview' %}#reservation" class="btn btn-outline-gold">Reserve Online</a>
+                </div>
+                {% if related_spaces %}
+                <div style="margin-top: var(--space-6);">
+                    <h4 style="margin-bottom: var(--space-3);">Other Spaces</h4>
+                    <div style="display: grid; gap: var(--space-2);">
+                        {% for related in related_spaces %}
+                        <a href="{% url 'dining:space_detail' related.slug %}" class="facility-nav-link">{{ related.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

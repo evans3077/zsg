@@ -21,13 +21,15 @@ def dining_overview(request):
     featured_food = FoodItem.objects.filter(
         is_active=True,
         is_featured=True
-    ).order_by('display_order')[:8]
+    ).select_related('category').order_by('category__display_order', 'display_order')[:9]
     
-    # Get dining spaces
+    # Get dining spaces (for grouped expandable section)
     dining_spaces = DiningSpace.objects.filter(
-        is_active=True,
-        is_featured=True
-    ).order_by('display_order')[:3]
+        is_active=True
+    ).prefetch_related('gallery').order_by('display_order')
+    pergola_space = dining_spaces.filter(space_type='pergola').first()
+    gazebo_spaces = dining_spaces.filter(space_type='gazebo')
+    open_air_space = dining_spaces.filter(space_type='garden').first()
     
     # Get farm sources
     farm_sources = FarmSource.objects.filter(
@@ -39,6 +41,9 @@ def dining_overview(request):
         'categories': categories,
         'featured_food': featured_food,
         'dining_spaces': dining_spaces,
+        'pergola_space': pergola_space,
+        'gazebo_spaces': gazebo_spaces,
+        'open_air_space': open_air_space,
         'farm_sources': farm_sources,
     }
     return render(request, 'dining/overview.html', context)

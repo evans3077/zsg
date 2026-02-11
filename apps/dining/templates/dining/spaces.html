@@ -1,0 +1,114 @@
+{% extends "dining/base.html" %}
+{% load static %}
+
+{% block title %}Dining Spaces | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Explore Gazebo 1 to 6, Pergola and Open Air Field dining spaces at Zamar Springs Gardens.{% endblock %}
+{% block meta_keywords %}dining spaces, gazebo, pergola, open air field, outdoor dining{% endblock %}
+
+{% block dining_content %}
+<section class="dining-hero">
+    <div class="container">
+        <div class="dining-hero-content">
+            <h1 class="dining-hero-title">{{ page_settings.spaces_title|default:"Dining Spaces" }}</h1>
+            <p class="dining-hero-subtitle">{{ page_settings.spaces_subtitle|default:"Beautiful locations for memorable dining experiences" }}</p>
+            <a href="#spaces-list" class="btn btn-gold btn-large">
+                <i class="fas fa-compass"></i> Explore Spaces
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" id="spaces-list">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Gazebo and Pergola Dining</h2>
+            <p class="section-subtitle">Comfort-focused seating layouts for individual guests and groups</p>
+        </div>
+
+        <div class="space-grid">
+            {% for space in pergolas %}
+            <article class="space-card">
+                <div class="space-image-container">
+                    <div class="room-image-placeholder"><i class="fas fa-archway fa-3x"></i></div>
+                    <span class="space-badge">{{ space.get_space_type_display }}</span>
+                </div>
+                <div class="space-content">
+                    <div class="space-header">
+                        <h3 class="space-title">{{ space.name }}</h3>
+                        <div class="space-capacity"><i class="fas fa-users"></i>{{ space.capacity }}</div>
+                    </div>
+                    <p class="space-description">{{ space.description|truncatewords:22 }}</p>
+                    <div class="room-actions">
+                        <a href="{% url 'dining:space_detail' space.slug %}" class="btn btn-gold">View Details</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+
+            {% for space in gazebos %}
+            <article class="space-card">
+                <div class="space-image-container">
+                    <div class="room-image-placeholder"><i class="fas fa-umbrella-beach fa-3x"></i></div>
+                    <span class="space-badge">{{ space.get_space_type_display }}</span>
+                </div>
+                <div class="space-content">
+                    <div class="space-header">
+                        <h3 class="space-title">{{ space.name }}</h3>
+                        <div class="space-capacity"><i class="fas fa-users"></i>{{ space.capacity }}</div>
+                    </div>
+                    <p class="space-description">{{ space.description|truncatewords:22 }}</p>
+                    <div class="room-actions">
+                        <a href="{% url 'dining:space_detail' space.slug %}" class="btn btn-gold">View Details</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+
+            {% for space in garden_dining %}
+            <article class="space-card">
+                <div class="space-image-container">
+                    <div class="room-image-placeholder"><i class="fas fa-tree fa-3x"></i></div>
+                    <span class="space-badge">{{ space.get_space_type_display }}</span>
+                </div>
+                <div class="space-content">
+                    <div class="space-header">
+                        <h3 class="space-title">{{ space.name }}</h3>
+                        <div class="space-capacity"><i class="fas fa-users"></i>{{ space.capacity }}</div>
+                    </div>
+                    <p class="space-description">{{ space.description|truncatewords:22 }}</p>
+                    <div class="room-actions">
+                        <a href="{% url 'dining:space_detail' space.slug %}" class="btn btn-gold">View Details</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Service Zones</h2>
+            <p class="section-subtitle">Kitchen, Coffee Shop, and Open BBQ Grill power daily service across all dining spaces</p>
+        </div>
+        <div class="farm-grid">
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-utensils"></i></div>
+                <h3 class="farm-title">Kitchen</h3>
+                <p class="farm-description">Main hot line for made-to-order meals and family platters.</p>
+            </div>
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-mug-hot"></i></div>
+                <h3 class="farm-title">Coffee Shop</h3>
+                <p class="farm-description">Coffee, tea, mocktails, and light bites all day.</p>
+            </div>
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-fire"></i></div>
+                <h3 class="farm-title">Open BBQ Grill</h3>
+                <p class="farm-description">Live grill station for choma specials and group servings.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

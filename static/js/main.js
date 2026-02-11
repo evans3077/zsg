@@ -59,8 +59,12 @@ function initMobileMenu() {
     
     // Mobile dropdowns
     dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
+        toggle.addEventListener('click', function(e) {
             const dropdown = this.nextElementSibling;
+            if (!dropdown || !dropdown.classList.contains('mobile-dropdown')) {
+                return;
+            }
+            e.preventDefault();
             const icon = this.querySelector('i');
             
             dropdown.classList.toggle('active');
@@ -75,6 +79,11 @@ function initMobileMenu() {
                 }
             }
         });
+    });
+
+    // Close mobile menu when selecting a normal mobile link
+    mobileMenu.querySelectorAll('a.mobile-nav-link:not(.dropdown-toggle), .mobile-dropdown a').forEach(link => {
+        link.addEventListener('click', closeMenu);
     });
 }
 
@@ -184,15 +193,18 @@ function initSmoothScrolling() {
 
 // Sub-navigation auto hide (Gardens & Conferences)
 function initSubNavAutoHide() {
-    const subnavs = document.querySelectorAll('.conference-nav, .gardens-nav');
+    const subnavs = document.querySelectorAll('.conference-nav, .gardens-nav, .food-category-nav');
     if (!subnavs.length) return;
 
-    let lastScrollY = window.scrollY;
+    let lastScrollY = Math.max(window.scrollY, 0);
     let ticking = false;
+    const scrollDeltaThreshold = 8;
 
     const onScroll = () => {
-        const currentY = window.scrollY;
-        const scrollingDown = currentY > lastScrollY;
+        const currentY = Math.max(window.scrollY, 0);
+        const delta = currentY - lastScrollY;
+        const scrollingDown = delta > scrollDeltaThreshold;
+        const scrollingUp = delta < -scrollDeltaThreshold;
 
         subnavs.forEach(nav => {
             if (currentY < 120) {
@@ -202,7 +214,7 @@ function initSubNavAutoHide() {
 
             if (scrollingDown) {
                 nav.classList.add('subnav-hidden');
-            } else {
+            } else if (scrollingUp) {
                 nav.classList.remove('subnav-hidden');
             }
         });

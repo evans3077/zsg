@@ -4,6 +4,22 @@
 
 {% block title %}{{ page_settings.meta_title|default:"Dining Experience" }} | Zamar Springs Gardens{% endblock %}
 {% block meta_description %}{{ page_settings.meta_description }}{% endblock %}
+{% block meta_keywords %}{{ page_settings.meta_keywords|default:"farm to fork, dining, coffee shop, bbq grill, gazebos, pergola" }}{% endblock %}
+{% block og_title %}Dining at Zamar Springs Gardens{% endblock %}
+{% block og_description %}Farm-to-fork meals, platter packages, and dining spaces at Zamar Springs Gardens.{% endblock %}
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Zamar Springs Gardens Dining",
+  "servesCuisine": ["African", "Grill", "Coffee", "Non-Alcoholic"],
+  "url": "{{ request.build_absolute_uri }}",
+  "menu": "{{ request.scheme }}://{{ request.get_host }}{% url 'dining:menu' %}",
+  "telephone": "+254112394681"
+}
+</script>
+{% endblock %}
 
 {% block dining_content %}
 <!-- Hero Section -->
@@ -26,6 +42,29 @@
             <p class="section-subtitle" style="font-size: 1.25rem; line-height: 1.7;">
                 {{ page_settings.intro_text }}
             </p>
+        </div>
+    </div>
+</section>
+
+<!-- Menu Access -->
+<section class="section-padding bg-gold-light" id="menu-access">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">View and Download Menu</h2>
+            <p class="section-subtitle">Use current menu files now. We will replace with the final menu later.</p>
+        </div>
+        <div class="pdf-viewer-container">
+            <div class="room-actions">
+                <a class="btn btn-gold" href="{% static 'menus/Menu-1.pdf' %}" target="_blank" rel="noopener">
+                    <i class="fas fa-eye"></i> View Main Menu
+                </a>
+                <a class="btn btn-outline-gold" href="{% static 'menus/Menu-1.pdf' %}" download>
+                    <i class="fas fa-download"></i> Download Main Menu
+                </a>
+                <a class="btn btn-outline-gold" href="{% static 'menus/platter Menu_20250924_114324_0000.pdf' %}" target="_blank" rel="noopener">
+                    <i class="fas fa-plate-wheat"></i> View Platter Menu
+                </a>
+            </div>
         </div>
     </div>
 </section>
@@ -122,6 +161,44 @@
     </div>
 </section>
 
+<!-- Dining Gallery -->
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Dining Gallery</h2>
+            <p class="section-subtitle">Swipe on mobile. Tap a card to expand details.</p>
+        </div>
+        <div class="dining-gallery-slider" id="dining-gallery-slider">
+            {% for food in featured_food|slice:":6" %}
+            <article class="dining-gallery-card" tabindex="0">
+                <div class="dining-gallery-image-wrap">
+                    {% if food.featured_image %}
+                    <img src="{{ food.featured_image.url }}" alt="{{ food.name }} at Zamar Springs Gardens" loading="lazy">
+                    {% else %}
+                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Zamar Springs Gardens menu and platter board" loading="lazy">
+                    {% endif %}
+                </div>
+                <div class="dining-gallery-content">
+                    <h3>{{ food.name }}</h3>
+                    <p>{{ food.description|truncatewords:14 }}</p>
+                </div>
+            </article>
+            {% endfor %}
+            {% for space in dining_spaces|slice:":3" %}
+            <article class="dining-gallery-card" tabindex="0">
+                <div class="dining-gallery-image-wrap">
+                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="{{ space.name }} setup at Zamar Springs Gardens" loading="lazy">
+                </div>
+                <div class="dining-gallery-content">
+                    <h3>{{ space.name }}</h3>
+                    <p>{{ space.description|truncatewords:14 }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 <!-- Farm to Fork -->
 <section class="section-padding bg-dining-secondary">
     <div class="container">
@@ -155,72 +232,149 @@
     </div>
 </section>
 
-<!-- Dining Spaces -->
+<!-- Service Zones -->
 <section class="section-padding">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">{{ page_settings.spaces_title }}</h2>
-            <p class="section-subtitle">{{ page_settings.spaces_subtitle }}</p>
+            <h2 class="section-title">Kitchen, Coffee Shop and Open BBQ Grill</h2>
+            <p class="section-subtitle">Core production and service zones behind every dining experience</p>
         </div>
-        
-        {% if dining_spaces %}
-        <div class="space-grid">
-            {% for space in dining_spaces %}
-            <div class="space-card">
-                <div class="space-image-container">
-                    {% if space.gallery.first %}
-                    <img class="space-image" src="{{ space.gallery.first.image.url }}" alt="{{ space.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder" style="background: linear-gradient(135deg, var(--dining-primary) 0%, var(--dining-accent) 100%);">
-                        <i class="fas fa-{% if space.space_type == 'pergola' %}archway{% else %}umbrella-beach{% endif %} fa-3x"></i>
-                    </div>
-                    {% endif %}
-                    <span class="space-badge">{{ space.get_space_type_display }}</span>
-                </div>
-                
-                <div class="space-content">
-                    <div class="space-header">
-                        <div>
-                            <h3 class="space-title">{{ space.name }}</h3>
-                        </div>
-                        <div class="space-capacity">
-                            <i class="fas fa-users"></i>
-                            {{ space.capacity }}
-                        </div>
-                    </div>
-                    
-                    <p class="space-description">
-                        {{ space.description|truncatewords:25 }}
-                    </p>
-                    
-                    {% if space.ideal_for %}
-                    <div class="space-ideal-for">
-                        <p class="space-ideal-for-title">Ideal for:</p>
-                        <div class="space-ideal-list">
-                            {% for occasion in space.get_ideal_for_list|slice:":3" %}
-                            <span class="space-ideal-item">{{ occasion }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    <div class="room-actions">
-                        <a href="{% url 'dining:space_detail' space.slug %}" class="btn btn-gold">
-                            View Space
-                        </a>
-                    </div>
-                </div>
+        <div class="farm-grid">
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-utensils"></i></div>
+                <h3 class="farm-title">Kitchen</h3>
+                <p class="farm-description">Main hot kitchen for breakfast, lunch, dinner and family platters.</p>
             </div>
-            {% endfor %}
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-mug-hot"></i></div>
+                <h3 class="farm-title">Coffee Shop</h3>
+                <p class="farm-description">Fresh coffee, tea, juices and quick bites served throughout the day.</p>
+            </div>
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-fire"></i></div>
+                <h3 class="farm-title">Open BBQ Grill</h3>
+                <p class="farm-description">Live grill for choma and signature roasted selections.</p>
+            </div>
         </div>
-        
-        <div class="text-center" style="margin-top: var(--space-8);">
-            <a href="{% url 'dining:spaces' %}" class="btn btn-outline-gold btn-large">
-                <i class="fas fa-compass"></i>
-                Explore All Dining Spaces
-            </a>
+    </div>
+</section>
+
+<!-- Dining Spaces -->
+<section class="section-padding" id="spaces">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">{{ page_settings.spaces_title }}</h2>
+            <p class="section-subtitle">{{ page_settings.spaces_subtitle }} Tap each section to expand.</p>
         </div>
-        {% endif %}
+
+        <div class="space-accordion">
+            <details class="space-expand" open>
+                <summary>
+                    <span><i class="fas fa-archway"></i> Pergola</span>
+                    <span class="space-expand-hint">Private meals and small event meals</span>
+                </summary>
+                <div class="space-expand-content">
+                    <div class="dining-gallery-slider dining-gallery-inline">
+                        {% if pergola_space and pergola_space.gallery.all %}
+                            {% for image in pergola_space.gallery.all %}
+                            <article class="dining-gallery-card">
+                                <div class="dining-gallery-image-wrap">
+                                    <img src="{{ image.image.url }}" alt="Pergola dining at Zamar Springs Gardens" loading="lazy">
+                                </div>
+                            </article>
+                            {% endfor %}
+                        {% else %}
+                            <article class="dining-gallery-card">
+                                <div class="dining-gallery-image-wrap">
+                                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Pergola dining setup at Zamar Springs Gardens" loading="lazy">
+                                </div>
+                            </article>
+                        {% endif %}
+                    </div>
+                    {% if pergola_space %}
+                    <p class="space-description">{{ pergola_space.description }}</p>
+                    {% endif %}
+                </div>
+            </details>
+
+            <details class="space-expand">
+                <summary>
+                    <span><i class="fas fa-umbrella-beach"></i> Gazebos 1-6</span>
+                    <span class="space-expand-hint">Flexible garden dining</span>
+                </summary>
+                <div class="space-expand-content">
+                    <div class="space-ideal-list" style="margin-bottom: var(--space-4);">
+                        {% for gazebo in gazebo_spaces %}
+                        <span class="space-ideal-item">{{ gazebo.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="dining-gallery-slider dining-gallery-inline">
+                        {% if gazebo_spaces %}
+                            {% for gazebo in gazebo_spaces|slice:":3" %}
+                                {% if gazebo.gallery.first %}
+                                <article class="dining-gallery-card">
+                                    <div class="dining-gallery-image-wrap">
+                                        <img src="{{ gazebo.gallery.first.image.url }}" alt="{{ gazebo.name }} at Zamar Springs Gardens" loading="lazy">
+                                    </div>
+                                </article>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <article class="dining-gallery-card">
+                            <div class="dining-gallery-image-wrap">
+                                <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Gazebo setup at Zamar Springs Gardens" loading="lazy">
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </details>
+
+            <details class="space-expand">
+                <summary>
+                    <span><i class="fas fa-tree"></i> Open Air</span>
+                    <span class="space-expand-hint">Large setup area for tables and seats</span>
+                </summary>
+                <div class="space-expand-content">
+                    <div class="dining-gallery-slider dining-gallery-inline">
+                        <article class="dining-gallery-card">
+                            <div class="dining-gallery-image-wrap">
+                                <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Open Air dining setup at Zamar Springs Gardens" loading="lazy">
+                            </div>
+                        </article>
+                    </div>
+                    {% if open_air_space %}
+                    <p class="space-description">{{ open_air_space.description }}</p>
+                    {% endif %}
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Menu Requests -->
+<section class="section-padding bg-dining-secondary" id="custom-menu">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Customized Menus on Request</h2>
+            <p class="section-subtitle">Zamar Springs Gardens customizes menu combinations for family events, private meals, and group bookings.</p>
+        </div>
+        <div class="farm-grid">
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-sliders"></i></div>
+                <h3 class="farm-title">Flexible Portions</h3>
+                <p class="farm-description">Adjust serving sizes for small tables, families, and larger groups.</p>
+            </div>
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-seedling"></i></div>
+                <h3 class="farm-title">Ingredient Preference</h3>
+                <p class="farm-description">Tell us your preferred proteins, sides, and farm-fresh vegetable options.</p>
+            </div>
+            <div class="farm-card">
+                <div class="farm-icon"><i class="fas fa-calendar-check"></i></div>
+                <h3 class="farm-title">Event-Aligned Menus</h3>
+                <p class="farm-description">We align menus to your event type, budget, and service style.</p>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -317,10 +471,19 @@
                                     {% endfor %}
                                 </select>
                             </div>
+
+                            <div class="form-group">
+                                <label for="res_custom_menu">Menu Customization *</label>
+                                <select id="res_custom_menu" name="menu_customization" required>
+                                    <option value="">Select option</option>
+                                    <option value="yes">Yes, customize menu for us</option>
+                                    <option value="no">No, use standard menu</option>
+                                </select>
+                            </div>
                             
                             <div class="form-group">
                                 <label for="res_notes">Special Requests</label>
-                                <textarea id="res_notes" name="notes" rows="3" placeholder="Dietary requirements, special occasions, etc."></textarea>
+                                <textarea id="res_notes" name="notes" rows="3" placeholder="Dietary requirements, platter preference, event details, preferred mains and sides."></textarea>
                             </div>
                         </div>
                     </div>
@@ -345,6 +508,19 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const galleryCards = document.querySelectorAll('.dining-gallery-card');
+    galleryCards.forEach(function(card) {
+        card.addEventListener('click', function() {
+            this.classList.toggle('is-expanded');
+        });
+        card.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.classList.toggle('is-expanded');
+            }
+        });
+    });
+
     // Set minimum date to today
     const dateInput = document.getElementById('res_date');
     if (dateInput) {

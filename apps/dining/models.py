@@ -121,6 +121,7 @@ class FoodItem(SEOFields, TimeStampedModel):
     # Images
     featured_image = models.ImageField(
         upload_to='dining/food/',
+        blank=True,
         help_text="High-quality food photo"
     )
     

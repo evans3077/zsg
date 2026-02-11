@@ -1,0 +1,80 @@
+{% extends "dining/base.html" %}
+{% load static %}
+
+{% block title %}Farm to Fork | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Discover our farm-to-fork process from fresh produce sourcing to plated meals at Zamar Springs Gardens.{% endblock %}
+{% block meta_keywords %}farm to fork, organic produce, sustainable dining, fresh ingredients{% endblock %}
+
+{% block dining_content %}
+<section class="dining-hero">
+    <div class="container">
+        <div class="dining-hero-content">
+            <h1 class="dining-hero-title">{{ page_settings.farm_title|default:"Farm-to-Fork Freshness" }}</h1>
+            <p class="dining-hero-subtitle">{{ page_settings.farm_subtitle|default:"All ingredients sourced directly from our organic farm" }}</p>
+            <a href="#source-list" class="btn btn-gold btn-large">
+                <i class="fas fa-seedling"></i> See Sources
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" id="source-list">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Our Farm Sources</h2>
+            <p class="section-subtitle">Traceable ingredients for consistent quality and freshness</p>
+        </div>
+        <div class="farm-grid">
+            {% for source in farm_sources %}
+            <article class="farm-card">
+                <div class="farm-icon"><i class="{{ source.icon }}"></i></div>
+                <h3 class="farm-title">{{ source.name }}</h3>
+                <p class="farm-description">{{ source.description }}</p>
+            </article>
+            {% empty %}
+            <div class="text-center">
+                <p class="section-subtitle">Farm source details are being updated.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Farm Plates</h2>
+            <p class="section-subtitle">Menu highlights prepared from our own produce</p>
+        </div>
+        <div class="food-grid">
+            {% for food in farm_food %}
+            <article class="food-card">
+                <div class="food-image-container">
+                    {% if food.featured_image %}
+                    <img class="food-image" src="{{ food.featured_image.url }}" alt="{{ food.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder"><i class="fas fa-utensils fa-3x"></i></div>
+                    {% endif %}
+                    <span class="food-from-farm"><i class="fas fa-leaf"></i> From Our Farm</span>
+                </div>
+                <div class="food-content">
+                    <h3 class="food-title">{{ food.name }}</h3>
+                    <p class="food-description">{{ food.description|truncatewords:20 }}</p>
+                    {% if food.farm_ingredients %}
+                    <div class="food-ingredients-list">
+                        {% for ing in food.get_farm_ingredients_list|slice:":4" %}
+                        <span class="food-ingredient">{{ ing }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <div class="text-center">
+                <p class="section-subtitle">Farm-based featured dishes are being updated.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
