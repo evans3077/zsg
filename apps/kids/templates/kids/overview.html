@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Kids Play Area & Family Fun Zone in Machakos | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Safe and exciting kids play zone in Machakos with bouncing castle, trampoline, face painting, games and trained animator. Family-friendly activities for all ages at only KES 250 per child.{% endblock %}
+{% block meta_keywords %}Kids play area in Machakos, Family-friendly hotel in Machakos, Kids activities Machakos, Bouncing castle Machakos, Family fun zone Machakos{% endblock %}
+{% block og_title %}Kids & Family Fun at Zamar Springs Gardens{% endblock %}
+{% block og_description %}Safe kids zone with trained animator and family activity spaces for all ages in Machakos.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/kids.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsActivityLocation",
+  "name": "Zamar Springs Gardens Kids & Family Zone",
+  "url": "{{ request.build_absolute_uri }}",
+  "description": "Kids play area and family fun zone in Machakos with supervised activities and outdoor recreation."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="kids-nav">
+    <div class="container">
+        <ul class="kids-nav-list">
+            <li><a href="#kids-zone">Kids Zone</a></li>
+            <li><a href="#play-pass">Kids Play Pass</a></li>
+            <li><a href="#family-activities">Family Activities</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section class="kids-hero">
+    <div class="kids-hero-media">
+        <div class="kids-hero-slide"><img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Kids and family fun at Zamar Springs Gardens" loading="eager"></div>
+        <div class="kids-hero-slide"><img src="/media/conferences/gallery/classroom-conference-hall-machakos-2.webp" alt="Family activity setup at Zamar Springs Gardens" loading="lazy"></div>
+        <div class="kids-hero-slide"><img src="/media/conferences/gallery/banquet-meeting-room-machakos-2.webp" alt="Outdoor family recreation area at Zamar Springs Gardens" loading="lazy"></div>
+        <div class="kids-hero-overlay"></div>
+    </div>
+    <div class="container">
+        <div class="kids-hero-content">
+            <h1>Kids Play Area & Family Fun Zone in Machakos</h1>
+            <p>Safe, supervised, and energetic spaces where children play confidently and families enjoy active bonding together.</p>
+            <div class="kids-hero-actions">
+                <a href="#kids-zone" class="btn btn-gold btn-large">Explore Kids Zone</a>
+                <a href="#family-activities" class="btn btn-outline-gold btn-large">View Family Activities</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" id="kids-zone">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Kids Zone</h2>
+            <p class="section-subtitle">A secure and supervised environment with structured fun led by a trained animator.</p>
+        </div>
+        <div class="activity-grid">
+            {% for activity in kids_activities %}
+            <article class="activity-card">
+                <div class="activity-image">
+                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="{{ activity.name }} activity at Zamar Springs Gardens" loading="lazy">
+                </div>
+                <div class="activity-content">
+                    <div class="activity-icon"><i class="{{ activity.icon }}"></i></div>
+                    <h3>{{ activity.name }}</h3>
+                    <p>{{ activity.desc }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" id="play-pass">
+    <div class="container">
+        <div class="price-highlight">
+            <p class="price-tagline">Kids Play Pass</p>
+            <p class="price-value">KES 250 per child</p>
+            <p class="price-note">Full Day Access | Trained animator available</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-gold-light" id="family-activities">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Family & Adult Activities</h2>
+            <p class="section-subtitle">Relaxed games and active experiences designed for bonding across all ages.</p>
+        </div>
+        <div class="family-layout">
+            <div class="family-media-stack">
+                <img src="/media/conferences/gallery/executive-board-room-machakos-1.webp" alt="Family game setup at Zamar Springs Gardens" loading="lazy">
+                <img src="/media/conferences/gallery/executive-meeting-room-machakos-u-2.webp" alt="Adult and family recreation at Zamar Springs Gardens" loading="lazy">
+            </div>
+            <div class="family-activities-list">
+                {% for activity in family_activities %}
+                <article class="family-activity-item">
+                    <i class="{{ activity.icon }}"></i>
+                    <div>
+                        <h3>{{ activity.name }}</h3>
+                        <p>{{ activity.desc }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

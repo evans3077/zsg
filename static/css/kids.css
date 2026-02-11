@@ -1,0 +1,302 @@
+/* zamar_springs/static/css/kids.css */
+:root {
+    --kids-primary: var(--gold-dark);
+    --kids-secondary: var(--gold-light);
+    --kids-accent: var(--gold-medium);
+    --kids-fresh: #7bbf6a;
+    --kids-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    --kids-card-elevated: 0 18px 36px rgba(0, 0, 0, 0.14);
+}
+
+.kids-nav {
+    position: sticky;
+    top: 80px;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--neutral-200);
+}
+
+.kids-nav-list {
+    display: flex;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: var(--space-3) 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.kids-nav-list::-webkit-scrollbar {
+    display: none;
+}
+
+.kids-nav-list a {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--neutral-700);
+    background: var(--neutral-50);
+    border: 1px solid var(--neutral-200);
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    transition: all 0.25s ease;
+}
+
+.kids-nav-list a:hover {
+    color: var(--gold-darker);
+    background: var(--gold-light);
+    border-color: var(--gold-medium);
+}
+
+.kids-hero {
+    position: relative;
+    min-height: 72vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    margin-top: -80px;
+    padding: calc(80px + var(--space-8)) 0 var(--space-8);
+    overflow: hidden;
+}
+
+.kids-hero-media {
+    position: absolute;
+    inset: 0;
+}
+
+.kids-hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: kidsHeroFade 18s infinite;
+}
+
+.kids-hero-slide:nth-child(1) { animation-delay: 0s; }
+.kids-hero-slide:nth-child(2) { animation-delay: 6s; }
+.kids-hero-slide:nth-child(3) { animation-delay: 12s; }
+
+.kids-hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.kids-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(28, 25, 23, 0.8) 0%, rgba(41, 37, 36, 0.88) 100%),
+        radial-gradient(circle at 20% 50%, rgba(196, 167, 71, 0.18) 0%, transparent 45%);
+}
+
+.kids-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.kids-hero-content h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 3.7rem);
+    line-height: 1.1;
+    color: var(--gold-medium);
+    margin-bottom: var(--space-4);
+}
+
+.kids-hero-content p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: var(--space-6);
+}
+
+.kids-hero-actions {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
+.activity-card {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--neutral-200);
+    box-shadow: var(--kids-card-shadow);
+    transition: all 0.28s ease;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--kids-card-elevated);
+    border-color: var(--kids-accent);
+}
+
+.activity-image {
+    aspect-ratio: 16 / 10;
+}
+
+.activity-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.activity-content {
+    padding: var(--space-4);
+}
+
+.activity-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--kids-accent), var(--kids-primary));
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3);
+}
+
+.activity-content h3 {
+    margin: 0 0 var(--space-2) 0;
+    color: var(--neutral-900);
+    font-size: 1.1rem;
+}
+
+.activity-content p {
+    margin: 0;
+    color: var(--neutral-600);
+    font-size: 0.92rem;
+}
+
+.price-highlight {
+    max-width: 740px;
+    margin: 0 auto;
+    background: white;
+    border: 2px solid var(--kids-accent);
+    border-radius: 1rem;
+    padding: var(--space-6);
+    text-align: center;
+    box-shadow: var(--kids-card-shadow);
+}
+
+.price-tagline {
+    margin: 0;
+    color: var(--neutral-700);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.price-value {
+    margin: var(--space-2) 0;
+    font-family: var(--font-serif);
+    color: var(--kids-primary);
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    font-weight: 700;
+}
+
+.price-note {
+    margin: 0;
+    color: var(--neutral-600);
+}
+
+.family-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+}
+
+.family-media-stack {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+}
+
+.family-media-stack img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 0.9rem;
+    box-shadow: var(--kids-card-shadow);
+}
+
+.family-activities-list {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.family-activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    background: white;
+    border: 1px solid var(--neutral-200);
+    border-radius: 0.9rem;
+    padding: var(--space-4);
+    transition: all 0.25s ease;
+}
+
+.family-activity-item:hover {
+    border-color: var(--kids-accent);
+    transform: translateX(6px);
+}
+
+.family-activity-item i {
+    width: 32px;
+    text-align: center;
+    color: var(--kids-primary);
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.family-activity-item h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+    color: var(--neutral-900);
+}
+
+.family-activity-item p {
+    margin: 0;
+    color: var(--neutral-600);
+    font-size: 0.9rem;
+}
+
+@keyframes kidsHeroFade {
+    0%, 25% { opacity: 1; }
+    35%, 100% { opacity: 0; }
+}
+
+@media (min-width: 640px) {
+    .kids-hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-3);
+    }
+
+    .activity-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .activity-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .family-layout {
+        grid-template-columns: 1.05fr 1fr;
+        gap: var(--space-8);
+        align-items: start;
+    }
+}
+

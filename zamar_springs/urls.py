@@ -12,6 +12,7 @@ urlpatterns = [
     path('conferences/', include('conferences.urls')),
     path('gardens/', include('gardens.urls')), 
     path('dining/', include('dining.urls')),
+    path('kids-family/', include('kids.urls')),
     path('manage/', include('admin_dashboard.urls')),
 ]
 

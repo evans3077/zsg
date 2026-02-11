@@ -193,7 +193,7 @@ function initSmoothScrolling() {
 
 // Sub-navigation auto hide (Gardens & Conferences)
 function initSubNavAutoHide() {
-    const subnavs = document.querySelectorAll('.conference-nav, .gardens-nav, .food-category-nav');
+    const subnavs = document.querySelectorAll('.conference-nav, .gardens-nav, .food-category-nav, .kids-nav');
     if (!subnavs.length) return;
 
     let lastScrollY = Math.max(window.scrollY, 0);
