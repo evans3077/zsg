@@ -86,7 +86,7 @@
                             </div>
                         </li>
                         <li><a href="{% url 'kids:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'kids' %}active{% endif %}">Kids & Family</a></li>
-                        <li><a href="#" class="nav-link">Gallery</a></li>
+                        <li><a href="{% url 'gallery:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'gallery' %}active{% endif %}">Gallery</a></li>
                         <li><a href="tel:+254112394681" class="nav-link">Contact</a></li>
                         <li><a href="{% url 'dining:overview' %}#reservation" class="btn btn-gold btn-small">Book Now</a></li>
                     </ul>
@@ -158,7 +158,7 @@
                 </div>
             </li>
             <li><a href="{% url 'kids:overview' %}" class="mobile-nav-link">Kids & Family</a></li>
-            <li><a href="#" class="mobile-nav-link">Gallery</a></li>
+            <li><a href="{% url 'gallery:overview' %}" class="mobile-nav-link">Gallery</a></li>
             <li><a href="tel:+254112394681" class="mobile-nav-link">Contact</a></li>
             <li class="mobile-book-now"><a href="{% url 'gardens:overview' %}#inquiry" class="btn btn-gold btn-small">Book Now</a></li>
         </ul>
@@ -204,7 +204,7 @@
                         <li><a href="{% url 'gardens:overview' %}">Event Gardens</a></li>
                         <li><a href="{% url 'dining:overview' %}">Dining & Catering</a></li>
                         <li><a href="{% url 'kids:overview' %}">Kids Services</a></li>
-                        <li><a href="#">Gallery</a></li>
+                        <li><a href="{% url 'gallery:overview' %}">Gallery</a></li>
                     </ul>
                 </div>
                 

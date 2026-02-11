@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_settings.meta_title|default:"Hotel Gallery - Weddings, Dining, Family Fun & Events in Machakos" }}{% endblock %}
+{% block meta_description %}{{ page_settings.meta_description|default:"Explore our beautiful gardens, wedding setups, farm-to-fork dining, kids play areas, and corporate event spaces in Machakos. See why families and event planners choose us." }}{% endblock %}
+{% block meta_keywords %}{{ page_settings.meta_keywords|default:"Kids play area in Machakos, Family-friendly hotel in Machakos, Kids activities Machakos, Bouncing castle Machakos, Family fun zone Machakos" }}{% endblock %}
+{% block og_title %}Hotel Gallery | Zamar Springs Gardens{% endblock %}
+{% block og_description %}Visual highlights of weddings, dining, family fun, gardens, and conferences at Zamar Springs Gardens.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "name": "Zamar Springs Gardens Gallery",
+  "description": "Weddings, dining, kids and family, gardens, and conference image gallery in Machakos.",
+  "url": "{{ request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="gallery-hero">
+    <div class="container">
+        <div class="gallery-hero-content">
+            <h1>{{ page_settings.hero_title|default:"Hotel Gallery" }}</h1>
+            <p>{{ page_settings.hero_subtitle|default:"A visual story of experiences at Zamar Springs Gardens." }}</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        {% for section in grouped_sections %}
+        <section class="gallery-group" id="gallery-{{ section.key }}">
+            <div class="gallery-group-head">
+                <h2>{{ section.title }}</h2>
+                <p>{{ section.description }}</p>
+            </div>
+
+            {% if section.images %}
+            <div class="gallery-grid">
+                {% for image in section.images %}
+                <figure class="gallery-card">
+                    <button
+                        class="gallery-lightbox-trigger"
+                        type="button"
+                        data-src="{{ image.image_path }}"
+                        data-alt="{{ image.alt_text }}"
+                        data-caption="{{ image.caption|default:image.title }}"
+                        aria-label="Open image: {{ image.alt_text }}"
+                    >
+                        <img src="{{ image.image_path }}" alt="{{ image.alt_text }}" loading="lazy">
+                    </button>
+                    <figcaption>{{ image.caption|default:image.title }}</figcaption>
+                </figure>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="gallery-empty">Gallery items for this section are being updated.</div>
+            {% endif %}
+        </section>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="gallery-lightbox" id="gallery-lightbox" aria-hidden="true">
+    <button class="gallery-lightbox-close" type="button" aria-label="Close image viewer">&times;</button>
+    <div class="gallery-lightbox-content">
+        <img id="gallery-lightbox-image" src="" alt="">
+        <p id="gallery-lightbox-caption"></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const lightbox = document.getElementById('gallery-lightbox');
+    const lightboxImg = document.getElementById('gallery-lightbox-image');
+    const lightboxCaption = document.getElementById('gallery-lightbox-caption');
+    const closeBtn = document.querySelector('.gallery-lightbox-close');
+    const triggers = document.querySelectorAll('.gallery-lightbox-trigger');
+
+    function openLightbox(src, alt, caption) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt;
+        lightboxCaption.textContent = caption || '';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        lightboxImg.src = '';
+        document.body.style.overflow = '';
+    }
+
+    triggers.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openLightbox(
+                this.dataset.src,
+                this.dataset.alt,
+                this.dataset.caption
+            );
+        });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
+            closeLightbox();
+        }
+    });
+});
+</script>
+{% endblock %}
+
