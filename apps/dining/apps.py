@@ -1,3 +1,4 @@
+# zamar_springs/apps/dining/apps.py
 from django.apps import AppConfig
 
 

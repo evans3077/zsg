@@ -1,0 +1,44 @@
+<!-- zamar_springs/apps/dining/templates/dining/base.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dining.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Dining Navigation -->
+<nav class="food-category-nav">
+    <div class="container">
+        <ul class="food-category-list">
+            <li>
+                <a href="{% url 'dining:overview' %}" 
+                   class="{% if request.resolver_match.url_name == 'overview' %}active{% endif %}">
+                    Overview
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'dining:menu' %}" 
+                   class="{% if request.resolver_match.url_name == 'menu' %}active{% endif %}">
+                    Menu
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'dining:spaces' %}" 
+                   class="{% if request.resolver_match.url_name == 'spaces' %}active{% endif %}">
+                    Dining Spaces
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'dining:farm_to_fork' %}" 
+                   class="{% if request.resolver_match.url_name == 'farm_to_fork' %}active{% endif %}">
+                    Farm to Fork
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{% block dining_content %}
+{% endblock %}
+{% endblock %}

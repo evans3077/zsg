@@ -1,0 +1,378 @@
+<!-- zamar_springs/apps/dining/templates/dining/overview.html -->
+{% extends "dining/base.html" %}
+{% load static %}
+
+{% block title %}{{ page_settings.meta_title|default:"Dining Experience" }} | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}{{ page_settings.meta_description }}{% endblock %}
+
+{% block dining_content %}
+<!-- Hero Section -->
+<section class="dining-hero">
+    <div class="container">
+        <div class="dining-hero-content">
+            <h1 class="dining-hero-title">{{ page_settings.hero_title }}</h1>
+            <p class="dining-hero-subtitle">{{ page_settings.hero_subtitle }}</p>
+            <a href="#featured-food" class="btn btn-gold btn-large">
+                <i class="fas fa-utensils"></i> View Our Food
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+            <p class="section-subtitle" style="font-size: 1.25rem; line-height: 1.7;">
+                {{ page_settings.intro_text }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Food -->
+<section class="section-padding" id="featured-food">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Dishes</h2>
+            <p class="section-subtitle">Taste our most popular creations</p>
+        </div>
+        
+        {% if featured_food %}
+        <div class="food-grid">
+            {% for food in featured_food %}
+            <div class="food-card {% if food.is_featured %}food-card-featured{% endif %} {% if food.is_special %}food-card-special{% endif %}">
+                <div class="food-image-container">
+                    {% if food.featured_image %}
+                    <img class="food-image" src="{{ food.featured_image.url }}" alt="{{ food.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder" style="background: linear-gradient(135deg, var(--dining-primary) 0%, var(--dining-accent) 100%);">
+                        <i class="fas fa-utensils fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    
+                    {% if food.is_from_farm %}
+                    <span class="food-from-farm">
+                        <i class="fas fa-leaf"></i> From Our Farm
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="food-content">
+                    <div class="food-header">
+                        <h3 class="food-title">{{ food.name }}</h3>
+                        <p class="food-category">
+                            <i class="{{ food.category.icon }}"></i>
+                            {{ food.category.name }}
+                        </p>
+                    </div>
+                    
+                    <p class="food-description">
+                        {{ food.description|truncatewords:20 }}
+                    </p>
+                    
+                    {% if food.is_from_farm and food.farm_ingredients %}
+                    <div class="food-ingredients">
+                        <p class="food-ingredients-title">
+                            <i class="fas fa-seedling"></i>
+                            Farm Ingredients:
+                        </p>
+                        <div class="food-ingredients-list">
+                            {% for ingredient in food.get_farm_ingredients_list|slice:":3" %}
+                            <span class="food-ingredient">{{ ingredient }}</span>
+                            {% endfor %}
+                            {% if food.get_farm_ingredients_list|length > 3 %}
+                            <span class="food-ingredient">+{{ food.get_farm_ingredients_list|length|add:"-3" }} more</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="food-footer">
+                        {% if food.price %}
+                        <div class="food-price">
+                            Ksh {{ food.price|floatformat:0 }}
+                        </div>
+                        {% else %}
+                        <div style="font-style: italic; color: var(--neutral-500);">
+                            Price available on request
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center" style="margin-top: var(--space-8);">
+            <a href="{% url 'dining:menu' %}" class="btn btn-gold btn-large">
+                <i class="fas fa-book-open"></i>
+                View Full Menu
+            </a>
+        </div>
+        {% else %}
+        <div class="text-center" style="padding: var(--space-12) 0;">
+            <i class="fas fa-utensils fa-4x" style="color: var(--neutral-400); margin-bottom: var(--space-4);"></i>
+            <h3 style="margin-bottom: var(--space-2); color: var(--neutral-700);">Menu Coming Soon</h3>
+            <p style="color: var(--neutral-600); max-width: 400px; margin: 0 auto;">
+                We're preparing our delicious offerings. Please check back soon.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Farm to Fork -->
+<section class="section-padding bg-dining-secondary">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">{{ page_settings.farm_title }}</h2>
+            <p class="section-subtitle">{{ page_settings.farm_subtitle }}</p>
+        </div>
+        
+        {% if farm_sources %}
+        <div class="farm-grid">
+            {% for source in farm_sources %}
+            <div class="farm-card">
+                <div class="farm-icon">
+                    <i class="{{ source.icon }}"></i>
+                </div>
+                <h3 class="farm-title">{{ source.name }}</h3>
+                <p class="farm-description">
+                    {{ source.description|truncatewords:20 }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="text-center" style="margin-top: var(--space-8);">
+            <a href="{% url 'dining:farm_to_fork' %}" class="btn btn-outline-gold">
+                <i class="fas fa-seedling"></i>
+                Learn More About Our Farm
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Dining Spaces -->
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">{{ page_settings.spaces_title }}</h2>
+            <p class="section-subtitle">{{ page_settings.spaces_subtitle }}</p>
+        </div>
+        
+        {% if dining_spaces %}
+        <div class="space-grid">
+            {% for space in dining_spaces %}
+            <div class="space-card">
+                <div class="space-image-container">
+                    {% if space.gallery.first %}
+                    <img class="space-image" src="{{ space.gallery.first.image.url }}" alt="{{ space.name }}" loading="lazy">
+                    {% else %}
+                    <div class="room-image-placeholder" style="background: linear-gradient(135deg, var(--dining-primary) 0%, var(--dining-accent) 100%);">
+                        <i class="fas fa-{% if space.space_type == 'pergola' %}archway{% else %}umbrella-beach{% endif %} fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <span class="space-badge">{{ space.get_space_type_display }}</span>
+                </div>
+                
+                <div class="space-content">
+                    <div class="space-header">
+                        <div>
+                            <h3 class="space-title">{{ space.name }}</h3>
+                        </div>
+                        <div class="space-capacity">
+                            <i class="fas fa-users"></i>
+                            {{ space.capacity }}
+                        </div>
+                    </div>
+                    
+                    <p class="space-description">
+                        {{ space.description|truncatewords:25 }}
+                    </p>
+                    
+                    {% if space.ideal_for %}
+                    <div class="space-ideal-for">
+                        <p class="space-ideal-for-title">Ideal for:</p>
+                        <div class="space-ideal-list">
+                            {% for occasion in space.get_ideal_for_list|slice:":3" %}
+                            <span class="space-ideal-item">{{ occasion }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="room-actions">
+                        <a href="{% url 'dining:space_detail' space.slug %}" class="btn btn-gold">
+                            View Space
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center" style="margin-top: var(--space-8);">
+            <a href="{% url 'dining:spaces' %}" class="btn btn-outline-gold btn-large">
+                <i class="fas fa-compass"></i>
+                Explore All Dining Spaces
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Reserve Your Table</h2>
+            <p class="cta-subtitle">Experience farm-fresh dining in beautiful surroundings</p>
+            
+            <div class="cta-actions">
+                <a href="tel:+254112394681" class="btn btn-gold btn-large">
+                    <i class="fas fa-phone"></i> Call to Reserve
+                </a>
+                <a href="#reservation" class="btn btn-outline-gold btn-large">
+                    <i class="fas fa-calendar-check"></i> Make Reservation
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Reservation Form -->
+<section class="section-padding" id="reservation">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Make a Reservation</h2>
+            <p class="section-subtitle">Book your dining experience in advance</p>
+        </div>
+        
+        <div style="max-width: 800px; margin: 0 auto;">
+            <form class="booking-form" method="post" action="#">
+                {% csrf_token %}
+                <div class="booking-form-grid">
+                    <div>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                            Your Details
+                        </h3>
+                        
+                        <div class="booking-form-fields">
+                            <div class="form-group">
+                                <label for="res_name">Full Name *</label>
+                                <input type="text" id="res_name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="res_email">Email Address *</label>
+                                <input type="email" id="res_email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="res_phone">Phone Number *</label>
+                                <input type="tel" id="res_phone" name="phone" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="res_guests">Number of Guests *</label>
+                                <input type="number" id="res_guests" name="guests" min="1" max="20" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
+                            Reservation Details
+                        </h3>
+                        
+                        <div class="booking-form-fields">
+                            <div class="form-group">
+                                <label for="res_date">Date *</label>
+                                <input type="date" id="res_date" name="date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="res_time">Time *</label>
+                                <select id="res_time" name="time" required>
+                                    <option value="">Select time</option>
+                                    <option value="08:00">8:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                    <option value="18:00">6:00 PM</option>
+                                    <option value="20:00">8:00 PM</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="res_space">Preferred Dining Space</label>
+                                <select id="res_space" name="space">
+                                    <option value="">Any available</option>
+                                    {% for space in dining_spaces %}
+                                    <option value="{{ space.slug }}">{{ space.name }} ({{ space.get_space_type_display }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="res_notes">Special Requests</label>
+                                <textarea id="res_notes" name="notes" rows="3" placeholder="Dietary requirements, special occasions, etc."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: var(--space-8);">
+                    <button type="submit" class="btn btn-gold btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Reservation
+                    </button>
+                    <p style="color: var(--neutral-500); margin-top: var(--space-3); font-size: 0.875rem;">
+                        <i class="fas fa-info-circle"></i>
+                        We'll confirm your reservation within 2 hours
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const dateInput = document.getElementById('res_date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+    
+    // Form submission
+    const reservationForm = document.querySelector('.booking-form');
+    if (reservationForm) {
+        reservationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+            
+            // Simulate submission
+            setTimeout(() => {
+                alert('Thank you! Your reservation request has been received. We\'ll confirm within 2 hours.');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+    }
+});
+</script>
+{% endblock %}
