@@ -73,7 +73,7 @@
                                 <a href="{% url 'gardens:general_events' %}">General Events</a>
                             </div>
                         </li>
-                        <li><a href="#" class="nav-link">Dining</a></li>
+                        <li><a href="{% url 'dining:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'dining' %}active{% endif %}">Dining</a></li>
                         <li><a href="#" class="nav-link">Kids & Family</a></li>
                         <li><a href="#" class="nav-link">Gallery</a></li>
                         <li><a href="#" class="nav-link">Contact</a></li>

@@ -1,4 +1,4 @@
-# zamar_springs/apps/dining/admin.py
+# zamar_springs/apps/dining/admin.py - FIXED VERSION
 from django.contrib import admin
 from .models import (
     DiningPage, FoodCategory, FoodItem,
@@ -45,7 +45,7 @@ class FoodCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(FoodItem)
 class FoodItemAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'is_from_farm', 'is_featured', 'display_order']
+    list_display = ['name', 'category', 'is_from_farm', 'is_featured', 'is_special', 'display_order']  # Added is_special here
     list_filter = ['category', 'is_from_farm', 'is_featured', 'is_special', 'is_active']
     list_editable = ['is_featured', 'is_special', 'display_order']
     search_fields = ['name', 'description']
