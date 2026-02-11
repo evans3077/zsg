@@ -30,13 +30,7 @@
             {% for garden in gardens %}
             <div class="garden-card {% if garden.is_featured %}garden-card-featured{% endif %}">
                 <div class="garden-image-container">
-                    {% if garden.featured_image %}
-                    <img class="garden-image" src="{{ garden.featured_image.url }}" alt="{{ garden.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder">
-                        <i class="fas fa-tree fa-3x"></i>
-                    </div>
-                    {% endif %}
+                    <img class="garden-image" src="{{ garden.display_image }}" alt="{{ garden.name }} at Zamar Springs Gardens" loading="lazy">
                     <span class="garden-badge">{{ garden.get_garden_type_display }}</span>
                 </div>
                 

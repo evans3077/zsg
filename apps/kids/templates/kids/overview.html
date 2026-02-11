@@ -36,9 +36,9 @@
 
 <section class="kids-hero">
     <div class="kids-hero-media">
-        <div class="kids-hero-slide"><img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Kids and family fun at Zamar Springs Gardens" loading="eager"></div>
-        <div class="kids-hero-slide"><img src="/media/conferences/gallery/classroom-conference-hall-machakos-2.webp" alt="Family activity setup at Zamar Springs Gardens" loading="lazy"></div>
-        <div class="kids-hero-slide"><img src="/media/conferences/gallery/banquet-meeting-room-machakos-2.webp" alt="Outdoor family recreation area at Zamar Springs Gardens" loading="lazy"></div>
+        <div class="kids-hero-slide"><img src="{{ hero_images.0 }}" alt="Kids outdoor play area at Zamar Springs Gardens in Machakos" loading="eager"></div>
+        <div class="kids-hero-slide"><img src="{{ hero_images.1 }}" alt="Kids activity games at Zamar Springs Gardens in Machakos" loading="lazy"></div>
+        <div class="kids-hero-slide"><img src="{{ hero_images.2 }}" alt="Family-friendly outdoor recreation setup at Zamar Springs Gardens" loading="lazy"></div>
         <div class="kids-hero-overlay"></div>
     </div>
     <div class="container">
@@ -63,7 +63,7 @@
             {% for activity in kids_activities %}
             <article class="activity-card">
                 <div class="activity-image">
-                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="{{ activity.name }} activity at Zamar Springs Gardens" loading="lazy">
+                    <img src="{{ activity.image }}" alt="{{ activity.name }} activity at Zamar Springs Gardens" loading="lazy">
                 </div>
                 <div class="activity-content">
                     <div class="activity-icon"><i class="{{ activity.icon }}"></i></div>
@@ -94,8 +94,8 @@
         </div>
         <div class="family-layout">
             <div class="family-media-stack">
-                <img src="/media/conferences/gallery/executive-board-room-machakos-1.webp" alt="Family game setup at Zamar Springs Gardens" loading="lazy">
-                <img src="/media/conferences/gallery/executive-meeting-room-machakos-u-2.webp" alt="Adult and family recreation at Zamar Springs Gardens" loading="lazy">
+                <img src="{{ family_images.0 }}" alt="Family table tennis setup at Zamar Springs Gardens" loading="lazy">
+                <img src="{{ family_images.1 }}" alt="Family darts and outdoor recreation at Zamar Springs Gardens" loading="lazy">
             </div>
             <div class="family-activities-list">
                 {% for activity in family_activities %}
@@ -112,4 +112,3 @@
     </div>
 </section>
 {% endblock %}
-

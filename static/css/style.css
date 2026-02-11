@@ -1059,9 +1059,17 @@
     }
 
      @media (max-width: 640px) {
+        .container {
+            padding: 0 var(--space-3);
+        }
+
         .hero-section {
             min-height: 70vh;
             padding-top: calc(80px + var(--space-8));
+        }
+
+        .hero-slide img {
+            object-position: center 30%;
         }
 
         .hero-stats {
@@ -1086,6 +1094,20 @@
         .hero-actions .btn {
             width: 100%;
             justify-content: center;
+        }
+
+        .footer-links-bottom {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--space-3);
+        }
+
+        .newsletter-form .input-group {
+            flex-direction: column;
+        }
+
+        .newsletter-form .input-group .btn {
+            width: 100%;
         }
     }
 

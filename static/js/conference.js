@@ -37,26 +37,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Booking form handling
-    const bookingForms = document.querySelectorAll('.booking-form');
-    bookingForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Show loading state
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                alert('Thank you! Your inquiry has been sent. We\'ll contact you within 24 hours.');
-                this.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    });
 });

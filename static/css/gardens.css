@@ -166,7 +166,7 @@
 /* ===== GARDEN CARDS ===== */
 .gardens-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--space-xl);
     align-items: stretch;
 }
@@ -331,7 +331,7 @@
 /* ===== EVENT TYPE CARDS ===== */
 .event-types-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--space-xl);
 }
 
@@ -912,7 +912,16 @@
     }
 
     .garden-image-container {
-        max-height: 200px;
+        max-height: 180px;
+    }
+
+    .garden-content {
+        padding: var(--space-lg);
+    }
+
+    .garden-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 

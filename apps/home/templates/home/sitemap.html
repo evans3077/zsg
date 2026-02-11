@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Sitemap | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Browse the full sitemap for Zamar Springs Gardens including conferences, gardens, dining, kids and family, gallery, and policy pages.{% endblock %}
+{% block meta_keywords %}sitemap, Zamar Springs Gardens pages, website navigation, Machakos venue{% endblock %}
+{% block og_title %}Sitemap | Zamar Springs Gardens{% endblock %}
+{% block og_description %}Quick access to all major pages and the XML sitemap for search indexing.{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 900px;">
+        <div class="section-header">
+            <h1 class="section-title">Sitemap</h1>
+            <p class="section-subtitle">Quick access to all major pages</p>
+        </div>
+
+        <div style="display: grid; gap: var(--space-5);">
+            {% for section in sections %}
+            <article style="background: white; border: 1px solid var(--neutral-200); border-radius: 1rem; padding: var(--space-6);">
+                <h2 style="font-family: var(--font-serif); margin-bottom: var(--space-3);">{{ section.title }}</h2>
+                <ul style="display: grid; gap: var(--space-2); list-style: none; padding: 0; margin: 0;">
+                    {% for link in section.links %}
+                    <li>
+                        <a href="{{ link.url }}" style="text-decoration: none; color: var(--gold-darker); font-weight: 600;">
+                            {{ link.label }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

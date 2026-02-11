@@ -113,13 +113,7 @@
             {% for garden in gardens|slice:":3" %}
             <div class="garden-card">
                 <div class="garden-image-container">
-                    {% if garden.featured_image %}
-                    <img class="garden-image" src="{{ garden.featured_image.url }}" alt="{{ garden.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder">
-                        <i class="fas fa-tree fa-3x"></i>
-                    </div>
-                    {% endif %}
+                    <img class="garden-image" src="{{ garden.display_image }}" alt="{{ garden.name }} at Zamar Springs Gardens" loading="lazy">
                 </div>
                 
                 <div class="garden-content">
@@ -188,8 +182,11 @@
         </div>
         
         <div style="max-width: 800px; margin: 0 auto;">
-            <form class="booking-form" method="post" action="#">
+            <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
                 {% csrf_token %}
+                <input type="hidden" name="request_type" value="garden_event">
+                <input type="hidden" name="source_page" value="Gardens {{ category }}">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}#inquiry">
                 <input type="hidden" name="event_category" value="{{ category }}">
                 
                 <div class="booking-form-fields">
@@ -284,27 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInput.min = today;
     }
     
-    // Form submission
-    const inquiryForm = document.querySelector('.booking-form');
-    if (inquiryForm) {
-        inquiryForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            // Simulate submission
-            setTimeout(() => {
-                alert('Thank you! Your {{ category }} inquiry has been sent. We\'ll contact you within 24 hours.');
-                this.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    }
 });
 </script>
 {% endblock %}

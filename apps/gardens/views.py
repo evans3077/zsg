@@ -3,6 +3,25 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import GardensPage, Garden, EventType
 
+GARDEN_IMAGE_MAP = {
+    "muuo-garden": "/static/images/web-pictures/muuo-grounds-zamarsprings.webp",
+    "wendo-garden": "/static/images/web-pictures/wendo-events-gardens-machakos-2.webp",
+    "utanu-garden": "/static/images/web-pictures/utanu-event-gardens-machakos.webp",
+}
+
+DEFAULT_GARDEN_IMAGE = "/static/images/web-pictures/garden-walkway-zamarsprings.webp"
+
+
+def _decorate_garden(garden):
+    if not garden:
+        return None
+
+    if garden.featured_image:
+        garden.display_image = garden.featured_image.url
+    else:
+        garden.display_image = GARDEN_IMAGE_MAP.get(garden.slug, DEFAULT_GARDEN_IMAGE)
+    return garden
+
 
 def gardens_overview(request):
     """Gardens & Events landing page"""
@@ -15,9 +34,11 @@ def gardens_overview(request):
         is_active=True,
         is_featured=True
     ).order_by('display_order')[:3]
+    featured_gardens = [_decorate_garden(garden) for garden in featured_gardens]
     
     # Get all gardens
     gardens = Garden.objects.filter(is_active=True).order_by('display_order')
+    gardens = [_decorate_garden(garden) for garden in gardens]
     
     # Get event types by category
     wedding_events = EventType.objects.filter(
@@ -57,6 +78,7 @@ def weddings_view(request):
     wedding_gardens = Garden.objects.filter(
         is_active=True
     ).order_by('display_order')
+    wedding_gardens = [_decorate_garden(garden) for garden in wedding_gardens]
     
     context = {
         'event_types': event_types,
@@ -100,6 +122,7 @@ def general_events_view(request):
 def gardens_detail_view(request):
     """Gardens listing page"""
     gardens = Garden.objects.filter(is_active=True).order_by('display_order')
+    gardens = [_decorate_garden(garden) for garden in gardens]
     
     context = {
         'gardens': gardens,
@@ -112,11 +135,13 @@ def gardens_detail_view(request):
 def garden_detail(request, slug):
     """Individual garden detail page"""
     garden = get_object_or_404(Garden, slug=slug, is_active=True)
+    garden = _decorate_garden(garden)
     
     # Get other gardens for related section
     related_gardens = Garden.objects.filter(
         is_active=True
     ).exclude(id=garden.id).order_by('display_order')[:3]
+    related_gardens = [_decorate_garden(related) for related in related_gardens]
     
     # Get event types suitable for this garden
     suitable_events = EventType.objects.filter(

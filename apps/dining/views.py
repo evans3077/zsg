@@ -5,6 +5,46 @@ from .models import (
     DiningSpace, FarmSource
 )
 
+SPACE_FALLBACK_IMAGE = "/static/images/web-pictures/open-air-dining-machakos.webp"
+
+SPACE_GALLERY_FALLBACKS = {
+    "pergola": [
+        "/static/images/web-pictures/pergola-outdoor-zamar-springs-gardens.webp",
+        "/static/images/web-pictures/pergola-outdoor-zamar-springs-gardens-1.webp",
+    ],
+    "gazebo": [
+        "/static/images/web-pictures/gazebo-setup-machakos.webp",
+        "/static/images/web-pictures/gazebo-setup-machakos-2.webp",
+    ],
+    "open_air": [
+        "/static/images/web-pictures/open-air-dining-machakos.webp",
+        "/static/images/web-pictures/outdoor-dining-space-machakos-1.webp",
+    ],
+}
+
+
+def _space_fallback_images(space):
+    if space.space_type == "garden":
+        return SPACE_GALLERY_FALLBACKS["open_air"]
+    return SPACE_GALLERY_FALLBACKS.get(space.space_type, [])
+
+
+def _decorate_space(space):
+    if not space:
+        return None
+
+    gallery_images = list(space.gallery.all())
+    space.gallery_images = gallery_images
+    space.fallback_gallery = _space_fallback_images(space)
+
+    if gallery_images:
+        space.card_image = gallery_images[0].image.url
+    elif space.fallback_gallery:
+        space.card_image = space.fallback_gallery[0]
+    else:
+        space.card_image = SPACE_FALLBACK_IMAGE
+    return space
+
 
 def dining_overview(request):
     """Dining landing page"""
@@ -24,12 +64,13 @@ def dining_overview(request):
     ).select_related('category').order_by('category__display_order', 'display_order')[:9]
     
     # Get dining spaces (for grouped expandable section)
-    dining_spaces = DiningSpace.objects.filter(
+    dining_spaces_qs = DiningSpace.objects.filter(
         is_active=True
     ).prefetch_related('gallery').order_by('display_order')
-    pergola_space = dining_spaces.filter(space_type='pergola').first()
-    gazebo_spaces = dining_spaces.filter(space_type='gazebo')
-    open_air_space = dining_spaces.filter(space_type='garden').first()
+    dining_spaces = [_decorate_space(space) for space in dining_spaces_qs]
+    pergola_space = _decorate_space(dining_spaces_qs.filter(space_type='pergola').first())
+    gazebo_spaces = [_decorate_space(space) for space in dining_spaces_qs.filter(space_type='gazebo')]
+    open_air_space = _decorate_space(dining_spaces_qs.filter(space_type='garden').first())
     
     # Get farm sources
     farm_sources = FarmSource.objects.filter(
@@ -63,11 +104,11 @@ def menu_view(request):
     # Get items for each category
     menu_data = []
     for category in categories:
-        items = FoodItem.objects.filter(
+        items = list(FoodItem.objects.filter(
             category=category,
             is_active=True
-        ).order_by('display_order')
-        if items.exists():
+        ).order_by('display_order'))
+        if items:
             menu_data.append({
                 'category': category,
                 'items': items

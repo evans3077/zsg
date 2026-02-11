@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Home - Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Zamar Springs Gardens is a family-friendly, non-alcoholic destination in Machakos for conferences, garden events, farm-to-fork dining, kids activities, and memorable outdoor experiences.{% endblock %}
+{% block meta_keywords %}Zamar Springs Gardens, family friendly hotel Machakos, garden venue Machakos, conference venue Machakos, farm to fork dining, kids activities{% endblock %}
+{% block og_title %}Zamar Springs Gardens | Family-Friendly Venue in Machakos{% endblock %}
+{% block og_description %}Discover conferences, gardens, dining, kids play zones, and event spaces at Zamar Springs Gardens in Machakos.{% endblock %}
 
 {% block content %}
 
@@ -7,13 +12,13 @@
 <section class="hero-section">
     <div class="hero-slider" aria-hidden="true">
         <div class="hero-slide is-active">
-            <img src="/media/conferences/gallery/banquet-meeting-room-machakos-2.webp" alt="" loading="eager" decoding="async">
+            <img src="{% static 'images/web-pictures/zamar-springs-gardens-entrance.webp' %}" alt="Entrance view at Zamar Springs Gardens in Machakos" loading="eager" decoding="async">
         </div>
         <div class="hero-slide">
-            <img src="/media/conferences/gallery/executive-board-room-machakos-1.webp" alt="" loading="lazy" decoding="async">
+            <img src="{% static 'images/web-pictures/pergola-outdoor-zamar-springs-gardens.webp' %}" alt="Pergola and outdoor dining setup at Zamar Springs Gardens" loading="lazy" decoding="async">
         </div>
         <div class="hero-slide">
-            <img src="/media/conferences/gallery/classroom-conference-hall-machakos-2.webp" alt="" loading="lazy" decoding="async">
+            <img src="{% static 'images/web-pictures/wendo-events-gardens-machakos-2.webp' %}" alt="Wendo gardens event setup at Zamar Springs Gardens in Machakos" loading="lazy" decoding="async">
         </div>
     </div>
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -95,7 +100,7 @@
                 <div class="service-content">
                     <h3 class="service-title">Dining Experience</h3>
                     <p class="service-description">Non-alcoholic dining with fresh, organic meals in a serene environment.</p>
-                    <a href="#" class="btn btn-gold btn-small">Learn More</a>
+                    <a href="{% url 'dining:overview' %}" class="btn btn-gold btn-small">Learn More</a>
                 </div>
             </div>
             <div class="service-card">
@@ -103,7 +108,7 @@
                 <div class="service-content">
                     <h3 class="service-title">Family & Kids</h3>
                     <p class="service-description">Kid-friendly areas and family bonding activities to enjoy the day.</p>
-                    <a href="#" class="btn btn-gold btn-small">Learn More</a>
+                    <a href="{% url 'kids:overview' %}" class="btn btn-gold btn-small">Learn More</a>
                 </div>
             </div>
         </div>

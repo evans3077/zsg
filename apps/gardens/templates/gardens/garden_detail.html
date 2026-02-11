@@ -37,6 +37,10 @@
                     <span>Type: <strong>{{ garden.get_garden_type_display }}</strong></span>
                 </div>
             </div>
+
+            <div style="margin-top: var(--space-6); border-radius: 1rem; overflow: hidden; box-shadow: var(--shadow-md);">
+                <img src="{{ garden.display_image }}" alt="{{ garden.name }} garden venue at Zamar Springs Gardens" loading="eager" style="width: 100%; aspect-ratio: 16/7; object-fit: cover;">
+            </div>
         </div>
 
         <div class="room-detail-content">
@@ -223,8 +227,11 @@
                         </div>
                     </div>
                     
-                    <form class="booking-form" method="post" action="#">
+                    <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
                         {% csrf_token %}
+                        <input type="hidden" name="request_type" value="garden_booking">
+                        <input type="hidden" name="source_page" value="Garden Detail">
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}#booking">
                         <input type="hidden" name="garden" value="{{ garden.name }}">
                         
                         <div class="form-group">
@@ -323,8 +330,8 @@
                         {% for related in related_gardens %}
                         <a href="{% url 'gardens:garden_detail' related.slug %}" style="display: block; text-decoration: none; color: inherit;">
                             <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border: 1px solid var(--neutral-200); border-radius: 0.5rem; transition: var(--transition-base);">
-                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-700) 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white;">
-                                    <i class="fas fa-tree"></i>
+                                <div style="width: 60px; height: 60px; border-radius: 0.5rem; overflow: hidden; flex-shrink: 0;">
+                                    <img src="{{ related.display_image }}" alt="{{ related.name }} garden at Zamar Springs Gardens" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div>
                                     <p style="font-weight: 600; margin-bottom: 0.25rem; color: var(--neutral-900);">{{ related.name }}</p>
@@ -370,25 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Form submission
-    const bookingForm = document.querySelector('.booking-form');
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                alert('Thank you! Your booking request for {{ garden.name }} has been sent. We\'ll contact you within 24 hours.');
-                this.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    }
 });
 </script>
 {% endblock %}

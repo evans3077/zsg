@@ -8,11 +8,17 @@
     <meta name="description" content="{% block meta_description %}Zamar Springs Gardens - A serene, non-alcoholic garden venue for conferences, events, dining, and family fun in Machakos{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}Zamar Springs Gardens, Machakos, garden venue, conferences, events, dining, family fun{% endblock %}">
     <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
     <meta property="og:title" content="{% block og_title %}Zamar Springs Gardens{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Zamar Springs Gardens - A serene, non-alcoholic garden venue for conferences, events, dining, and family fun in Machakos{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/zamar-springs-log-1.webp' %}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Zamar Springs Gardens">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Zamar Springs Gardens{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Zamar Springs Gardens - A serene, non-alcoholic garden venue for conferences, events, dining, and family fun in Machakos{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/zamar-springs-log-1.webp' %}{% endblock %}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -171,6 +177,15 @@
 
     <!-- Main Content -->
     <main class="main-content">
+        {% if messages %}
+        <section class="container" style="padding-top: var(--space-4);">
+            {% for message in messages %}
+            <div style="margin-bottom: var(--space-3); padding: var(--space-4); border-radius: 0.75rem; border: 1px solid {% if message.tags == 'success' %}#8ad6a2{% elif message.tags == 'error' %}#f4a7a7{% else %}var(--neutral-300){% endif %}; background: {% if message.tags == 'success' %}#eefaf2{% elif message.tags == 'error' %}#fff3f3{% else %}var(--neutral-50){% endif %}; color: var(--neutral-800);">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 
@@ -247,9 +262,9 @@
             <div class="footer-bottom">
                 <p>&copy; 2026 Zamar Springs Gardens. All rights reserved.</p>
                 <div class="footer-links-bottom">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Sitemap</a>
+                    <a href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+                    <a href="{% url 'home:terms_of_service' %}">Terms of Service</a>
+                    <a href="{% url 'home:sitemap_page' %}">Sitemap</a>
                 </div>
             </div>
         </div>

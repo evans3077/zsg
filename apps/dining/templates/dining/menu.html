@@ -67,15 +67,6 @@
 
             {% for item in group.items|slice:":6" %}
             <article class="menu-item">
-                <div class="menu-item-image">
-                    {% if item.featured_image %}
-                    <img src="{{ item.featured_image.url }}" alt="{{ item.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder" style="height:100%;">
-                        <i class="fas fa-utensils fa-2x"></i>
-                    </div>
-                    {% endif %}
-                </div>
                 <div class="menu-item-content">
                     <div class="menu-item-header">
                         <h4 class="menu-item-name">{{ item.name }}</h4>

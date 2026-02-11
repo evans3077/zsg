@@ -81,24 +81,11 @@
         <div class="food-grid">
             {% for food in featured_food %}
             <div class="food-card {% if food.is_featured %}food-card-featured{% endif %} {% if food.is_special %}food-card-special{% endif %}">
-                <div class="food-image-container">
-                    {% if food.featured_image %}
-                    <img class="food-image" src="{{ food.featured_image.url }}" alt="{{ food.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder" style="background: linear-gradient(135deg, var(--dining-primary) 0%, var(--dining-accent) 100%);">
-                        <i class="fas fa-utensils fa-3x"></i>
-                    </div>
-                    {% endif %}
-                    
-                    {% if food.is_from_farm %}
-                    <span class="food-from-farm">
-                        <i class="fas fa-leaf"></i> From Our Farm
-                    </span>
-                    {% endif %}
-                </div>
-                
                 <div class="food-content">
                     <div class="food-header">
+                        <div class="food-visual" aria-hidden="true">
+                            <i class="{{ food.category.icon }}"></i>
+                        </div>
                         <h3 class="food-title">{{ food.name }}</h3>
                         <p class="food-category">
                             <i class="{{ food.category.icon }}"></i>
@@ -128,6 +115,9 @@
                     {% endif %}
                     
                     <div class="food-footer">
+                        {% if food.is_from_farm %}
+                        <span class="menu-item-ingredient">From Our Farm</span>
+                        {% endif %}
                         {% if food.price %}
                         <div class="food-price">
                             Ksh {{ food.price|floatformat:0 }}
@@ -165,29 +155,14 @@
 <section class="section-padding bg-gold-light">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Dining Gallery</h2>
+            <h2 class="section-title">Dining Spaces Gallery</h2>
             <p class="section-subtitle">Swipe on mobile. Tap a card to expand details.</p>
         </div>
         <div class="dining-gallery-slider" id="dining-gallery-slider">
-            {% for food in featured_food|slice:":6" %}
-            <article class="dining-gallery-card" tabindex="0">
-                <div class="dining-gallery-image-wrap">
-                    {% if food.featured_image %}
-                    <img src="{{ food.featured_image.url }}" alt="{{ food.name }} at Zamar Springs Gardens" loading="lazy">
-                    {% else %}
-                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Zamar Springs Gardens menu and platter board" loading="lazy">
-                    {% endif %}
-                </div>
-                <div class="dining-gallery-content">
-                    <h3>{{ food.name }}</h3>
-                    <p>{{ food.description|truncatewords:14 }}</p>
-                </div>
-            </article>
-            {% endfor %}
             {% for space in dining_spaces|slice:":3" %}
             <article class="dining-gallery-card" tabindex="0">
                 <div class="dining-gallery-image-wrap">
-                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="{{ space.name }} setup at Zamar Springs Gardens" loading="lazy">
+                    <img src="{{ space.card_image }}" alt="{{ space.name }} setup at Zamar Springs Gardens" loading="lazy">
                 </div>
                 <div class="dining-gallery-content">
                     <h3>{{ space.name }}</h3>
@@ -275,20 +250,22 @@
                 </summary>
                 <div class="space-expand-content">
                     <div class="dining-gallery-slider dining-gallery-inline">
-                        {% if pergola_space and pergola_space.gallery.all %}
-                            {% for image in pergola_space.gallery.all %}
+                        {% if pergola_space and pergola_space.gallery_images %}
+                            {% for image in pergola_space.gallery_images %}
                             <article class="dining-gallery-card">
                                 <div class="dining-gallery-image-wrap">
                                     <img src="{{ image.image.url }}" alt="Pergola dining at Zamar Springs Gardens" loading="lazy">
                                 </div>
                             </article>
                             {% endfor %}
-                        {% else %}
+                        {% elif pergola_space and pergola_space.fallback_gallery %}
+                            {% for image_path in pergola_space.fallback_gallery %}
                             <article class="dining-gallery-card">
                                 <div class="dining-gallery-image-wrap">
-                                    <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Pergola dining setup at Zamar Springs Gardens" loading="lazy">
+                                    <img src="{{ image_path }}" alt="Pergola dining setup at Zamar Springs Gardens" loading="lazy">
                                 </div>
                             </article>
+                            {% endfor %}
                         {% endif %}
                     </div>
                     {% if pergola_space %}
@@ -311,20 +288,19 @@
                     <div class="dining-gallery-slider dining-gallery-inline">
                         {% if gazebo_spaces %}
                             {% for gazebo in gazebo_spaces|slice:":3" %}
-                                {% if gazebo.gallery.first %}
                                 <article class="dining-gallery-card">
                                     <div class="dining-gallery-image-wrap">
-                                        <img src="{{ gazebo.gallery.first.image.url }}" alt="{{ gazebo.name }} at Zamar Springs Gardens" loading="lazy">
+                                        <img src="{{ gazebo.card_image }}" alt="{{ gazebo.name }} at Zamar Springs Gardens" loading="lazy">
                                     </div>
                                 </article>
-                                {% endif %}
                             {% endfor %}
-                        {% endif %}
+                        {% else %}
                         <article class="dining-gallery-card">
                             <div class="dining-gallery-image-wrap">
-                                <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Gazebo setup at Zamar Springs Gardens" loading="lazy">
+                                <img src="/static/images/web-pictures/gazebo-setup-machakos.webp" alt="Gazebo setup at Zamar Springs Gardens" loading="lazy">
                             </div>
                         </article>
+                        {% endif %}
                     </div>
                 </div>
             </details>
@@ -336,11 +312,23 @@
                 </summary>
                 <div class="space-expand-content">
                     <div class="dining-gallery-slider dining-gallery-inline">
-                        <article class="dining-gallery-card">
-                            <div class="dining-gallery-image-wrap">
-                                <img src="{% static 'menus/WhatsApp Image 2026-02-11 at 09.10.25 (1).jpeg' %}" alt="Open Air dining setup at Zamar Springs Gardens" loading="lazy">
-                            </div>
-                        </article>
+                        {% if open_air_space and open_air_space.gallery_images %}
+                            {% for image in open_air_space.gallery_images %}
+                            <article class="dining-gallery-card">
+                                <div class="dining-gallery-image-wrap">
+                                    <img src="{{ image.image.url }}" alt="Open Air dining setup at Zamar Springs Gardens" loading="lazy">
+                                </div>
+                            </article>
+                            {% endfor %}
+                        {% elif open_air_space and open_air_space.fallback_gallery %}
+                            {% for image_path in open_air_space.fallback_gallery %}
+                            <article class="dining-gallery-card">
+                                <div class="dining-gallery-image-wrap">
+                                    <img src="{{ image_path }}" alt="Open Air dining setup at Zamar Springs Gardens" loading="lazy">
+                                </div>
+                            </article>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                     {% if open_air_space %}
                     <p class="space-description">{{ open_air_space.description }}</p>
@@ -406,8 +394,11 @@
         </div>
         
         <div style="max-width: 800px; margin: 0 auto;">
-            <form class="booking-form" method="post" action="#">
+            <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
                 {% csrf_token %}
+                <input type="hidden" name="request_type" value="dining_reservation">
+                <input type="hidden" name="source_page" value="Dining Overview">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}#reservation">
                 <div class="booking-form-grid">
                     <div>
                         <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
@@ -528,27 +519,6 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInput.min = today;
     }
     
-    // Form submission
-    const reservationForm = document.querySelector('.booking-form');
-    if (reservationForm) {
-        reservationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            submitBtn.disabled = true;
-            
-            // Simulate submission
-            setTimeout(() => {
-                alert('Thank you! Your reservation request has been received. We\'ll confirm within 2 hours.');
-                this.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    }
 });
 </script>
 {% endblock %}

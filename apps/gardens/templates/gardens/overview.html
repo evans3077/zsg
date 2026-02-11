@@ -93,13 +93,7 @@
             {% for garden in featured_gardens %}
             <div class="garden-card {% if garden.is_featured %}garden-card-featured{% endif %}">
                 <div class="garden-image-container">
-                    {% if garden.featured_image %}
-                    <img class="garden-image" src="{{ garden.featured_image.url }}" alt="{{ garden.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder">
-                        <i class="fas fa-tree fa-3x"></i>
-                    </div>
-                    {% endif %}
+                    <img class="garden-image" src="{{ garden.display_image }}" alt="{{ garden.name }} at Zamar Springs Gardens" loading="lazy">
                     <span class="garden-badge">{{ garden.garden_type|title }}</span>
                 </div>
                 
@@ -277,8 +271,11 @@
         </div>
         
         <div style="max-width: 800px; margin: 0 auto;">
-            <form class="booking-form" method="post" action="#">
+            <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
                 {% csrf_token %}
+                <input type="hidden" name="request_type" value="garden_event">
+                <input type="hidden" name="source_page" value="Gardens Overview">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}#inquiry">
                 <div class="booking-form-grid">
                     <div>
                         <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
@@ -360,27 +357,6 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInput.min = today;
     }
     
-    // Form submission
-    const inquiryForm = document.querySelector('.booking-form');
-    if (inquiryForm) {
-        inquiryForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            // Simulate submission
-            setTimeout(() => {
-                alert('Thank you for your inquiry! We\'ll contact you within 24 hours with availability and pricing.');
-                this.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    }
 });
 </script>
 {% endblock %}

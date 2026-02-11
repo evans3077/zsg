@@ -149,7 +149,7 @@
             <p class="section-subtitle">We can create a package tailored to your specific needs</p>
         </div>
         
-        <div lass="custom-package-card">
+        <div class="custom-package-card">
             <div class="custom-package-content">
                 <div>
                     <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-3); color: var(--neutral-900);">
@@ -206,8 +206,11 @@
         </div>
         
         <div class="package-inquiry">
-            <form class="booking-form" method="post" action="#">
+            <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
                 {% csrf_token %}
+                <input type="hidden" name="request_type" value="conference_package">
+                <input type="hidden" name="source_page" value="Conference Packages">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}#inquiry">
                 <div class="booking-form-grid">
                     <div>
                         <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--neutral-900);">
@@ -399,33 +402,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
         dateInput.min = today;
-    }
-    
-    // Form submission
-    const inquiryForm = document.querySelector('.booking-form');
-    if (inquiryForm) {
-        inquiryForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            // Simulate submission
-            setTimeout(() => {
-                alert('Thank you for your inquiry! We\'ll contact you within 24 hours with package details and availability.');
-                this.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                
-                // Reset date to today
-                if (dateInput) {
-                    dateInput.value = new Date().toISOString().split('T')[0];
-                }
-            }, 1500);
-        });
     }
     
     // FAQ toggle

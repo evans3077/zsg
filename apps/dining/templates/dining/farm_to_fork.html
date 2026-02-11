@@ -49,15 +49,11 @@
         <div class="food-grid">
             {% for food in farm_food %}
             <article class="food-card">
-                <div class="food-image-container">
-                    {% if food.featured_image %}
-                    <img class="food-image" src="{{ food.featured_image.url }}" alt="{{ food.name }}" loading="lazy">
-                    {% else %}
-                    <div class="room-image-placeholder"><i class="fas fa-utensils fa-3x"></i></div>
-                    {% endif %}
-                    <span class="food-from-farm"><i class="fas fa-leaf"></i> From Our Farm</span>
-                </div>
                 <div class="food-content">
+                    <div class="food-visual" aria-hidden="true">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <span class="menu-item-ingredient">From Our Farm</span>
                     <h3 class="food-title">{{ food.name }}</h3>
                     <p class="food-description">{{ food.description|truncatewords:20 }}</p>
                     {% if food.farm_ingredients %}
