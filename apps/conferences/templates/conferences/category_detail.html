@@ -1,10 +1,38 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ category.name }} | Zamar Springs Gardens{% endblock %}
+{% block title %}{{ category.name }} in Machakos - Corporate Meeting & Conference Rooms
+{% endblock %}
 
-{% block meta_description %}{{ category.description }}{% endblock %}
+{% block meta_description %}{{ category.name }} in Machakos at Zamar Springs Gardens. Ideal for corporate meetings, executive sessions, trainings, seminars and workshops. Fully equipped with dedicated high-speed WiFi, projector, air conditioning and catering services. Affordable conference room hire in Machakos. Book today.
+{% endblock %}
 
+{% block meta_keywords %}
+{{ category.name }} Machakos,
+{{ category.name }} in Machakos,
+conference rooms Machakos,
+meeting rooms Machakos,
+corporate meeting venue Machakos,
+executive meeting rooms Machakos,
+training venue Machakos,
+seminar venue Machakos,
+boardroom hire Machakos,
+conference rooms near Nairobi,
+meeting rooms near Nairobi,
+corporate meeting near Nairobi,
+executive meeting near Nairobi,
+training venue near Nairobi,
+seminar venue near Nairobi,
+boardroom hire near Nairobi,
+conference hall rental Machakos,
+professional meeting space Machakos,
+affordable conference rooms Kenya
+{% endblock %}
+{% block og_title %}{{ category.name }} in Machakos | Corporate Meeting Venue{% endblock %}
+
+{% block og_description %}
+Professional {{ category.name|lower }} in Machakos for meetings, corporate events, seminars and training sessions with modern amenities and flexible booking options.
+{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/conference.css' %}">
 {% endblock %}
@@ -14,7 +42,7 @@
 <section class="conference-hero">
     <div class="container">
         <div class="conference-hero-content">
-            <h1 class="conference-hero-title">{{ category.name }}</h1>
+            <h1 class="conference-hero-title">{{ category.name }} in Machakos for Corporate Meetings & Events</h1>
             <p class="conference-hero-subtitle">{{ category.description }}</p>
             <a href="#rooms" class="btn btn-gold btn-large">
                 <i class="fas fa-building"></i>
@@ -49,8 +77,8 @@
 <section class="rooms-section" id="rooms">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">All {{ category.name }}</h2>
-            <p class="section-subtitle">Browse our selection of {{ category.name|lower }}</p>
+            <h2 class="section-title">All {{ category.name }} Available in Zamar Springs Gardens,Machakos</h2>
+            <p class="section-subtitle">Browse our selection of professional {{ category.name|lower }} for meetings and corporate events in Machakos.</p>
         </div>
         
         {% if rooms %}
@@ -59,7 +87,7 @@
             <div class="room-card {% if room.is_featured %}room-card-featured{% endif %}">
                 <div class="room-image-container">
                     {% if room.featured_image %}
-                    <img class="room-image" src="{{ room.featured_image.url }}" alt="{{ room.name }}" loading="lazy" decoding="async" width="800" height="533">
+                    <img class="room-image" src="{{ room.featured_image.url }}" alt="{{ room.name }} - {{ category.name }} in Machakos at Zamar Springs Gardens" loading="lazy" decoding="async" width="800" height="533">
                     {% else %}
                     <div class="room-image-placeholder">
                         <i class="fas fa-building fa-4x"></i>
@@ -204,11 +232,11 @@
         <div class="text-center facility-cta">
             <a href="{% url 'conferences:overview' %}" class="btn btn-gold btn-large">
                 <i class="fas fa-arrow-left"></i>
-                Back to All Facilities
+                Back to Conference Venues
             </a>
             <a href="{% url 'conferences:packages' %}" class="btn btn-outline-gold btn-large" style="margin-left: var(--space-4);">
                 <i class="fas fa-gift"></i>
-                View Packages
+                View Conference Packages in Machakos
             </a>
         </div>
     </div>
