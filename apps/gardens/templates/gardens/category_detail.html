@@ -217,8 +217,13 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="event_date">Preferred Date *</label>
-                        <input type="date" id="event_date" name="event_date" required>
+                        <label for="category_start_datetime">Event Start *</label>
+                        <input type="datetime-local" id="category_start_datetime" class="event-start-datetime" name="start_datetime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category_end_datetime">Event End *</label>
+                        <input type="datetime-local" id="category_end_datetime" class="event-end-datetime" name="end_datetime" required>
                     </div>
                     
                     <div class="form-group">
@@ -274,11 +279,25 @@ function selectEvent(eventName) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum date
-    const dateInput = document.getElementById('event_date');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
+    // Set minimum datetime and keep end after start
+    const startInput = document.getElementById('category_start_datetime');
+    const endInput = document.getElementById('category_end_datetime');
+    const now = new Date();
+    const minValue = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+
+    if (startInput) {
+        startInput.min = minValue;
+    }
+    if (endInput) {
+        endInput.min = minValue;
+    }
+    if (startInput && endInput) {
+        startInput.addEventListener('change', function() {
+            endInput.min = this.value || minValue;
+            if (endInput.value && endInput.value < endInput.min) {
+                endInput.value = endInput.min;
+            }
+        });
     }
     
 });

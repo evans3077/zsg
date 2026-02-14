@@ -25,7 +25,7 @@ class HomePageSettings(models.Model):
     phone_number = models.CharField(max_length=20, default="0112394681")
     email = models.EmailField(default="info@zamarsprings.com")
     address = models.TextField(
-        default="Kithini, Machakos, 45 minutes from Nairobi CBD"
+        default="Kithini, Machakos, 55 km from Nairobi GPO"
     )
     operating_hours = models.TextField(
         default="Open Daily: 8:00 AM - 10:00 PM"

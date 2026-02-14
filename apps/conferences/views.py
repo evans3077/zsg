@@ -1,9 +1,30 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Case, IntegerField, Value, When
 from .models import (
     ConferencePage, ConferenceCategory, 
     ConferenceRoom, ConferencePackage
 )
+
+
+def _ordered_conference_categories_queryset():
+    return (
+        ConferenceCategory.objects.filter(
+            is_active=True,
+            category_type__in=["board", "meeting", "hall"],
+        )
+        .annotate(
+            sort_priority=Case(
+                When(category_type="board", then=Value(1)),
+                When(category_type="meeting", then=Value(2)),
+                When(category_type="hall", then=Value(3)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("sort_priority", "display_order", "name")
+    )
+
 
 def conference_overview(request):
     """Conference landing page"""
@@ -11,7 +32,7 @@ def conference_overview(request):
     if not page_settings:
         page_settings = ConferencePage.objects.create()
     
-    categories = ConferenceCategory.objects.filter(is_active=True).order_by('display_order')
+    categories = _ordered_conference_categories_queryset()
     featured_rooms = ConferenceRoom.objects.filter(is_active=True, is_featured=True).order_by('display_order')[:6]
     popular_packages = ConferencePackage.objects.filter(is_active=True, is_popular=True).order_by('display_order')[:3]
     
@@ -35,8 +56,16 @@ def category_detail(request, slug):
     ).order_by('display_order')
 
     all_categories = ConferenceCategory.objects.filter(
-        is_active=True
-    ).order_by('display_order')
+        id__in=_ordered_conference_categories_queryset().values("id")
+    ).annotate(
+        sort_priority=Case(
+            When(category_type="board", then=Value(1)),
+            When(category_type="meeting", then=Value(2)),
+            When(category_type="hall", then=Value(3)),
+            default=Value(99),
+            output_field=IntegerField(),
+        )
+    ).order_by("sort_priority", "display_order", "name")
 
     return render(request, 'conferences/category_detail.html', {
         'category': category,

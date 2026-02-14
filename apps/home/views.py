@@ -27,6 +27,31 @@ def privacy_policy_view(request):
     return render(request, "home/privacy_policy.html")
 
 
+def outdoor_events_view(request):
+    sections = [
+        {
+            "title": "Nature Trails in Nature",
+            "description": "Planned section for nature trail experiences in a serene outdoor setting.",
+            "icon": "fas fa-route",
+        },
+        {
+            "title": "Guided & Organized Hiking",
+            "description": "Planned section for structured hiking sessions with guides and route support.",
+            "icon": "fas fa-hiking",
+        },
+        {
+            "title": "Organized Cycling",
+            "description": "Planned section for coordinated cycling activities for groups and teams.",
+            "icon": "fas fa-bicycle",
+        },
+    ]
+    return render(request, "home/outdoor_events.html", {"sections": sections})
+
+
+def careers_view(request):
+    return render(request, "home/careers.html")
+
+
 def terms_of_service_view(request):
     return render(request, "home/terms_of_service.html")
 
@@ -39,6 +64,7 @@ def site_map_view(request):
                 {"label": "Home", "url": "/"},
                 {"label": "Conferences", "url": "/conferences/"},
                 {"label": "Gardens & Events", "url": "/gardens/"},
+                {"label": "Outdoor Events", "url": "/outdoor-events/"},
                 {"label": "Dining", "url": "/dining/"},
                 {"label": "Kids & Family", "url": "/kids-family/"},
                 {"label": "Gallery", "url": "/gallery/"},
@@ -49,6 +75,7 @@ def site_map_view(request):
             "links": [
                 {"label": "Privacy Policy", "url": "/privacy-policy/"},
                 {"label": "Terms of Service", "url": "/terms-of-service/"},
+                {"label": "Careers", "url": "/careers/"},
                 {"label": "XML Sitemap", "url": "/sitemap.xml"},
             ],
         },

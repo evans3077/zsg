@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Outdoor Events | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Outdoor events at Zamar Springs Gardens including nature trails, guided hiking, and organized cycling.{% endblock %}
+{% block meta_keywords %}outdoor events Machakos, nature trails, guided hiking, organized cycling{% endblock %}
+
+{% block content %}
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">Outdoor Events</h1>
+            <p class="section-subtitle">New outdoor activities section. Full details will be added next.</p>
+        </div>
+        <div class="highlights-grid">
+            {% for section in sections %}
+            <article class="highlight-card">
+                <div class="highlight-icon"><i class="{{ section.icon }}"></i></div>
+                <h3>{{ section.title }}</h3>
+                <p>{{ section.description }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

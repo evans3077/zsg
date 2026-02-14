@@ -64,8 +64,28 @@ Professional {{ category.name|lower }} in Machakos for meetings, corporate event
                 </div>
                 <div class="category-card-content">
 
-                    <h3>{{ cat.name }}</h3>
-                    <p>{{ cat.description|truncatewords:8 }}</p>
+                    <h3>
+                        {% if cat.category_type == 'board' %}
+                            Board Rooms
+                        {% elif cat.category_type == 'meeting' %}
+                            Meeting Rooms
+                        {% elif cat.category_type == 'hall' %}
+                            Halls
+                        {% else %}
+                            {{ cat.name }}
+                        {% endif %}
+                    </h3>
+                    <p>
+                        {% if cat.category_type == 'board' %}
+                            12 to 15 pax: Board Room 1 and Board Room 2
+                        {% elif cat.category_type == 'meeting' %}
+                            15 to 50 pax: Melia and Japonica
+                        {% elif cat.category_type == 'hall' %}
+                            50 to 180 pax: Acacia, Bamboo, and Cactus
+                        {% else %}
+                            {{ cat.description|truncatewords:8 }}
+                        {% endif %}
+                    </p>
                 </div>
             </a>
             {% endfor %}

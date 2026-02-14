@@ -31,6 +31,8 @@ class BookingRequest(TimeStampedModel):
     service_name = models.CharField(max_length=200, blank=True)
     event_type = models.CharField(max_length=120, blank=True)
     attendees = models.PositiveIntegerField(null=True, blank=True)
+    start_datetime = models.DateTimeField(null=True, blank=True)
+    end_datetime = models.DateTimeField(null=True, blank=True)
     requested_date = models.DateField(null=True, blank=True)
     requested_time = models.CharField(max_length=20, blank=True)
     budget = models.CharField(max_length=80, blank=True)

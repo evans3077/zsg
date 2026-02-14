@@ -15,10 +15,20 @@
     background: rgba(255, 255, 255, 0.97);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--neutral-200);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    will-change: transform;
+}
+
+.kids-nav.subnav-hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .kids-nav-list {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: var(--space-2);
     list-style: none;
     margin: 0;

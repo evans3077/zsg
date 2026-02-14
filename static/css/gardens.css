@@ -58,6 +58,8 @@
 .gardens-nav-list {
     display: flex;
     overflow-x: auto;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: var(--space-xs);
     padding: var(--space-sm) 0;
     margin: 0;

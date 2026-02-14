@@ -67,7 +67,17 @@
                             <div class="dropdown-menu">
                                 <a href="{% url 'conferences:overview' %}">All Facilities</a>
                                 {% for category in conference_categories %}
-                                    <a href="{% url 'conferences:category_detail' category.slug %}">{{ category.name }}</a>
+                                    <a href="{% url 'conferences:category_detail' category.slug %}">
+                                        {% if category.category_type == 'board' %}
+                                            Board Rooms
+                                        {% elif category.category_type == 'meeting' %}
+                                            Meeting Rooms
+                                        {% elif category.category_type == 'hall' %}
+                                            Halls
+                                        {% else %}
+                                            {{ category.name }}
+                                        {% endif %}
+                                    </a>
                                 {% endfor %}
                                 <a href="{% url 'conferences:packages' %}">Packages</a>
                             </div>
@@ -97,8 +107,7 @@
                             </div>
                         </li>
                         <li><a href="{% url 'kids:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'kids' %}active{% endif %}">Kids & Family</a></li>
-                        <li><a href="{% url 'gallery:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'gallery' %}active{% endif %}">Gallery</a></li>
-                        <li><a href="tel:+254112394681" class="nav-link">Contact</a></li>
+                        <li><a href="{% url 'home:outdoor_events' %}" class="nav-link {% if request.resolver_match.url_name == 'outdoor_events' %}active{% endif %}">Outdoor Events</a></li>
                         <li><a href="{% url 'dining:overview' %}#reservation" class="btn btn-gold btn-small">Book Now</a></li>
                     </ul>
                 </nav>
@@ -139,7 +148,17 @@
                 <div class="mobile-dropdown">
                     <a href="{% url 'conferences:overview' %}">All Facilities</a>
                     {% for category in conference_categories %}
-                        <a href="{% url 'conferences:category_detail' category.slug %}">{{ category.name }}</a>
+                        <a href="{% url 'conferences:category_detail' category.slug %}">
+                            {% if category.category_type == 'board' %}
+                                Board Rooms
+                            {% elif category.category_type == 'meeting' %}
+                                Meeting Rooms
+                            {% elif category.category_type == 'hall' %}
+                                Halls
+                            {% else %}
+                                {{ category.name }}
+                            {% endif %}
+                        </a>
                     {% endfor %}
                     <a href="{% url 'conferences:packages' %}">Packages</a>
                 </div>
@@ -169,8 +188,7 @@
                 </div>
             </li>
             <li><a href="{% url 'kids:overview' %}" class="mobile-nav-link">Kids & Family</a></li>
-            <li><a href="{% url 'gallery:overview' %}" class="mobile-nav-link">Gallery</a></li>
-            <li><a href="tel:+254112394681" class="mobile-nav-link">Contact</a></li>
+            <li><a href="{% url 'home:outdoor_events' %}" class="mobile-nav-link">Outdoor Events</a></li>
             <li class="mobile-book-now"><a href="{% url 'gardens:overview' %}#inquiry" class="btn btn-gold btn-small">Book Now</a></li>
         </ul>
         <div class="mobile-contact">
@@ -194,7 +212,44 @@
         {% block content %}{% endblock %}
     </main>
 
-        <!-- Footer -->
+    <section class="reviews-section section-padding bg-gold-light" id="customer-reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What Our Customers Say About Us</h2>
+                <p class="section-subtitle">Live section ready for Google Business Profile reviews.</p>
+            </div>
+            <div class="reviews-slider" id="reviews-slider" data-business-profile-id="9647546898271930806">
+                <button class="review-nav review-prev" type="button" aria-label="Previous review">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="reviews-viewport">
+                    <div class="reviews-track">
+                        <article class="review-card">
+                            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <p class="review-text">Beautiful and peaceful venue with great hosting support.</p>
+                            <p class="review-author">Guest Review</p>
+                        </article>
+                        <article class="review-card">
+                            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <p class="review-text">Professional setup for meetings and a great environment for teams.</p>
+                            <p class="review-author">Corporate Client</p>
+                        </article>
+                        <article class="review-card">
+                            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <p class="review-text">Excellent family atmosphere and well-maintained spaces.</p>
+                            <p class="review-author">Family Guest</p>
+                        </article>
+                    </div>
+                </div>
+                <button class="review-nav review-next" type="button" aria-label="Next review">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="reviews-dots" aria-label="Review slider pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="main-footer">
         <div class="container">
             <div class="footer-grid">
@@ -205,7 +260,7 @@
                     </div>
                     <p class="footer-description">
                         A serene, non-alcoholic garden venue for conferences, events, 
-                        dining and family fun - just 45 minutes from Nairobi.
+                        dining and family fun - just 55 km from Nairobi GPO.
                     </p>
                     <div class="social-links">
                         <a href="https://www.facebook.com/ZamarSpringsG" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
@@ -221,6 +276,7 @@
                         <li><a href="{% url 'home:index' %}">Home</a></li>
                         <li><a href="{% url 'conferences:overview' %}">Conference Rooms</a></li>
                         <li><a href="{% url 'gardens:overview' %}">Event Gardens</a></li>
+                        <li><a href="{% url 'home:outdoor_events' %}">Outdoor Events</a></li>
                         <li><a href="{% url 'dining:overview' %}">Dining & Catering</a></li>
                         <li><a href="{% url 'kids:overview' %}">Kids Services</a></li>
                         <li><a href="{% url 'gallery:overview' %}">Gallery</a></li>
@@ -247,6 +303,15 @@
                             <span>Daily: 8:00 AM - 10:00 PM</span>
                         </div>
                     </div>
+                    <div style="margin-top: var(--space-4); text-align: center;">
+                        <a href="https://www.google.com/maps/dir//Zamar+Springs+Gardens,+Machakos/@-1.5302656,37.1785728,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x182f859c01518f0f:0xf81de1734be1d780!2m2!1d37.1868857!2d-1.532478?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D"
+                           target="_blank"
+                           rel="noopener"
+                           class="btn btn-outline-gold btn-small"
+                           style="display: inline-flex;">
+                            <i class="fas fa-location-arrow"></i> Get Directions
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="footer-col">
@@ -266,6 +331,7 @@
             <div class="footer-bottom">
                 <p>&copy; 2026 Zamar Springs Gardens. All rights reserved.</p>
                 <div class="footer-links-bottom">
+                    <a href="{% url 'home:careers' %}">Careers</a>
                     <a href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
                     <a href="{% url 'home:terms_of_service' %}">Terms of Service</a>
                     <a href="{% url 'home:sitemap_page' %}">Sitemap</a>
@@ -275,11 +341,20 @@
     </footer>
     
     <!-- Back to Top -->
+    <a href="https://wa.me/254112394681" class="floating-whatsapp" aria-label="Chat with us on WhatsApp" target="_blank" rel="noopener">
+        <i class="fab fa-whatsapp"></i>
+    </a>
     <button class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
     <!-- Scripts -->
+    <script>
+        window.ZAMAR_GOOGLE_REVIEWS = {
+            businessProfileId: "9647546898271930806",
+            apiKey: ""
+        };
+    </script>
     <script src="{% static 'js/main.js' %}"defer></script>
     {% block extra_js %}{% endblock %}
 </body>

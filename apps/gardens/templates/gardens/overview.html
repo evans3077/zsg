@@ -234,9 +234,9 @@
                 </div>
                 <div>
                     <div style="font-size: 2.5rem; font-weight: 800; color: var(--gardens-primary); margin-bottom: var(--space-2);">
-                        45min
+                        55 KM
                     </div>
-                    <div style="font-weight: 600; color: var(--neutral-800);">From Nairobi</div>
+                    <div style="font-weight: 600; color: var(--neutral-800);">From Nairobi GPO</div>
                 </div>
             </div>
         </div>
@@ -310,16 +310,28 @@
                                 <label for="event_type">Event Type *</label>
                                 <select id="event_type" name="event_type" required>
                                     <option value="">Select event type</option>
-                                    <option value="wedding">Wedding</option>
-                                    <option value="birthday">Birthday Party</option>
-                                    <option value="corporate">Corporate Event</option>
+                                    <option value="conference">Conference</option>
+                                    <option value="picnics">Picnics</option>
+                                    <option value="birthday_parties">Birthday Parties</option>
+                                    <option value="engagements">Engagements</option>
+                                    <option value="graduation_parties">Graduation Parties</option>
+                                    <option value="anniversaries">Anniversaries</option>
+                                    <option value="team_building">Team Building</option>
+                                    <option value="photoshoots">Photoshoots</option>
+                                    <option value="group_chamas">Group Chamas</option>
+                                    <option value="choir_video_shoots">Choir / Video Shoots</option>
                                     <option value="other">Other</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label for="event_date">Preferred Date *</label>
-                                <input type="date" id="event_date" name="event_date" required>
+                                <label for="garden_overview_start_datetime">Event Start *</label>
+                                <input type="datetime-local" id="garden_overview_start_datetime" class="event-start-datetime" name="start_datetime" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="garden_overview_end_datetime">Event End *</label>
+                                <input type="datetime-local" id="garden_overview_end_datetime" class="event-end-datetime" name="end_datetime" required>
                             </div>
                             
                             <div class="form-group">
@@ -350,11 +362,25 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum date to today
-    const dateInput = document.getElementById('event_date');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
+    // Set minimum datetime and keep end after start
+    const startInput = document.getElementById('garden_overview_start_datetime');
+    const endInput = document.getElementById('garden_overview_end_datetime');
+    const now = new Date();
+    const minValue = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+
+    if (startInput) {
+        startInput.min = minValue;
+    }
+    if (endInput) {
+        endInput.min = minValue;
+    }
+    if (startInput && endInput) {
+        startInput.addEventListener('change', function() {
+            endInput.min = this.value || minValue;
+            if (endInput.value && endInput.value < endInput.min) {
+                endInput.value = endInput.min;
+            }
+        });
     }
     
 });

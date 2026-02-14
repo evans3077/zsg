@@ -46,7 +46,15 @@
                 {% for category in conference_categories %}
                 <a class="facility-nav-link" href="{% url 'conferences:category_detail' category.slug %}">
                     <i class="{{ category.icon }}"></i>
-                    {{ category.name }}
+                    {% if category.category_type == 'board' %}
+                        Board Rooms
+                    {% elif category.category_type == 'meeting' %}
+                        Meeting Rooms
+                    {% elif category.category_type == 'hall' %}
+                        Halls
+                    {% else %}
+                        {{ category.name }}
+                    {% endif %}
                 </a>
                 {% endfor %}
             </div>
@@ -354,18 +362,13 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="date">Preferred Date *</label>
-                            <input type="date" id="date" name="date" required>
+                            <label for="room_start_datetime">Event Start *</label>
+                            <input type="datetime-local" id="room_start_datetime" class="event-start-datetime" name="start_datetime" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="duration">Duration *</label>
-                            <select id="duration" name="duration" required>
-                                <option value="">Select duration</option>
-                                {% if room.hourly_rate %}<option value="hourly">Hourly</option>{% endif %}
-                                {% if room.half_day_rate %}<option value="half_day">Half Day (4 hours)</option>{% endif %}
-                                {% if room.full_day_rate %}<option value="full_day">Full Day (8 hours)</option>{% endif %}
-                            </select>
+                            <label for="room_end_datetime">Event End *</label>
+                            <input type="datetime-local" id="room_end_datetime" class="event-end-datetime" name="end_datetime" required>
                         </div>
                         
                         <div class="form-group">

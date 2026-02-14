@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Newsletter Form
     initNewsletterForm();
+
+    // Booking datetime window helpers
+    initBookingDatetimeWindow();
+
+    // Reviews slider / API hook
+    initGoogleReviewsSection();
 });
 
 // Mobile Menu
@@ -196,9 +202,26 @@ function initSubNavAutoHide() {
     const subnavs = document.querySelectorAll('.conference-nav, .gardens-nav, .food-category-nav, .kids-nav');
     if (!subnavs.length) return;
 
+    const header = document.querySelector('.main-header');
+    const headerHeight = header ? header.offsetHeight : 80;
+    subnavs.forEach(nav => {
+        nav.style.top = `${headerHeight}px`;
+    });
+
     let lastScrollY = Math.max(window.scrollY, 0);
     let ticking = false;
+    let hideTimer = null;
     const scrollDeltaThreshold = 8;
+    const idleHideDelay = 1400;
+
+    const scheduleHide = () => {
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            if (window.scrollY > 140) {
+                subnavs.forEach(nav => nav.classList.add('subnav-hidden'));
+            }
+        }, idleHideDelay);
+    };
 
     const onScroll = () => {
         const currentY = Math.max(window.scrollY, 0);
@@ -216,6 +239,7 @@ function initSubNavAutoHide() {
                 nav.classList.add('subnav-hidden');
             } else if (scrollingUp) {
                 nav.classList.remove('subnav-hidden');
+                scheduleHide();
             }
         });
 
@@ -229,6 +253,14 @@ function initSubNavAutoHide() {
             ticking = true;
         }
     }, { passive: true });
+
+    subnavs.forEach(nav => {
+        nav.addEventListener('mouseenter', () => {
+            if (hideTimer) clearTimeout(hideTimer);
+            nav.classList.remove('subnav-hidden');
+        });
+        nav.addEventListener('mouseleave', scheduleHide);
+    });
 }
 
 // Newsletter Form
@@ -267,6 +299,111 @@ function initNewsletterForm() {
             submitBtn.disabled = false;
         }, 1500);
     });
+}
+
+function initBookingDatetimeWindow() {
+    const startInputs = document.querySelectorAll('input.event-start-datetime');
+    const endInputs = document.querySelectorAll('input.event-end-datetime');
+    if (!startInputs.length || !endInputs.length) return;
+
+    const now = new Date();
+    const minValue = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+
+    startInputs.forEach((startInput, index) => {
+        const endInput = endInputs[index];
+        if (!endInput) return;
+
+        startInput.min = minValue;
+        endInput.min = minValue;
+
+        startInput.addEventListener('change', function() {
+            endInput.min = this.value || minValue;
+            if (endInput.value && endInput.value < endInput.min) {
+                endInput.value = endInput.min;
+            }
+        });
+    });
+}
+
+function initGoogleReviewsSection() {
+    const slider = document.getElementById('reviews-slider');
+    if (!slider) return;
+
+    const track = slider.querySelector('.reviews-track');
+    const dotsContainer = slider.querySelector('.reviews-dots');
+    const prevBtn = slider.querySelector('.review-prev');
+    const nextBtn = slider.querySelector('.review-next');
+    const cards = slider.querySelectorAll('.review-card');
+    if (!cards.length) return;
+
+    const config = window.ZAMAR_GOOGLE_REVIEWS || {};
+    const businessProfileId = config.businessProfileId || slider.dataset.businessProfileId;
+    const apiKey = config.apiKey || '';
+
+    // Provision for API integration when keys are provided.
+    if (businessProfileId && apiKey) {
+        slider.dataset.reviewsSource = 'google-business-profile';
+    } else {
+        slider.dataset.reviewsSource = 'fallback-static';
+    }
+
+    let activeIndex = 0;
+    let autoTimer = null;
+
+    const goTo = (index) => {
+        if (!track) return;
+        activeIndex = (index + cards.length) % cards.length;
+        track.style.transform = `translateX(-${activeIndex * 100}%)`;
+        slider.querySelectorAll('.review-dot').forEach((dot, dotIndex) => {
+            dot.classList.toggle('active', dotIndex === activeIndex);
+        });
+    };
+
+    if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        cards.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = `review-dot${index === 0 ? ' active' : ''}`;
+            dot.setAttribute('aria-label', `Show review ${index + 1}`);
+            dot.addEventListener('click', () => {
+                goTo(index);
+                restartAutoPlay();
+            });
+            dotsContainer.appendChild(dot);
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            goTo(activeIndex - 1);
+            restartAutoPlay();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            goTo(activeIndex + 1);
+            restartAutoPlay();
+        });
+    }
+
+    const startAutoPlay = () => {
+        autoTimer = setInterval(() => goTo(activeIndex + 1), 5200);
+    };
+
+    const restartAutoPlay = () => {
+        if (autoTimer) clearInterval(autoTimer);
+        startAutoPlay();
+    };
+
+    goTo(0);
+    startAutoPlay();
+
+    slider.addEventListener('mouseenter', () => {
+        if (autoTimer) clearInterval(autoTimer);
+    });
+    slider.addEventListener('mouseleave', restartAutoPlay);
 }
 
 // Helper Functions

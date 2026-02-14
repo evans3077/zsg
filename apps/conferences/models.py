@@ -28,7 +28,6 @@ class ConferenceCategory(models.Model):
         ('board', 'Board Rooms'),
         ('meeting', 'Meeting Rooms'),
         ('hall', 'Meeting Hall'),
-        ('training', 'Training & Workshops'),
     ]
     
     name = models.CharField(max_length=100)

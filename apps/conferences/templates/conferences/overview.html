@@ -26,7 +26,7 @@
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Perfect Meeting Environment</h2>
-            <p class="section-subtitle">{{ page_settings.intro_text }}</p>
+            <p class="section-subtitle">{{ page_settings.intro_text }} Suitable for meetings, training workshops, executive sessions, and corporate events.</p>
         </div>
     </div>
 </section>
@@ -42,8 +42,28 @@
                     <i class="{{ category.icon }}"></i>
                 </div>
                 <div class="category-card-content">
-                    <h3>{{ category.name }}</h3>
-                    <p>{{ category.description|truncatewords:10 }}</p>
+                    <h3>
+                        {% if category.category_type == 'board' %}
+                            Board Rooms (12 to 15 pax)
+                        {% elif category.category_type == 'meeting' %}
+                            Meeting Rooms (15 to 50 pax)
+                        {% elif category.category_type == 'hall' %}
+                            Halls (50 to 180 pax)
+                        {% else %}
+                            {{ category.name }}
+                        {% endif %}
+                    </h3>
+                    <p>
+                        {% if category.category_type == 'board' %}
+                            Board Room 1 and Board Room 2
+                        {% elif category.category_type == 'meeting' %}
+                            Melia and Japonica
+                        {% elif category.category_type == 'hall' %}
+                            Acacia, Bamboo, and Cactus
+                        {% else %}
+                            {{ category.description|truncatewords:10 }}
+                        {% endif %}
+                    </p>
                 </div>
             </a>
             {% endfor %}

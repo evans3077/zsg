@@ -11,6 +11,8 @@ class BookingRequestAdmin(admin.ModelAdmin):
         "full_name",
         "phone",
         "service_name",
+        "start_datetime",
+        "end_datetime",
         "requested_date",
         "status",
     ]

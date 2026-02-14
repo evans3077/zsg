@@ -157,13 +157,14 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 80px;
+        height: 72px;
+        gap: var(--space-3);
     }
 
     /* Logo */
     .logo-icon {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         overflow: hidden; 
         display: flex;
@@ -188,16 +189,24 @@
     .nav-list {
         display: flex;
         align-items: center;
-        gap: var(--space-2);
+        justify-content: center;
+        gap: var(--space-1);
         list-style: none;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--neutral-200);
+        border-radius: 999px;
+        padding: 0.35rem;
+        margin: 0 auto;
+        max-width: fit-content;
     }
 
     .nav-link {
-        padding: var(--space-3) var(--space-4);
+        padding: 0.5rem 0.8rem;
         text-decoration: none;
         color: var(--neutral-700);
-        font-weight: 500;
-        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border-radius: 999px;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
@@ -217,23 +226,24 @@
     .nav-dropdown:hover .dropdown-menu {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translate(-50%, 0);
     }
 
     .dropdown-menu {
         position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 200px;
+        top: calc(100% + 0.5rem);
+        left: 50%;
+        min-width: 230px;
         background: white;
         border-radius: 0.5rem;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-10px);
+        transform: translate(-50%, -10px);
         transition: all 0.3s ease;
         z-index: 100;
         padding: var(--space-2) 0;
+        text-align: center;
     }
 
     .dropdown-menu a {
@@ -342,6 +352,7 @@
         color: var(--neutral-700);
         font-weight: 500;
         border-bottom: 1px solid var(--neutral-200);
+        text-align: center;
     }
 
     .mobile-dropdown {
@@ -361,11 +372,12 @@
         text-decoration: none;
         color: var(--neutral-600);
         transition: all 0.3s ease;
+        text-align: center;
     }
 
     .mobile-dropdown a:hover {
         color: var(--gold-dark);
-        padding-left: var(--space-2);
+        padding-left: 0;
     }
 
     .mobile-contact {
@@ -1029,6 +1041,118 @@
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     }
 
+    .floating-whatsapp {
+        position: fixed;
+        left: var(--space-5);
+        bottom: var(--space-6);
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #25d366;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 1.6rem;
+        box-shadow: 0 12px 24px rgba(37, 211, 102, 0.35);
+        z-index: 100;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .floating-whatsapp:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 16px 30px rgba(37, 211, 102, 0.45);
+    }
+
+    .reviews-slider {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .reviews-viewport {
+        overflow: hidden;
+        border-radius: 1rem;
+    }
+
+    .reviews-track {
+        display: flex;
+        transition: transform 0.55s ease;
+    }
+
+    .review-card {
+        min-width: 100%;
+        background: white;
+        border: 1px solid var(--gold-light);
+        border-radius: 1rem;
+        padding: var(--space-6);
+        box-shadow: 0 10px 25px rgba(28, 25, 23, 0.08);
+        text-align: center;
+    }
+
+    .review-nav {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid var(--neutral-300);
+        background: white;
+        color: var(--neutral-700);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .review-nav:hover {
+        background: var(--gold-dark);
+        border-color: var(--gold-dark);
+        color: white;
+    }
+
+    .reviews-dots {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        gap: 0.4rem;
+        margin-top: var(--space-3);
+    }
+
+    .review-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        border: none;
+        background: var(--neutral-300);
+        cursor: pointer;
+        transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .review-dot.active {
+        background: var(--gold-dark);
+        transform: scale(1.2);
+    }
+
+    .review-stars {
+        font-size: 1.125rem;
+        color: var(--gold-dark);
+        letter-spacing: 0.1rem;
+        margin-bottom: var(--space-3);
+    }
+
+    .review-text {
+        color: var(--neutral-700);
+        line-height: 1.7;
+        margin-bottom: var(--space-4);
+    }
+
+    .review-author {
+        font-weight: 700;
+        color: var(--neutral-900);
+    }
+
     /* Responsive Design - MOBILE FIRST */
     @media (min-width: 640px) {
         .hero-title {
@@ -1109,12 +1233,30 @@
         .newsletter-form .input-group .btn {
             width: 100%;
         }
+
+        .reviews-slider {
+            grid-template-columns: 1fr;
+        }
+
+        .review-nav {
+            display: none;
+        }
+
+        .floating-whatsapp {
+            left: var(--space-3);
+            bottom: var(--space-4);
+            width: 48px;
+            height: 48px;
+            font-size: 1.45rem;
+        }
     }
 
 
     @media (min-width: 768px) {
         .desktop-nav {
-            display: block;
+            display: flex;
+            justify-content: center;
+            flex: 1;
         }
         
         .mobile-menu-toggle {

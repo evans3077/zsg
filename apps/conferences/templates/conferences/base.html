@@ -17,7 +17,15 @@
             <li>
                 <a href="{% url 'conferences:category_detail' category.slug %}"
                    class="{% if request.resolver_match.url_name == 'category_detail' and request.resolver_match.kwargs.slug == category.slug %}active{% endif %}">
-                    {{ category.name }}
+                    {% if category.category_type == 'board' %}
+                        Board Rooms
+                    {% elif category.category_type == 'meeting' %}
+                        Meeting Rooms
+                    {% elif category.category_type == 'hall' %}
+                        Halls
+                    {% else %}
+                        {{ category.name }}
+                    {% endif %}
                 </a>
             </li>
             {% endfor %}
