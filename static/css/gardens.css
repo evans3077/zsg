@@ -58,7 +58,7 @@
 .gardens-nav-list {
     display: flex;
     overflow-x: auto;
-    justify-content: center;
+    justify-content: center !important;
     flex-wrap: wrap;
     gap: var(--space-xs);
     padding: var(--space-sm) 0;
@@ -912,7 +912,7 @@
 @media (min-width: 769px) {
     .gardens-nav-list {
         overflow-x: visible;
-        justify-content: center;
+        justify-content: center !important;
     }
 }
 

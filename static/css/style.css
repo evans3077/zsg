@@ -6,6 +6,7 @@
         --gold-medium: #e6d5a5;
         --gold-dark: #c4a747;
         --gold-darker: #9c7e2e;
+        --gold-accessible: #6f571f;
         --gold-accent: #ffd700;
         
         /* Neutral Colors */
@@ -116,12 +117,12 @@
 
     .btn-outline-gold {
         background: transparent;
-        color: var(--gold-dark);
-        border: 2px solid var(--gold-dark);
+        color: var(--gold-accessible);
+        border: 2px solid var(--gold-accessible);
     }
 
     .btn-outline-gold:hover {
-        background: var(--gold-dark);
+        background: var(--gold-accessible);
         color: white !important;
     }
 
@@ -215,7 +216,7 @@
 
     .nav-link:hover,
     .nav-link.active {
-        color: var(--gold-dark);
+        color: var(--gold-accessible);
         background: var(--gold-light);
     }
 
@@ -270,7 +271,7 @@
 
     .dropdown-menu a:hover {
         background: var(--gold-light);
-        color: var(--gold-dark);
+        color: var(--gold-accessible);
     }
 
     /* Mobile Menu Toggle */
@@ -1077,6 +1078,12 @@
     .floating-whatsapp:hover {
         transform: translateY(-4px) scale(1.03);
         box-shadow: 0 16px 30px rgba(37, 211, 102, 0.45);
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+        outline: 3px solid var(--gold-accessible);
+        outline-offset: 2px;
     }
 
     .reviews-slider {

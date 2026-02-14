@@ -65,7 +65,7 @@
                                 Conferences <i class="fas fa-chevron-down"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="{% url 'conferences:overview' %}">All Facilities</a>
+                                <a href="{% url 'conferences:overview' %}">Conferences Overview</a>
                                 {% for category in conference_categories %}
                                     <a href="{% url 'conferences:category_detail' category.slug %}">
                                         {% if category.category_type == 'board' %}
@@ -87,7 +87,7 @@
                                 Gardens & Events <i class="fas fa-chevron-down"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="{% url 'gardens:overview' %}">Overview</a>
+                                <a href="{% url 'gardens:overview' %}">Gardens Overview</a>
                                 <a href="{% url 'gardens:gardens_list' %}">Our Gardens</a>
                                 <a href="{% url 'gardens:weddings' %}">Weddings</a>
                                 <a href="{% url 'gardens:private_events' %}">Private Events</a>
@@ -99,7 +99,7 @@
                                 Dining <i class="fas fa-chevron-down"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="{% url 'dining:overview' %}">Overview</a>
+                                <a href="{% url 'dining:overview' %}">Dining Overview</a>
                                 <a href="{% url 'dining:menu' %}">Menu</a>
                                 <a href="{% url 'dining:overview' %}#spaces">Dining Spaces</a>
                                 <a href="{% url 'dining:overview' %}#custom-menu">Custom Menus</a>
@@ -109,7 +109,7 @@
                         <li><a href="{% url 'kids:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'kids' %}active{% endif %}">Kids & Family</a></li>
                         <li><a href="{% url 'home:outdoor_events' %}" class="nav-link {% if request.resolver_match.url_name == 'outdoor_events' %}active{% endif %}">Outdoor Events</a></li>
                         <li><a href="{% url 'home:our_farm' %}" class="nav-link {% if request.resolver_match.url_name == 'our_farm' %}active{% endif %}">Our Farm</a></li>
-                        <li><a href="{% url 'dining:overview' %}#reservation" class="btn btn-gold btn-small nav-book-cta">Book Now</a></li>
+                        <li><a href="{% url 'dining:overview' %}#reservation" class="btn btn-gold btn-small nav-book-cta" aria-label="Book now for dining reservation">Book Now</a></li>
                     </ul>
                 </nav>
 
@@ -147,7 +147,7 @@
                     Conferences <i class="fas fa-chevron-down"></i>
                 </a>
                 <div class="mobile-dropdown">
-                    <a href="{% url 'conferences:overview' %}">All Facilities</a>
+                    <a href="{% url 'conferences:overview' %}">Conferences Overview</a>
                     {% for category in conference_categories %}
                         <a href="{% url 'conferences:category_detail' category.slug %}">
                             {% if category.category_type == 'board' %}
@@ -169,7 +169,7 @@
                     Gardens & Events <i class="fas fa-chevron-down"></i>
                 </a>
                 <div class="mobile-dropdown">
-                    <a href="{% url 'gardens:overview' %}">Overview</a>
+                    <a href="{% url 'gardens:overview' %}">Gardens Overview</a>
                     <a href="{% url 'gardens:gardens_list' %}">Our Gardens</a>
                     <a href="{% url 'gardens:weddings' %}">Weddings</a>
                     <a href="{% url 'gardens:private_events' %}">Private Events</a>
@@ -181,7 +181,7 @@
                     Dining <i class="fas fa-chevron-down"></i>
                 </a>
                 <div class="mobile-dropdown">
-                    <a href="{% url 'dining:overview' %}">Overview</a>
+                    <a href="{% url 'dining:overview' %}">Dining Overview</a>
                     <a href="{% url 'dining:menu' %}">Menu</a>
                     <a href="{% url 'dining:overview' %}#spaces">Dining Spaces</a>
                     <a href="{% url 'dining:overview' %}#custom-menu">Custom Menus</a>
@@ -191,7 +191,7 @@
             <li><a href="{% url 'kids:overview' %}" class="mobile-nav-link">Kids & Family</a></li>
             <li><a href="{% url 'home:outdoor_events' %}" class="mobile-nav-link">Outdoor Events</a></li>
             <li><a href="{% url 'home:our_farm' %}" class="mobile-nav-link">Our Farm</a></li>
-            <li class="mobile-book-now"><a href="{% url 'gardens:overview' %}#inquiry" class="btn btn-gold btn-small nav-book-cta">Book Now</a></li>
+            <li class="mobile-book-now"><a href="{% url 'gardens:overview' %}#inquiry" class="btn btn-gold btn-small nav-book-cta" aria-label="Book now for gardens inquiry">Book Now</a></li>
         </ul>
         <div class="mobile-contact">
             <div class="contact-item"><i class="fas fa-phone"></i> <span>0112394681</span></div>
