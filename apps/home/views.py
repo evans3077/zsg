@@ -48,6 +48,22 @@ def outdoor_events_view(request):
     return render(request, "home/outdoor_events.html", {"sections": sections})
 
 
+def our_farm_view(request):
+    sections = [
+        {
+            "title": "Our Farm",
+            "description": "Foundational information about our farm operations will be added here.",
+            "icon": "fas fa-seedling",
+        },
+        {
+            "title": "Flower Nursery",
+            "description": "Foundational information about our flower nursery will be added here.",
+            "icon": "fas fa-spa",
+        },
+    ]
+    return render(request, "home/our_farm.html", {"sections": sections})
+
+
 def careers_view(request):
     return render(request, "home/careers.html")
 
@@ -65,6 +81,7 @@ def site_map_view(request):
                 {"label": "Conferences", "url": "/conferences/"},
                 {"label": "Gardens & Events", "url": "/gardens/"},
                 {"label": "Outdoor Events", "url": "/outdoor-events/"},
+                {"label": "Our Farm", "url": "/our-farm/"},
                 {"label": "Dining", "url": "/dining/"},
                 {"label": "Kids & Family", "url": "/kids-family/"},
                 {"label": "Gallery", "url": "/gallery/"},

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Our Farm | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}Our Farm and Flower Nursery at Zamar Springs Gardens.{% endblock %}
+{% block meta_keywords %}our farm, flower nursery, Zamar Springs Gardens{% endblock %}
+
+{% block content %}
+<section class="section-padding bg-gold-light">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">Our Farm</h1>
+            <p class="section-subtitle">A new section for farm and nursery updates.</p>
+        </div>
+        <div class="highlights-grid">
+            {% for section in sections %}
+            <article class="highlight-card">
+                <div class="highlight-icon"><i class="{{ section.icon }}"></i></div>
+                <h3>{{ section.title }}</h3>
+                <p>{{ section.description }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

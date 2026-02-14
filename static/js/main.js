@@ -120,21 +120,13 @@ function initDropdowns() {
     const dropdowns = document.querySelectorAll('.nav-dropdown');
     
     dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('mouseenter', function() {
-            const menu = this.querySelector('.dropdown-menu');
-            if (menu) {
-                menu.style.opacity = '1';
-                menu.style.visibility = 'visible';
-                menu.style.transform = 'translateY(0)';
-            }
+        dropdown.addEventListener('focusin', function() {
+            this.classList.add('is-open');
         });
         
-        dropdown.addEventListener('mouseleave', function() {
-            const menu = this.querySelector('.dropdown-menu');
-            if (menu) {
-                menu.style.opacity = '0';
-                menu.style.visibility = 'hidden';
-                menu.style.transform = 'translateY(-10px)';
+        dropdown.addEventListener('focusout', function(e) {
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('is-open');
             }
         });
     });

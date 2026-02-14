@@ -108,7 +108,8 @@
                         </li>
                         <li><a href="{% url 'kids:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'kids' %}active{% endif %}">Kids & Family</a></li>
                         <li><a href="{% url 'home:outdoor_events' %}" class="nav-link {% if request.resolver_match.url_name == 'outdoor_events' %}active{% endif %}">Outdoor Events</a></li>
-                        <li><a href="{% url 'dining:overview' %}#reservation" class="btn btn-gold btn-small">Book Now</a></li>
+                        <li><a href="{% url 'home:our_farm' %}" class="nav-link {% if request.resolver_match.url_name == 'our_farm' %}active{% endif %}">Our Farm</a></li>
+                        <li><a href="{% url 'dining:overview' %}#reservation" class="btn btn-gold btn-small nav-book-cta">Book Now</a></li>
                     </ul>
                 </nav>
 
@@ -189,7 +190,8 @@
             </li>
             <li><a href="{% url 'kids:overview' %}" class="mobile-nav-link">Kids & Family</a></li>
             <li><a href="{% url 'home:outdoor_events' %}" class="mobile-nav-link">Outdoor Events</a></li>
-            <li class="mobile-book-now"><a href="{% url 'gardens:overview' %}#inquiry" class="btn btn-gold btn-small">Book Now</a></li>
+            <li><a href="{% url 'home:our_farm' %}" class="mobile-nav-link">Our Farm</a></li>
+            <li class="mobile-book-now"><a href="{% url 'gardens:overview' %}#inquiry" class="btn btn-gold btn-small nav-book-cta">Book Now</a></li>
         </ul>
         <div class="mobile-contact">
             <div class="contact-item"><i class="fas fa-phone"></i> <span>0112394681</span></div>
@@ -277,6 +279,7 @@
                         <li><a href="{% url 'conferences:overview' %}">Conference Rooms</a></li>
                         <li><a href="{% url 'gardens:overview' %}">Event Gardens</a></li>
                         <li><a href="{% url 'home:outdoor_events' %}">Outdoor Events</a></li>
+                        <li><a href="{% url 'home:our_farm' %}">Our Farm</a></li>
                         <li><a href="{% url 'dining:overview' %}">Dining & Catering</a></li>
                         <li><a href="{% url 'kids:overview' %}">Kids Services</a></li>
                         <li><a href="{% url 'gallery:overview' %}">Gallery</a></li>

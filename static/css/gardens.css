@@ -66,6 +66,7 @@
     list-style: none;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    width: 100%;
 }
 
 .gardens-nav-list::-webkit-scrollbar {
@@ -905,6 +906,13 @@
     .gardens-grid,
     .event-types-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 769px) {
+    .gardens-nav-list {
+        overflow-x: visible;
+        justify-content: center;
     }
 }
 

@@ -21,6 +21,7 @@ class StaticViewSitemap(Sitemap):
             "gardens:private_events",
             "gardens:general_events",
             "home:outdoor_events",
+            "home:our_farm",
             "dining:overview",
             "dining:menu",
             "dining:farm_to_fork",
