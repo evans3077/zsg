@@ -10,7 +10,7 @@ from pathlib import Path
 
 def tiktok_verification_file(request, filename):
     allowed_files = {
-        "tiktokPCDNRc5372cRrCcX7sM5IrFWHOqhIv9e.txt",
+        "tiktokuLvznZP2EDRLOMsOgF4kV22E4srBvvgq.txt",
     }
     if filename not in allowed_files:
         raise Http404("Verification file not found.")
