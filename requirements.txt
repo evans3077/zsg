@@ -4,3 +4,5 @@ whitenoise==6.8.2
 dj-database-url==2.2.0
 psycopg2-binary==2.9.10
 Pillow==11.1.0
+celery==5.4.0
+django-redis==5.4.0

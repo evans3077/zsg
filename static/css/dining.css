@@ -59,6 +59,130 @@
     margin-right: auto;
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.dining-search-wrap {
+    position: relative;
+    max-width: 740px;
+    margin: 0 auto;
+}
+
+.dining-search-input {
+    width: 100%;
+    height: 52px;
+    border: 1px solid var(--neutral-300);
+    border-radius: 999px;
+    padding: 0 1rem 0 1.15rem;
+    font-size: 0.98rem;
+    background: #fff;
+    color: var(--neutral-800);
+}
+
+.dining-search-input:focus-visible {
+    outline: 3px solid var(--gold-accessible);
+    outline-offset: 2px;
+    border-color: var(--gold-accessible);
+}
+
+.dining-search-results {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--neutral-200);
+    border-radius: 0.8rem;
+    box-shadow: 0 18px 34px rgba(28, 25, 23, 0.12);
+    max-height: 420px;
+    overflow: auto;
+    z-index: 1600;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.dining-search-results.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dining-search-item {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 0.7rem 0.9rem;
+    text-decoration: none;
+    color: var(--neutral-800);
+    border-bottom: 1px solid var(--neutral-100);
+}
+
+.dining-search-item:last-child {
+    border-bottom: 0;
+}
+
+.dining-search-item:hover,
+.dining-search-item.active {
+    background: var(--gold-light);
+}
+
+.dining-search-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 0.6rem;
+    overflow: hidden;
+    border: 1px solid var(--neutral-200);
+}
+
+.dining-search-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dining-search-thumb-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-accessible);
+    background: var(--neutral-50);
+}
+
+.dining-search-title {
+    font-weight: 700;
+    color: var(--neutral-900);
+}
+
+.dining-search-sub {
+    color: var(--neutral-600);
+    font-size: 0.86rem;
+}
+
+.dining-search-price {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--gold-accessible);
+}
+
+.dining-search-empty {
+    padding: 0.85rem 1rem;
+    color: var(--neutral-600);
+    text-align: center;
+}
+
 .food-category-nav {
     position: sticky;
     top: 80px;

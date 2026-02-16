@@ -1,11 +1,29 @@
 # zamar_springs/apps/dining/views.py
+import hashlib
+import re
+
+from django.conf import settings
+from django.core.cache import cache
+from django.db import connection
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.views.decorators.http import require_GET
+
+try:
+    from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+except Exception:  # pragma: no cover - postgres features unavailable on sqlite
+    SearchQuery = SearchRank = SearchVector = None
+
 from .models import (
     DiningPage, FoodCategory, FoodItem,
     DiningSpace, FarmSource
 )
 
 SPACE_FALLBACK_IMAGE = "/static/images/web-pictures/open-air-dining-machakos.webp"
+SEARCH_CACHE_TTL = 60 * 10
+MENU_DATASET_CACHE_TTL = 60 * 15
 
 SPACE_GALLERY_FALLBACKS = {
     "pergola": [
@@ -44,6 +62,140 @@ def _decorate_space(space):
     else:
         space.card_image = SPACE_FALLBACK_IMAGE
     return space
+
+
+def _normalize_query(query):
+    return re.sub(r"\s+", " ", (query or "").strip().lower())
+
+
+def _search_cache_key(query):
+    hashed = hashlib.md5(query.encode("utf-8")).hexdigest()
+    return f"dining:search:v1:{hashed}"
+
+
+def _serialize_search_result(item, show_price=False):
+    thumbnail = item["featured_image"] or ""
+    if thumbnail and not str(thumbnail).startswith(("http://", "https://", "/")):
+        thumbnail = f"{settings.MEDIA_URL}{thumbnail}"
+
+    return {
+        "id": item["id"],
+        "name": item["name"],
+        "slug": item["slug"],
+        "category": item["category__name"],
+        "category_slug": item["category__slug"],
+        "thumbnail": thumbnail,
+        "price": str(item["price"]) if show_price and item["price"] is not None else None,
+        "url": f"{reverse('dining:menu')}#menu-list",
+    }
+
+
+def _build_cached_menu_dataset():
+    key = "dining:search:dataset:v1"
+    dataset = cache.get(key)
+    if dataset is not None:
+        return dataset
+
+    qs = (
+        FoodItem.objects.filter(is_active=True, category__is_active=True)
+        .select_related("category")
+        .values(
+            "id",
+            "name",
+            "slug",
+            "description",
+            "search_tags",
+            "farm_ingredients",
+            "price",
+            "featured_image",
+            "category__name",
+            "category__slug",
+        )
+        .order_by("category__display_order", "display_order")
+    )
+    dataset = []
+    for row in qs:
+        blob = " ".join(
+            [
+                row["name"] or "",
+                row["description"] or "",
+                row["search_tags"] or "",
+                row["farm_ingredients"] or "",
+                row["category__name"] or "",
+            ]
+        ).lower()
+        row["search_blob"] = blob
+        dataset.append(row)
+
+    cache.set(key, dataset, MENU_DATASET_CACHE_TTL)
+    return dataset
+
+
+def _search_menu_items(query, limit=10):
+    is_postgres = connection.vendor == "postgresql" and SearchVector is not None
+
+    if is_postgres:
+        search_vector = (
+            SearchVector("name", weight="A")
+            + SearchVector("description", weight="B")
+            + SearchVector("search_tags", weight="A")
+            + SearchVector("farm_ingredients", weight="C")
+            + SearchVector("category__name", weight="B")
+        )
+        search_query = SearchQuery(query, search_type="websearch")
+        qs = (
+            FoodItem.objects.filter(is_active=True, category__is_active=True)
+            .select_related("category")
+            .annotate(search=search_vector, rank=SearchRank(search_vector, search_query))
+            .filter(
+                Q(search=search_query)
+                | Q(name__icontains=query)
+                | Q(description__icontains=query)
+                | Q(search_tags__icontains=query)
+                | Q(farm_ingredients__icontains=query)
+                | Q(category__name__icontains=query)
+            )
+            .order_by("-rank", "category__display_order", "display_order")
+            .values(
+                "id",
+                "name",
+                "slug",
+                "price",
+                "featured_image",
+                "category__name",
+                "category__slug",
+            )[:limit]
+        )
+        return list(qs)
+
+    dataset = _build_cached_menu_dataset()
+    filtered = [row for row in dataset if query in row["search_blob"]]
+    return filtered[:limit]
+
+
+@require_GET
+def menu_search_api(request):
+    query = _normalize_query(request.GET.get("q"))
+    if len(query) < 2:
+        response = JsonResponse({"results": []})
+        response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+        return response
+
+    cache_key = _search_cache_key(query)
+    cached = cache.get(cache_key)
+    if cached is None:
+        raw_results = _search_menu_items(query)
+        cached = raw_results
+        cache.set(cache_key, cached, SEARCH_CACHE_TTL)
+
+    show_price_public = getattr(settings, "SHOW_MENU_PRICES_PUBLIC", True)
+    show_price = bool(show_price_public or request.user.is_staff or request.user.is_superuser)
+    results = [_serialize_search_result(item, show_price=show_price) for item in cached]
+
+    response = JsonResponse({"results": results})
+    response["Cache-Control"] = "private, max-age=60"
+    response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    return response
 
 
 def dining_overview(request):

@@ -101,6 +101,11 @@ class FoodItem(SEOFields, TimeStampedModel):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField(help_text="Brief description of the dish")
+    search_tags = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Comma-separated tags for menu search (e.g. vegan, spicy, breakfast)",
+    )
     
     # Ingredients sourced from farm
     is_from_farm = models.BooleanField(default=False)
@@ -135,6 +140,11 @@ class FoodItem(SEOFields, TimeStampedModel):
         verbose_name = "Food Item"
         verbose_name_plural = "Food Items"
         ordering = ['category', 'display_order']
+        indexes = [
+            models.Index(fields=["is_active", "display_order"], name="dining_food_active_idx"),
+            models.Index(fields=["name"], name="dining_food_name_idx"),
+            models.Index(fields=["search_tags"], name="dining_food_tags_idx"),
+        ]
     
     def __str__(self):
         return f"{self.name} - {self.category.name}"

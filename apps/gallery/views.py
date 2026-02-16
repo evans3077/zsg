@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.core.cache import cache
 from .models import GalleryPage, GalleryImage
+from .models import SocialPost
 
 
 SECTION_CONTENT = {
@@ -58,7 +60,8 @@ def overview(request):
             ),
         )
 
-    images = GalleryImage.objects.filter(is_active=True).order_by("category", "display_order")
+    images = list(GalleryImage.objects.filter(is_active=True).order_by("category", "display_order"))
+    menu_gallery_images = [img for img in images if img.category == "dining"][:6]
     grouped_sections = []
     for section_key, data in SECTION_CONTENT.items():
         section_images = [img for img in images if img.category == section_key]
@@ -71,11 +74,25 @@ def overview(request):
             }
         )
 
+    social_posts = {}
+    for platform in ("instagram", "tiktok"):
+        cache_key = f"gallery:social:{platform}:latest"
+        posts = cache.get(cache_key)
+        if posts is None:
+            posts = list(
+                SocialPost.objects.filter(platform=platform, archived=False)
+                .order_by("-timestamp")[:3]
+            )
+            cache.set(cache_key, posts, 60 * 15)
+        social_posts[platform] = posts
+
     return render(
         request,
         "gallery/overview.html",
         {
             "page_settings": page_settings,
+            "menu_gallery_images": menu_gallery_images,
             "grouped_sections": grouped_sections,
+            "social_posts": social_posts,
         },
     )

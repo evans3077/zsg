@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GalleryPage, GalleryImage
+from .models import GalleryPage, GalleryImage, SocialPost
 
 
 @admin.register(GalleryPage)
@@ -21,3 +21,11 @@ class GalleryImageAdmin(admin.ModelAdmin):
     list_filter = ["category", "is_active"]
     list_editable = ["display_order", "is_active"]
     search_fields = ["title", "alt_text", "caption", "image_path"]
+
+
+@admin.register(SocialPost)
+class SocialPostAdmin(admin.ModelAdmin):
+    list_display = ["platform", "post_id", "timestamp", "archived", "updated_at"]
+    list_filter = ["platform", "archived"]
+    list_editable = ["archived"]
+    search_fields = ["post_id", "caption", "permalink"]

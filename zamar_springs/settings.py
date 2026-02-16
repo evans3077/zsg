@@ -163,3 +163,46 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '31536000'))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'True').lower() in ('1', 'true', 'yes', 'on')
     SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'True').lower() in ('1', 'true', 'yes', 'on')
+
+# Feature toggles
+SHOW_MENU_PRICES_PUBLIC = os.getenv('SHOW_MENU_PRICES_PUBLIC', 'True').lower() in ('1', 'true', 'yes', 'on')
+
+# Cache (Redis preferred, local memory fallback)
+redis_url = os.getenv('REDIS_URL', '').strip()
+if redis_url:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': redis_url,
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+                'IGNORE_EXCEPTIONS': True,
+            },
+            'KEY_PREFIX': 'zsg',
+            'TIMEOUT': 60 * 15,
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'zsg-local-cache',
+            'TIMEOUT': 60 * 15,
+        }
+    }
+
+# Celery (for social media background sync)
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', redis_url or '')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', CELERY_BROKER_URL or '')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_ALWAYS_EAGER = os.getenv('CELERY_TASK_ALWAYS_EAGER', 'False').lower() in ('1', 'true', 'yes', 'on')
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BEAT_SCHEDULE = {
+    'sync-social-posts-every-45-minutes': {
+        'task': 'gallery.sync_social_posts',
+        'schedule': 45 * 60,
+    },
+}

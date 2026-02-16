@@ -6,6 +6,7 @@ app_name = 'dining'
 
 urlpatterns = [
     path('', views.dining_overview, name='overview'),
+    path('api/search/', views.menu_search_api, name='menu_search_api'),
     path('menu/', views.menu_view, name='menu'),
     path('dining-spaces/', views.dining_spaces_view, name='spaces'),
     path('space/<slug:slug>/', views.space_detail, name='space_detail'),

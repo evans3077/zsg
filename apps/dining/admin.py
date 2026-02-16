@@ -48,11 +48,11 @@ class FoodItemAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'is_from_farm', 'is_featured', 'is_special', 'display_order']  # Added is_special here
     list_filter = ['category', 'is_from_farm', 'is_featured', 'is_special', 'is_active']
     list_editable = ['is_featured', 'is_special', 'display_order']
-    search_fields = ['name', 'description']
+    search_fields = ['name', 'description', 'search_tags', 'category__name']
     prepopulated_fields = {'slug': ('name',)}
     fieldsets = (
         ('Basic Information', {
-            'fields': ('name', 'slug', 'category', 'description', 'featured_image')
+            'fields': ('name', 'slug', 'category', 'description', 'search_tags', 'featured_image')
         }),
         ('Farm Connection', {
             'fields': ('is_from_farm', 'farm_ingredients')

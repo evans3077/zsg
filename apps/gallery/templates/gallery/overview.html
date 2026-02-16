@@ -35,6 +35,84 @@
 
 <section class="section-padding">
     <div class="container">
+        <section class="gallery-group" id="gallery-menu">
+            <div class="gallery-group-head">
+                <h2>Menu Gallery</h2>
+                <p>Visual highlights of our dining menu and platter presentation.</p>
+            </div>
+
+            {% if menu_gallery_images %}
+            <div class="gallery-grid">
+                {% for image in menu_gallery_images %}
+                <figure class="gallery-card">
+                    <button
+                        class="gallery-lightbox-trigger"
+                        type="button"
+                        data-src="{{ image.image_path }}"
+                        data-alt="{{ image.alt_text }}"
+                        data-caption="{{ image.caption|default:image.title }}"
+                        aria-label="Open menu image: {{ image.alt_text }}"
+                    >
+                        <img src="{{ image.image_path }}" alt="{{ image.alt_text }}" loading="lazy" decoding="async" width="640" height="480">
+                    </button>
+                    <figcaption>{{ image.caption|default:image.title }}</figcaption>
+                </figure>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="gallery-empty">Menu gallery items are being prepared.</div>
+            {% endif %}
+        </section>
+
+        <section class="gallery-group" id="gallery-social">
+            <div class="gallery-group-head">
+                <h2>Social Media Highlights</h2>
+                <p>Latest updates from Instagram and TikTok. Posts refresh automatically.</p>
+            </div>
+
+            <div class="social-platform-grid">
+                <article class="social-platform-card">
+                    <h3><i class="fab fa-instagram"></i> Instagram</h3>
+                    {% if social_posts.instagram %}
+                    <div class="social-post-grid">
+                        {% for post in social_posts.instagram %}
+                        <a class="social-post" href="{{ post.permalink }}" target="_blank" rel="noopener" aria-label="Open Instagram post {{ forloop.counter }}">
+                            {% if post.media_url %}
+                            <img src="{{ post.media_url }}" alt="Instagram post {{ forloop.counter }} preview" loading="lazy" decoding="async" width="160" height="160">
+                            {% else %}
+                            <div class="social-post-fallback"><i class="fab fa-instagram"></i></div>
+                            {% endif %}
+                            <p>{{ post.caption|default:"View latest Instagram post"|truncatechars:90 }}</p>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="gallery-empty">Instagram feed will appear here after API setup.</div>
+                    {% endif %}
+                </article>
+
+                <article class="social-platform-card">
+                    <h3><i class="fab fa-tiktok"></i> TikTok</h3>
+                    {% if social_posts.tiktok %}
+                    <div class="social-post-grid">
+                        {% for post in social_posts.tiktok %}
+                        <a class="social-post" href="{{ post.permalink }}" target="_blank" rel="noopener" aria-label="Open TikTok post {{ forloop.counter }}">
+                            {% if post.media_url %}
+                            <img src="{{ post.media_url }}" alt="TikTok post {{ forloop.counter }} preview" loading="lazy" decoding="async" width="160" height="160">
+                            {% else %}
+                            <div class="social-post-fallback"><i class="fab fa-tiktok"></i></div>
+                            {% endif %}
+                            <p>{{ post.caption|default:"View latest TikTok post"|truncatechars:90 }}</p>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="gallery-empty">TikTok feed will appear here after API setup.</div>
+                    {% endif %}
+                </article>
+            </div>
+        </section>
+
         {% for section in grouped_sections %}
         <section class="gallery-group" id="gallery-{{ section.key }}">
             <div class="gallery-group-head">
@@ -54,7 +132,7 @@
                         data-caption="{{ image.caption|default:image.title }}"
                         aria-label="Open image: {{ image.alt_text }}"
                     >
-                        <img src="{{ image.image_path }}" alt="{{ image.alt_text }}" loading="lazy">
+                        <img src="{{ image.image_path }}" alt="{{ image.alt_text }}" loading="lazy" width="640" height="480">
                     </button>
                     <figcaption>{{ image.caption|default:image.title }}</figcaption>
                 </figure>
@@ -78,52 +156,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const lightbox = document.getElementById('gallery-lightbox');
-    const lightboxImg = document.getElementById('gallery-lightbox-image');
-    const lightboxCaption = document.getElementById('gallery-lightbox-caption');
-    const closeBtn = document.querySelector('.gallery-lightbox-close');
-    const triggers = document.querySelectorAll('.gallery-lightbox-trigger');
-
-    function openLightbox(src, alt, caption) {
-        lightboxImg.src = src;
-        lightboxImg.alt = alt;
-        lightboxCaption.textContent = caption || '';
-        lightbox.classList.add('is-open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-        lightbox.classList.remove('is-open');
-        lightbox.setAttribute('aria-hidden', 'true');
-        lightboxImg.src = '';
-        document.body.style.overflow = '';
-    }
-
-    triggers.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            openLightbox(
-                this.dataset.src,
-                this.dataset.alt,
-                this.dataset.caption
-            );
-        });
-    });
-
-    closeBtn.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox) {
-            closeLightbox();
-        }
-    });
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
-            closeLightbox();
-        }
-    });
-});
-</script>
+<script src="{% static 'js/gallery.js' %}" defer></script>
 {% endblock %}
 

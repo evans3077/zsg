@@ -46,6 +46,29 @@
     </div>
 </section>
 
+<section class="section-padding" id="menu-search">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Search Our Menu</h2>
+            <p class="section-subtitle">Find dishes, platters, juices, and mocktails instantly.</p>
+        </div>
+        <div class="dining-search-wrap">
+            <label class="sr-only" for="dining-menu-search-input">Search dining menu</label>
+            <input
+                id="dining-menu-search-input"
+                class="dining-search-input"
+                type="search"
+                placeholder="Search food items, categories, or tags..."
+                autocomplete="off"
+                aria-autocomplete="list"
+                aria-controls="dining-search-results"
+                aria-expanded="false"
+            >
+            <div id="dining-search-results" class="dining-search-results" role="listbox" aria-label="Menu search results"></div>
+        </div>
+    </div>
+</section>
+
 <!-- Menu Access -->
 <section class="section-padding bg-gold-light" id="menu-access">
     <div class="container">
@@ -488,42 +511,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const galleryCards = document.querySelectorAll('.dining-gallery-card');
-    galleryCards.forEach(function(card) {
-        card.addEventListener('click', function() {
-            this.classList.toggle('is-expanded');
-        });
-        card.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.classList.toggle('is-expanded');
-            }
-        });
-    });
-
-    // Set minimum datetime and keep end after start
-    const startInput = document.getElementById('dining_start_datetime');
-    const endInput = document.getElementById('dining_end_datetime');
-    const now = new Date();
-    const minValue = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-
-    if (startInput) {
-        startInput.min = minValue;
-    }
-    if (endInput) {
-        endInput.min = minValue;
-    }
-    if (startInput && endInput) {
-        startInput.addEventListener('change', function() {
-            endInput.min = this.value || minValue;
-            if (endInput.value && endInput.value < endInput.min) {
-                endInput.value = endInput.min;
-            }
-        });
-    }
-    
-});
-</script>
+<script src="{% static 'js/dining-search.js' %}" defer></script>
+<script src="{% static 'js/dining-overview.js' %}" defer></script>
 {% endblock %}

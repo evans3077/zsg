@@ -44,3 +44,32 @@ class GalleryImage(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.get_category_display()})"
+
+
+class SocialPost(TimeStampedModel):
+    PLATFORM_CHOICES = [
+        ("instagram", "Instagram"),
+        ("tiktok", "TikTok"),
+        ("facebook", "Facebook"),
+    ]
+
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+    post_id = models.CharField(max_length=120)
+    caption = models.TextField(blank=True)
+    media_url = models.URLField(max_length=500, blank=True)
+    permalink = models.URLField(max_length=500)
+    timestamp = models.DateTimeField()
+    archived = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["platform", "-timestamp"]
+        indexes = [
+            models.Index(fields=["platform", "archived", "-timestamp"], name="gal_soc_p_a_ts_idx"),
+            models.Index(fields=["post_id"], name="gal_soc_post_id_idx"),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=["platform", "post_id"], name="unique_social_post_platform_id"),
+        ]
+
+    def __str__(self):
+        return f"{self.get_platform_display()} - {self.post_id}"
