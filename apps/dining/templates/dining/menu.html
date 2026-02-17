@@ -78,7 +78,7 @@
                     <p class="menu-item-description">{{ item.description }}</p>
                     {% if item.is_from_farm %}
                     <div class="menu-item-ingredients">
-                        <span class="menu-item-ingredient">Farm Fresh</span>
+                        <span class="menu-item-ingredient nature-pill">Farm Fresh</span>
                         {% for ing in item.get_farm_ingredients_list|slice:":3" %}
                         <span class="menu-item-ingredient">{{ ing }}</span>
                         {% endfor %}

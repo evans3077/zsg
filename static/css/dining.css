@@ -453,6 +453,10 @@
     margin-bottom: var(--space-2);
 }
 
+.nature-icon {
+    color: var(--nature-green);
+}
+
 .food-ingredients-list,
 .space-ideal-list,
 .menu-item-ingredients {
@@ -470,6 +474,13 @@
     border-radius: 999px;
     font-size: 0.8rem;
     border: 1px solid var(--gold-medium);
+}
+
+.nature-pill {
+    background: var(--nature-green-soft);
+    color: var(--nature-green-dark);
+    border-color: rgba(47, 125, 50, 0.35);
+    font-weight: 700;
 }
 
 .food-footer {
@@ -536,6 +547,17 @@
     color: white;
     font-size: 1.8rem;
     background: linear-gradient(135deg, var(--gold-medium) 0%, var(--gold-dark) 100%);
+}
+
+.farm-icon-nature {
+    background: linear-gradient(135deg, var(--nature-green) 0%, var(--nature-green-dark) 100%);
+}
+
+.farm-icon-nature .nature-icon,
+.farm-icon-nature .fa-seedling,
+.farm-icon-nature .fa-leaf,
+.farm-icon-nature .fa-spa {
+    color: #ffffff;
 }
 
 .menu-category {

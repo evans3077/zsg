@@ -100,7 +100,7 @@
                     {% if food.is_from_farm and food.farm_ingredients %}
                     <div class="food-ingredients">
                         <p class="food-ingredients-title">
-                            <i class="fas fa-seedling"></i>
+                            <i class="fas fa-seedling nature-icon"></i>
                             Farm Ingredients:
                         </p>
                         <div class="food-ingredients-list">
@@ -116,7 +116,7 @@
                     
                     <div class="food-footer">
                         {% if food.is_from_farm %}
-                        <span class="menu-item-ingredient">From Our Farm</span>
+                        <span class="menu-item-ingredient nature-pill">From Our Farm</span>
                         {% endif %}
                         {% if food.price %}
                         <div class="food-price">
@@ -240,8 +240,8 @@
         <div class="farm-grid">
             {% for source in farm_sources %}
             <div class="farm-card">
-                <div class="farm-icon">
-                    <i class="{{ source.icon }}"></i>
+                <div class="farm-icon farm-icon-nature">
+                    <i class="{{ source.icon }} nature-icon"></i>
                 </div>
                 <h3 class="farm-title">{{ source.name }}</h3>
                 <p class="farm-description">
@@ -254,7 +254,7 @@
         
         <div class="text-center" style="margin-top: var(--space-8);">
             <a href="{% url 'dining:farm_to_fork' %}" class="btn btn-outline-gold">
-                <i class="fas fa-seedling"></i>
+                <i class="fas fa-seedling nature-icon"></i>
                 Learn More About Our Farm
             </a>
         </div>
@@ -407,7 +407,7 @@
                 <p class="farm-description">Adjust serving sizes for small tables, families, and larger groups.</p>
             </div>
             <div class="farm-card">
-                <div class="farm-icon"><i class="fas fa-seedling"></i></div>
+                <div class="farm-icon farm-icon-nature"><i class="fas fa-seedling nature-icon"></i></div>
                 <h3 class="farm-title">Ingredient Preference</h3>
                 <p class="farm-description">Tell us your preferred proteins, sides, and farm-fresh vegetable options.</p>
             </div>
