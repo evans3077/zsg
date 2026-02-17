@@ -7,18 +7,39 @@
 {% endblock %}
 
 {% block content %}
+<!-- Dining Sticky Search -->
+<nav class="dining-sticky-search" aria-label="Dining search">
+    <div class="container">
+        <div class="dining-search-wrap dining-search-wrap-sticky">
+            <label class="sr-only" for="dining-menu-search-input">Search dining menu</label>
+            <input
+                id="dining-menu-search-input"
+                class="dining-search-input"
+                type="search"
+                placeholder="Search tea, coffee, snacks, meals, platters..."
+                autocomplete="off"
+                aria-autocomplete="list"
+                aria-controls="dining-search-results"
+                aria-expanded="false"
+            >
+            <div id="dining-search-results" class="dining-search-results" role="listbox" aria-label="Menu search results"></div>
+            <p class="dining-search-hint">Search available menu items from Zamar Springs.</p>
+        </div>
+    </div>
+</nav>
+
 <!-- Dining Navigation -->
-<nav class="food-category-nav">
+<nav class="food-category-nav" aria-label="Dining sections">
     <div class="container">
         <ul class="food-category-list">
             <li>
-                <a href="{% url 'dining:overview' %}" 
+                <a href="{% url 'dining:overview' %}"
                    class="{% if request.resolver_match.url_name == 'overview' %}active{% endif %}">
                     Overview
                 </a>
             </li>
             <li>
-                <a href="{% url 'dining:menu' %}" 
+                <a href="{% url 'dining:menu' %}"
                    class="{% if request.resolver_match.url_name == 'menu' %}active{% endif %}">
                     Menu
                 </a>
@@ -28,13 +49,13 @@
                     Dining Spaces
                 </a>
             </li>
-             <li>
+            <li>
                 <a href="{% url 'dining:overview' %}#custom-menu">
                     Custom Menus
                 </a>
             </li>
             <li>
-                <a href="{% url 'dining:farm_to_fork' %}" 
+                <a href="{% url 'dining:farm_to_fork' %}"
                    class="{% if request.resolver_match.url_name == 'farm_to_fork' %}active{% endif %}">
                     Farm to Fork
                 </a>
@@ -45,4 +66,9 @@
 
 {% block dining_content %}
 {% endblock %}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/dining-search.js' %}" defer></script>
 {% endblock %}

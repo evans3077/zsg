@@ -76,6 +76,21 @@
     margin: 0 auto;
 }
 
+.dining-sticky-search {
+    position: sticky;
+    top: 72px;
+    z-index: 1700;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--neutral-200);
+    padding: 0.55rem 0 0.65rem;
+    box-shadow: 0 10px 22px rgba(28, 25, 23, 0.06);
+}
+
+.dining-search-wrap-sticky {
+    max-width: 860px;
+}
+
 .dining-search-input {
     width: 100%;
     height: 52px;
@@ -181,6 +196,13 @@
     padding: 0.85rem 1rem;
     color: var(--neutral-600);
     text-align: center;
+}
+
+.dining-search-hint {
+    margin-top: 0.4rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--neutral-500);
 }
 
 .food-category-nav {
@@ -532,6 +554,12 @@
     margin-bottom: var(--space-2);
 }
 
+.menu-items-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
 .menu-item {
     display: grid;
     grid-template-columns: 1fr;
@@ -540,9 +568,9 @@
     background: white;
     border-radius: var(--radius-lg);
     box-shadow: var(--card-shadow);
-    margin-bottom: var(--space-4);
     border: 1px solid var(--neutral-200);
     border-left: 4px solid var(--dining-primary);
+    height: 100%;
 }
 
 .menu-item:hover {
@@ -583,7 +611,14 @@
 .menu-item-description {
     color: var(--neutral-700);
     line-height: 1.6;
-    margin-bottom: var(--space-3);
+    margin: 0;
+}
+
+.menu-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    height: 100%;
 }
 
 .pdf-viewer-container {
@@ -666,6 +701,74 @@
 
 .dining-gallery-inline {
     margin-bottom: var(--space-4);
+}
+
+.dining-spaces-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
+.space-gallery-card {
+    background: #fff;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.space-gallery-slider {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--neutral-100);
+}
+
+.space-gallery-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.45s ease;
+    will-change: transform;
+}
+
+.space-gallery-slide {
+    min-width: 100%;
+    height: 100%;
+}
+
+.space-gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.space-gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(28, 25, 23, 0.6);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.space-gallery-nav.prev {
+    left: 0.6rem;
+}
+
+.space-gallery-nav.next {
+    right: 0.6rem;
+}
+
+.space-gallery-nav:hover {
+    background: rgba(111, 87, 31, 0.9);
 }
 
 .space-accordion {
@@ -859,6 +962,12 @@
     min-height: 120px;
 }
 
+.booking-form input::placeholder,
+.booking-form textarea::placeholder {
+    color: var(--neutral-600);
+    opacity: 1;
+}
+
 .booking-form input:focus,
 .booking-form select:focus,
 .booking-form textarea:focus {
@@ -875,6 +984,23 @@
     background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
     padding-right: 2.5rem;
+}
+
+.reservation-note {
+    color: var(--neutral-700) !important;
+    font-weight: 500;
+}
+
+.cta-section .btn-outline-gold {
+    color: #fff;
+    border-color: var(--gold-medium);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.cta-section .btn-outline-gold:hover {
+    background: var(--gold-medium);
+    border-color: var(--gold-medium);
+    color: var(--neutral-900) !important;
 }
 
 @media (max-width: 768px) {
@@ -926,6 +1052,22 @@
     .farm-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .menu-items-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767px) {
+    .dining-sticky-search {
+        top: 64px;
+        padding: 0.45rem 0 0.55rem;
+    }
+
+    .dining-search-input {
+        height: 48px;
+        font-size: 0.95rem;
+    }
 }
 
 @media (min-width: 900px) {
@@ -954,9 +1096,23 @@
         overflow: visible;
     }
 
+    .dining-spaces-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .dining-gallery-card:hover {
         transform: translateY(-5px) scale(1.01);
         box-shadow: var(--card-shadow-hover);
         border-color: var(--gold-medium);
+    }
+
+    .menu-items-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1320px) {
+    .menu-items-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }

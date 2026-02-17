@@ -65,6 +65,7 @@
                 {% endif %}
             </div>
 
+            <div class="menu-items-grid">
             {% for item in group.items|slice:":6" %}
             <article class="menu-item">
                 <div class="menu-item-content">
@@ -86,6 +87,7 @@
                 </div>
             </article>
             {% endfor %}
+            </div>
         </div>
         {% empty %}
         <div class="text-center">

@@ -195,10 +195,19 @@ function initSubNavAutoHide() {
     if (!subnavs.length) return;
 
     const header = document.querySelector('.main-header');
-    const headerHeight = header ? header.offsetHeight : 80;
-    subnavs.forEach(nav => {
-        nav.style.top = `${headerHeight}px`;
-    });
+    const diningStickySearch = document.querySelector('.dining-sticky-search');
+    const applySubnavOffsets = () => {
+        const headerHeight = header ? header.offsetHeight : 80;
+        const diningSearchHeight = diningStickySearch ? diningStickySearch.offsetHeight : 0;
+        subnavs.forEach(nav => {
+            if (nav.classList.contains('food-category-nav')) {
+                nav.style.top = `${headerHeight + diningSearchHeight}px`;
+            } else {
+                nav.style.top = `${headerHeight}px`;
+            }
+        });
+    };
+    applySubnavOffsets();
 
     let lastScrollY = Math.max(window.scrollY, 0);
     let ticking = false;
@@ -245,6 +254,8 @@ function initSubNavAutoHide() {
             ticking = true;
         }
     }, { passive: true });
+
+    window.addEventListener('resize', applySubnavOffsets, { passive: true });
 
     subnavs.forEach(nav => {
         nav.addEventListener('mouseenter', () => {

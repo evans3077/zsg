@@ -24,6 +24,28 @@ from .models import (
 SPACE_FALLBACK_IMAGE = "/static/images/web-pictures/open-air-dining-machakos.webp"
 SEARCH_CACHE_TTL = 60 * 10
 MENU_DATASET_CACHE_TTL = 60 * 15
+PDF_SUPPLEMENT_DATASET_CACHE_TTL = 60 * 30
+
+MENU_PDF_SUPPLEMENTAL_ITEMS = [
+    {"name": "African Mixed Tea", "category": "Hot Beverages", "tags": "tea african mixed chai"},
+    {"name": "Masala Tea", "category": "Hot Beverages", "tags": "tea masala chai spiced"},
+    {"name": "Lemon Tea", "category": "Hot Beverages", "tags": "tea lemon"},
+    {"name": "Black Tea", "category": "Hot Beverages", "tags": "tea black"},
+    {"name": "White Chocolate", "category": "Hot Beverages", "tags": "white chocolate hot drink"},
+    {"name": "Black Chocolate", "category": "Hot Beverages", "tags": "black chocolate hot drink"},
+    {"name": "White Milo", "category": "Hot Beverages", "tags": "milo white"},
+    {"name": "Black Milo", "category": "Hot Beverages", "tags": "milo black"},
+    {"name": "White Coffee", "category": "Hot Beverages", "tags": "coffee white"},
+    {"name": "Black Coffee", "category": "Hot Beverages", "tags": "coffee black"},
+    {"name": "Dawa", "category": "Hot Beverages", "tags": "dawa tea lemon honey ginger"},
+    {"name": "Pot of Milk", "category": "Hot Beverages", "tags": "milk hot pot"},
+    {"name": "Samosa", "category": "Snacks", "tags": "snacks appetizer"},
+    {"name": "Sausage", "category": "Snacks", "tags": "snacks breakfast"},
+    {"name": "Chips", "category": "Snacks", "tags": "fries chips snacks"},
+    {"name": "Bhajia", "category": "Snacks", "tags": "snacks bhajia"},
+    {"name": "Viazi Karai", "category": "Snacks", "tags": "snacks potatoes"},
+    {"name": "Mandazi", "category": "Snacks", "tags": "snacks pastry"},
+]
 
 SPACE_GALLERY_FALLBACKS = {
     "pergola": [
@@ -64,8 +86,43 @@ def _decorate_space(space):
     return space
 
 
+def _space_gallery_urls(space):
+    if not space:
+        return []
+    if getattr(space, "gallery_images", None):
+        return [image.image.url for image in space.gallery_images if image.image]
+    if getattr(space, "fallback_gallery", None):
+        return list(space.fallback_gallery)
+    if getattr(space, "card_image", None):
+        return [space.card_image]
+    return []
+
+
+def _ensure_min_gallery(urls, min_items=2):
+    clean_urls = [url for url in urls if url]
+    if not clean_urls:
+        return []
+    while len(clean_urls) < min_items:
+        clean_urls.append(clean_urls[0])
+    return clean_urls
+
+
 def _normalize_query(query):
     return re.sub(r"\s+", " ", (query or "").strip().lower())
+
+
+def _tokenize_search_text(value):
+    return re.findall(r"[a-z0-9]+", (value or "").lower())
+
+
+def _matches_query_blob(blob, query):
+    query_tokens = _tokenize_search_text(query)
+    if not query_tokens:
+        return False
+    blob_tokens = _tokenize_search_text(blob)
+    if not blob_tokens:
+        return False
+    return all(any(blob_token.startswith(query_token) for blob_token in blob_tokens) for query_token in query_tokens)
 
 
 def _search_cache_key(query):
@@ -131,6 +188,52 @@ def _build_cached_menu_dataset():
     return dataset
 
 
+def _build_cached_pdf_supplement_dataset():
+    key = "dining:search:pdf-supplement:v1"
+    dataset = cache.get(key)
+    if dataset is not None:
+        return dataset
+
+    dataset = []
+    for index, row in enumerate(MENU_PDF_SUPPLEMENTAL_ITEMS, start=1):
+        name = row.get("name", "").strip()
+        category_name = row.get("category", "Menu PDF")
+        tags = row.get("tags", "")
+        dataset.append(
+            {
+                "id": f"pdf-{index}",
+                "name": name,
+                "slug": "",
+                "description": "",
+                "search_tags": tags,
+                "farm_ingredients": "",
+                "price": None,
+                "featured_image": "",
+                "category__name": category_name,
+                "category__slug": "menu-pdf",
+                "search_blob": f"{name} {category_name} {tags}".lower(),
+            }
+        )
+
+    cache.set(key, dataset, PDF_SUPPLEMENT_DATASET_CACHE_TTL)
+    return dataset
+
+
+def _merge_ranked_results(primary, supplemental, limit=12):
+    merged = []
+    seen_names = set()
+
+    for row in list(primary) + list(supplemental):
+        normalized_name = (row.get("name") or "").strip().lower()
+        if not normalized_name or normalized_name in seen_names:
+            continue
+        merged.append(row)
+        seen_names.add(normalized_name)
+        if len(merged) >= limit:
+            break
+    return merged
+
+
 def _search_menu_items(query, limit=10):
     is_postgres = connection.vendor == "postgresql" and SearchVector is not None
 
@@ -160,17 +263,36 @@ def _search_menu_items(query, limit=10):
                 "id",
                 "name",
                 "slug",
+                "description",
+                "search_tags",
+                "farm_ingredients",
                 "price",
                 "featured_image",
                 "category__name",
                 "category__slug",
             )[:limit]
         )
-        return list(qs)
+        db_results = []
+        for row in qs:
+            blob = " ".join(
+                [
+                    row["name"] or "",
+                    row["description"] or "",
+                    row["search_tags"] or "",
+                    row["farm_ingredients"] or "",
+                    row["category__name"] or "",
+                ]
+            ).lower()
+            row["search_blob"] = blob
+            if _matches_query_blob(blob, query):
+                db_results.append(row)
+    else:
+        dataset = _build_cached_menu_dataset()
+        db_results = [row for row in dataset if _matches_query_blob(row["search_blob"], query)][:limit]
 
-    dataset = _build_cached_menu_dataset()
-    filtered = [row for row in dataset if query in row["search_blob"]]
-    return filtered[:limit]
+    supplemental_dataset = _build_cached_pdf_supplement_dataset()
+    supplemental_hits = [row for row in supplemental_dataset if _matches_query_blob(row["search_blob"], query)][:limit]
+    return _merge_ranked_results(db_results, supplemental_hits, limit=limit)
 
 
 @require_GET
@@ -223,6 +345,22 @@ def dining_overview(request):
     pergola_space = _decorate_space(dining_spaces_qs.filter(space_type='pergola').first())
     gazebo_spaces = [_decorate_space(space) for space in dining_spaces_qs.filter(space_type='gazebo')]
     open_air_space = _decorate_space(dining_spaces_qs.filter(space_type='garden').first())
+
+    pergola_gallery_urls = _ensure_min_gallery(
+        _space_gallery_urls(pergola_space) or SPACE_GALLERY_FALLBACKS["pergola"],
+        min_items=2,
+    )
+    gazebo_gallery_urls = []
+    for gazebo in gazebo_spaces:
+        gazebo_gallery_urls.extend(_space_gallery_urls(gazebo))
+    gazebo_gallery_urls = _ensure_min_gallery(
+        gazebo_gallery_urls or SPACE_GALLERY_FALLBACKS["gazebo"],
+        min_items=2,
+    )
+    open_air_gallery_urls = _ensure_min_gallery(
+        _space_gallery_urls(open_air_space) or SPACE_GALLERY_FALLBACKS["open_air"],
+        min_items=2,
+    )
     
     # Get farm sources
     farm_sources = FarmSource.objects.filter(
@@ -237,6 +375,9 @@ def dining_overview(request):
         'pergola_space': pergola_space,
         'gazebo_spaces': gazebo_spaces,
         'open_air_space': open_air_space,
+        'pergola_gallery_urls': pergola_gallery_urls,
+        'gazebo_gallery_urls': gazebo_gallery_urls,
+        'open_air_gallery_urls': open_air_gallery_urls,
         'farm_sources': farm_sources,
     }
     return render(request, 'dining/overview.html', context)
