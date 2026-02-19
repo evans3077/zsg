@@ -12,16 +12,19 @@
     <div class="container">
         <div class="dining-search-wrap dining-search-wrap-sticky">
             <label class="sr-only" for="dining-menu-search-input">Search dining menu</label>
-            <input
-                id="dining-menu-search-input"
-                class="dining-search-input"
-                type="search"
-                placeholder="Search tea, coffee, snacks, meals, platters..."
-                autocomplete="off"
-                aria-autocomplete="list"
-                aria-controls="dining-search-results"
-                aria-expanded="false"
-            >
+            <div class="dining-search-shell">
+                <span class="dining-search-leading" aria-hidden="true"><i class="fas fa-search"></i></span>
+                <input
+                    id="dining-menu-search-input"
+                    class="dining-search-input"
+                    type="search"
+                    placeholder="Search tea, coffee, snacks, meals, platters..."
+                    autocomplete="off"
+                    aria-autocomplete="list"
+                    aria-controls="dining-search-results"
+                    aria-expanded="false"
+                >
+            </div>
             <div id="dining-search-results" class="dining-search-results" role="listbox" aria-label="Menu search results"></div>
             <p class="dining-search-hint">Search available menu items from Zamar Springs.</p>
         </div>

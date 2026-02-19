@@ -68,15 +68,7 @@
                                 <a href="{% url 'conferences:overview' %}">Conferences Overview</a>
                                 {% for category in conference_categories %}
                                     <a href="{% url 'conferences:category_detail' category.slug %}">
-                                        {% if category.category_type == 'board' %}
-                                            Board Rooms
-                                        {% elif category.category_type == 'meeting' %}
-                                            Meeting Rooms
-                                        {% elif category.category_type == 'hall' %}
-                                            Halls
-                                        {% else %}
-                                            {{ category.name }}
-                                        {% endif %}
+                                        {{ category.name }}
                                     </a>
                                 {% endfor %}
                                 <a href="{% url 'conferences:packages' %}">Packages</a>
@@ -114,12 +106,14 @@
                     </ul>
                 </nav>
 
-                <!-- Mobile Menu Toggle -->
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+                <div class="header-actions">
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -151,15 +145,7 @@
                     <a href="{% url 'conferences:overview' %}">Conferences Overview</a>
                     {% for category in conference_categories %}
                         <a href="{% url 'conferences:category_detail' category.slug %}">
-                            {% if category.category_type == 'board' %}
-                                Board Rooms
-                            {% elif category.category_type == 'meeting' %}
-                                Meeting Rooms
-                            {% elif category.category_type == 'hall' %}
-                                Halls
-                            {% else %}
-                                {{ category.name }}
-                            {% endif %}
+                            {{ category.name }}
                         </a>
                     {% endfor %}
                     <a href="{% url 'conferences:packages' %}">Packages</a>
@@ -341,6 +327,15 @@
                     <a href="{% url 'home:terms_of_service' %}">Terms of Service</a>
                     <a href="{% url 'home:sitemap_page' %}">Sitemap</a>
                 </div>
+            </div>
+            <div class="savannah-strip" aria-hidden="true">
+                <i class="fas fa-seedling"></i>
+                <i class="fas fa-leaf"></i>
+                <i class="fas fa-tree"></i>
+                <i class="fas fa-seedling"></i>
+                <i class="fas fa-leaf"></i>
+                <i class="fas fa-tree"></i>
+                <i class="fas fa-seedling"></i>
             </div>
         </div>
     </footer>

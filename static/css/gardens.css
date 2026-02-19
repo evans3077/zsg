@@ -946,3 +946,36 @@
         gap: var(--space-3xl);
     }
 }
+
+@media (max-width: 767px) {
+    .gardens-grid,
+    .event-types-grid,
+    .gardens-category-grid,
+    .highlights-grid,
+    .amenities-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: var(--space-md);
+        scroll-snap-type: x mandatory;
+        padding-bottom: var(--space-sm);
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .gardens-grid::-webkit-scrollbar,
+    .event-types-grid::-webkit-scrollbar,
+    .gardens-category-grid::-webkit-scrollbar,
+    .highlights-grid::-webkit-scrollbar,
+    .amenities-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .garden-card,
+    .event-type-card,
+    .garden-category-card,
+    .highlight-card,
+    .amenity-item {
+        min-width: min(84vw, 320px);
+        scroll-snap-align: start;
+    }
+}

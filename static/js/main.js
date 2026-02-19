@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Reviews slider / API hook
     initGoogleReviewsSection();
+
+    // Adaptive div boxes for non-link cards
+    initAdaptiveDivBoxes();
 });
 
 // Mobile Menu
@@ -407,6 +410,36 @@ function initGoogleReviewsSection() {
         if (autoTimer) clearInterval(autoTimer);
     });
     slider.addEventListener('mouseleave', restartAutoPlay);
+}
+
+function initAdaptiveDivBoxes() {
+    if (!window.matchMedia('(max-width: 767px)').matches) return;
+
+    const groups = [
+        { container: '.highlights-grid', cards: '.highlight-card' },
+        { container: '.services-grid', cards: '.service-card' },
+        { container: '.rooms-grid', cards: '.room-card' },
+        { container: '.packages-grid', cards: '.package-card' },
+        { container: '.gardens-grid', cards: '.garden-card' },
+        { container: '.event-types-grid', cards: '.event-type-card' },
+        { container: '.activity-grid', cards: '.activity-card' },
+        { container: '.farm-grid', cards: '.farm-card' },
+    ];
+
+    groups.forEach((group) => {
+        document.querySelectorAll(group.container).forEach((container) => {
+            container.addEventListener('click', (event) => {
+                const card = event.target.closest(group.cards);
+                if (!card || !container.contains(card)) return;
+
+                // Keep linked cards unchanged; only non-link cards trigger horizontal mode.
+                const leadsToPage = card.matches('a[href]') || !!card.querySelector('a[href]');
+                if (!leadsToPage) {
+                    container.classList.add('mobile-swipe-row');
+                }
+            });
+        });
+    });
 }
 
 // Helper Functions

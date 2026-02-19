@@ -310,3 +310,30 @@
     }
 }
 
+@media (max-width: 767px) {
+    .activity-grid,
+    .family-activities-list,
+    .family-media-stack {
+        display: flex;
+        overflow-x: auto;
+        gap: var(--space-3);
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: var(--space-2);
+    }
+
+    .activity-grid::-webkit-scrollbar,
+    .family-activities-list::-webkit-scrollbar,
+    .family-media-stack::-webkit-scrollbar {
+        display: none;
+    }
+
+    .activity-card,
+    .family-activity-item,
+    .family-media-stack img {
+        min-width: min(84vw, 320px);
+        scroll-snap-align: start;
+    }
+}
+
