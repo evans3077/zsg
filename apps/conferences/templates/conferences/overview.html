@@ -44,26 +44,16 @@
                 <div class="category-card-content">
                     <h3>
                         {% if category.category_type == 'board' %}
-                            Board Rooms (12 to 15 pax)
+                            Board Rooms in Machakos
                         {% elif category.category_type == 'meeting' %}
-                            Meeting Rooms (15 to 50 pax)
+                            Meeting Rooms in Machakos
                         {% elif category.category_type == 'hall' %}
-                            Halls (50 to 180 pax)
+                            Meeting Halls in Machakos
                         {% else %}
                             {{ category.name }}
                         {% endif %}
                     </h3>
-                    <p>
-                        {% if category.category_type == 'board' %}
-                            Board Room 1 and Board Room 2
-                        {% elif category.category_type == 'meeting' %}
-                            Melia and Japonica
-                        {% elif category.category_type == 'hall' %}
-                            Acacia, Bamboo, and Cactus
-                        {% else %}
-                            {{ category.description|truncatewords:10 }}
-                        {% endif %}
-                    </p>
+                    <p>{{ category.room_names_summary|default:category.description }}</p>
                 </div>
             </a>
             {% endfor %}
@@ -98,7 +88,15 @@
                     <div class="room-header">
                         <div>
                             <h3 class="room-title">{{ room.name }}</h3>
-                            <p class="room-type">{{ room.category.name }}</p>
+                            <p class="room-type">
+                                {% if room.room_type == 'board' %}
+                                    Board Rooms
+                                {% elif room.room_type == 'hall' %}
+                                    Halls
+                                {% else %}
+                                    Meeting Rooms
+                                {% endif %}
+                            </p>
                         </div>
                         <div class="room-capacity">
                             <i class="fas fa-users"></i>
@@ -206,6 +204,20 @@
                 <h3>Ample Parking</h3>
                 <p>Secure parking space for all attendees</p>
             </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Corporate Retreats in Machakos</h2>
+            <p class="section-subtitle">Pair conference sessions with guided hiking, cycling routes and nature trail breaks for high-impact team retreats.</p>
+        </div>
+        <div class="room-actions">
+            <a href="{% url 'home:outdoor_events' %}" class="btn btn-outline-gold btn-large">
+                <i class="fas fa-people-group"></i> Explore Outdoor Team Experiences
+            </a>
         </div>
     </div>
 </section>

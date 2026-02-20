@@ -1,22 +1,252 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Outdoor Events | Zamar Springs Gardens{% endblock %}
-{% block meta_description %}Outdoor events at Zamar Springs Gardens including nature trails, guided hiking, and organized cycling.{% endblock %}
-{% block meta_keywords %}outdoor events Machakos, nature trails, guided hiking, organized cycling{% endblock %}
+{% block title %}{{ seo.title }}{% endblock %}
+{% block meta_description %}{{ seo.description }}{% endblock %}
+{% block meta_keywords %}{{ seo.keywords }}{% endblock %}
+{% block og_title %}{{ seo.title }}{% endblock %}
+{% block og_description %}{{ seo.description }}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">{{ schema_payloads.tourist_attraction|safe }}</script>
+<script type="application/ld+json">{{ schema_payloads.event_venue|safe }}</script>
+{% endblock %}
 
 {% block content %}
-<section class="section-padding bg-gold-light">
+<section class="hero-section">
+    <div class="hero-slider" aria-hidden="true">
+        <div class="hero-slide is-active">
+            <img src="{{ hero.image }}" alt="{{ hero.image_alt }}" loading="eager" decoding="async" fetchpriority="high" width="1920" height="1280">
+        </div>
+    </div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">{{ hero.title }}</h1>
+            <p class="hero-subtitle">{{ hero.subtitle }}</p>
+            <div class="hero-actions">
+                <a href="{{ hero.cta_target }}" class="btn btn-gold btn-large" aria-label="Plan your outdoor event in Machakos">
+                    <i class="fas fa-map-signs"></i> {{ hero.cta_label }}
+                </a>
+                <a href="tel:+254112394681" class="btn btn-outline-gold btn-large" aria-label="Call to book outdoor activities in Machakos">
+                    <i class="fas fa-phone"></i> Call to Book
+                </a>
+                <a href="#outdoor-inquiry" class="btn btn-outline-gold btn-large" aria-label="Request a quote for outdoor events">
+                    <i class="fas fa-file-signature"></i> Request a Quote
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="highlights-section">
     <div class="container">
         <div class="section-header">
-            <h1 class="section-title">Outdoor Events</h1>
-            <p class="section-subtitle">New outdoor activities section. Full details will be added next.</p>
+            <h2 class="section-title">Outdoor Experiences in Machakos</h2>
+            <p class="section-subtitle">Nature-based activities designed for families, teams, and wellness groups near Nairobi.</p>
+        </div>
+        <div class="highlights-grid outdoor-highlights-grid">
+            <a href="#nature-trails-section" class="highlight-card outdoor-highlight-link" aria-label="Go to Nature Trails section">
+                <div class="highlight-icon nature-icon-bg"><i class="fas fa-route"></i></div>
+                <h3>Nature Trails</h3>
+                <p>Peaceful, secure and fully fenced 800m trail rounds in a clean garden environment.</p>
+            </a>
+            <a href="#guided-hiking-section" class="highlight-card outdoor-highlight-link" aria-label="Go to Guided Hiking section">
+                <div class="highlight-icon"><i class="fas fa-hiking"></i></div>
+                <h3>Guided Hiking</h3>
+                <p>Structured hiking sessions to Mua Hills with trained guides and first-aider support.</p>
+            </a>
+            <a href="#organized-cycling-section" class="highlight-card outdoor-highlight-link" aria-label="Go to Organized Cycling section">
+                <div class="highlight-icon"><i class="fas fa-bicycle"></i></div>
+                <h3>Organized Cycling</h3>
+                <p>Scenic cycling routes from 20km to 40km for fitness clubs and corporate wellness groups.</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="services-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Outdoor Activities & Nature Experiences in Machakos</h2>
+            <p class="section-subtitle">Built for corporate retreats, adventure groups, and family experiences.</p>
+        </div>
+        <div class="services-grid">
+            <article class="service-card" id="nature-trails-section">
+                <div class="service-image service-image-photo">
+                    <img src="{{ nature_trail.image }}" alt="{{ nature_trail.image_alt }}" loading="lazy" decoding="async" width="800" height="540">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">{{ nature_trail.title }}</h3>
+                    {% for paragraph in nature_trail.description.splitlines %}
+                    {% if paragraph %}
+                    <p class="service-description">{{ paragraph }}</p>
+                    {% endif %}
+                    {% endfor %}
+                    <ul class="outdoor-feature-list">
+                        {% for feature in nature_trail.features %}
+                        <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="room-actions">
+                        <a href="{{ nature_trail.cta_target }}" class="btn btn-gold" aria-label="Visit for a nature walk at Zamar Springs Gardens">
+                            <i class="fas fa-walking"></i> {{ nature_trail.cta_label }}
+                        </a>
+                    </div>
+                </div>
+            </article>
+            <article class="service-card" id="guided-hiking-section">
+                <div class="service-image service-image-photo">
+                    <img src="{{ guided_hiking.image }}" alt="{{ guided_hiking.image_alt }}" loading="lazy" decoding="async" width="800" height="540">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">{{ guided_hiking.title }}</h3>
+                    {% for paragraph in guided_hiking.description.splitlines %}
+                    {% if paragraph %}
+                    <p class="service-description">{{ paragraph }}</p>
+                    {% endif %}
+                    {% endfor %}
+                    <h3>Available Trail Distances</h3>
+                    <ul class="outdoor-feature-list">
+                        {% for distance in guided_hiking.distances %}
+                        <li><i class="fas fa-mountain"></i> {{ distance }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="outdoor-note"><strong>{{ guided_hiking.note }}</strong></p>
+                    <div class="room-actions">
+                        <a href="{{ guided_hiking.cta_target }}" class="btn btn-gold" aria-label="Request guided hiking quote in Mua Hills Machakos">
+                            <i class="fas fa-hiking"></i> {{ guided_hiking.cta_label }}
+                        </a>
+                    </div>
+                </div>
+            </article>
+            <article class="service-card" id="organized-cycling-section">
+                <div class="service-image service-image-photo">
+                    <img src="{{ organized_cycling.image }}" alt="{{ organized_cycling.image_alt }}" loading="lazy" decoding="async" width="800" height="540">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">{{ organized_cycling.title }}</h3>
+                    {% for paragraph in organized_cycling.description.splitlines %}
+                    {% if paragraph %}
+                    <p class="service-description">{{ paragraph }}</p>
+                    {% endif %}
+                    {% endfor %}
+                    <h3>Cycling Routes</h3>
+                    <ul class="outdoor-feature-list">
+                        {% for route in organized_cycling.routes %}
+                        <li><i class="fas fa-bicycle"></i> {{ route }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="room-actions">
+                        <a href="{{ organized_cycling.cta_target }}" class="btn btn-gold" aria-label="Plan a cycling event in Machakos">
+                            <i class="fas fa-route"></i> {{ organized_cycling.cta_label }}
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Plan Outdoor Events Near Nairobi</h2>
+            <p class="cta-subtitle">Designed for family groups, fitness teams, corporate retreats and adventure seekers in Machakos.</p>
+            <div class="cta-actions">
+                <a href="tel:+254112394681" class="btn btn-gold btn-large" aria-label="Call to book outdoor events">
+                    <i class="fas fa-phone"></i> Call to Book
+                </a>
+                <a href="#outdoor-inquiry" class="btn btn-outline-gold btn-large" aria-label="Request quote for outdoor events">
+                    <i class="fas fa-file-signature"></i> Request a Quote
+                </a>
+                <a href="#outdoor-inquiry" class="btn btn-gold btn-large" aria-label="Plan your outdoor event at Zamar Springs Gardens">
+                    <i class="fas fa-calendar-check"></i> Plan Your Outdoor Event
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-gold-light" id="outdoor-inquiry">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Request an Outdoor Event Quote</h2>
+            <p class="section-subtitle">Share your preferred activity, dates and group size for a customized response.</p>
+        </div>
+        <div class="outdoor-form-wrap">
+            <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
+                {% csrf_token %}
+                <input type="hidden" name="request_type" value="outdoor_event">
+                <input type="hidden" name="source_page" value="Outdoor Events">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}#outdoor-inquiry">
+                <div class="booking-form-grid">
+                    <div class="booking-form-fields">
+                        <div class="form-group">
+                            <label for="outdoor_name">Full Name *</label>
+                            <input type="text" id="outdoor_name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor_phone">Phone Number *</label>
+                            <input type="tel" id="outdoor_phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor_email">Email Address</label>
+                            <input type="email" id="outdoor_email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor_attendees">Expected Participants *</label>
+                            <input type="number" id="outdoor_attendees" name="attendees" min="1" required>
+                        </div>
+                    </div>
+                    <div class="booking-form-fields">
+                        <div class="form-group">
+                            <label for="outdoor_event_type">Outdoor Event Type *</label>
+                            <select id="outdoor_event_type" name="event_type" required>
+                                <option value="">Select outdoor event type</option>
+                                <option value="nature_trail">Nature Trail Walk</option>
+                                <option value="guided_hiking">Guided Hiking</option>
+                                <option value="organized_cycling">Organized Cycling</option>
+                                <option value="custom_package">Custom Outdoor Package</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor_start_datetime">Event Start *</label>
+                            <input type="datetime-local" id="outdoor_start_datetime" class="event-start-datetime" name="start_datetime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor_end_datetime">Event End *</label>
+                            <input type="datetime-local" id="outdoor_end_datetime" class="event-end-datetime" name="end_datetime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor_message">Request Details</label>
+                            <textarea id="outdoor_message" name="message" rows="4" placeholder="Share preferred route, distance, support needs, and any special request."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="outdoor-form-actions">
+                    <button type="submit" class="btn btn-gold btn-large">
+                        <i class="fas fa-paper-plane"></i> Submit Quote Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Related Experiences at Zamar Springs Gardens</h2>
+            <p class="section-subtitle">Connect your outdoor experience with dining, gardens, and conference retreat plans.</p>
         </div>
         <div class="highlights-grid">
-            {% for section in sections %}
+            {% for link in internal_links %}
             <article class="highlight-card">
-                <div class="highlight-icon"><i class="{{ section.icon }}"></i></div>
-                <h3>{{ section.title }}</h3>
-                <p>{{ section.description }}</p>
+                <div class="highlight-icon"><i class="fas fa-link"></i></div>
+                <h3>{{ link.label }}</h3>
+                <p>{{ link.description }}</p>
+                <a href="{{ link.url }}" class="btn btn-outline-gold" aria-label="{{ link.label }}">Open <i class="fas fa-arrow-right"></i></a>
             </article>
             {% endfor %}
         </div>

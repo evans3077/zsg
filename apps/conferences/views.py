@@ -1,10 +1,18 @@
 from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.db.models import Case, IntegerField, Value, When
 from .models import (
     ConferencePage, ConferenceCategory, 
     ConferenceRoom, ConferencePackage
 )
+
+
+ROOM_TYPES_BY_CATEGORY_TYPE = {
+    "board": ["board"],
+    "meeting": ["executive", "standard"],
+    "hall": ["hall"],
+}
 
 
 def _ordered_conference_categories_queryset():
@@ -26,14 +34,40 @@ def _ordered_conference_categories_queryset():
     )
 
 
+def _room_type_filter_for_category(category):
+    return ROOM_TYPES_BY_CATEGORY_TYPE.get(category.category_type, [])
+
+
+def _attach_category_summaries(categories):
+    for category in categories:
+        room_type_filter = _room_type_filter_for_category(category)
+        active_rooms = list(
+            ConferenceRoom.objects.filter(
+                is_active=True,
+                room_type__in=room_type_filter,
+            ).order_by("display_order", "name")
+        )
+        category.active_rooms = active_rooms
+        if active_rooms:
+            category.room_names_summary = ", ".join(room.name for room in active_rooms)
+        else:
+            category.room_names_summary = category.description
+    return categories
+
+
 def conference_overview(request):
     """Conference landing page"""
     page_settings = ConferencePage.objects.filter(is_active=True).first()
     if not page_settings:
         page_settings = ConferencePage.objects.create()
     
-    categories = _ordered_conference_categories_queryset()
-    featured_rooms = ConferenceRoom.objects.filter(is_active=True, is_featured=True).order_by('display_order')[:6]
+    categories = list(_ordered_conference_categories_queryset())
+    categories = _attach_category_summaries(categories)
+    featured_rooms = (
+        ConferenceRoom.objects.filter(is_active=True, is_featured=True)
+        .select_related("category")
+        .order_by('display_order')[:6]
+    )
     popular_packages = ConferencePackage.objects.filter(is_active=True, is_popular=True).order_by('display_order')[:3]
     
     context = {
@@ -50,12 +84,17 @@ def category_detail(request, slug):
         slug=slug,
         is_active=True
     )
-    rooms = ConferenceRoom.objects.filter(
-        category=category,
-        is_active=True
-    ).order_by('display_order')
+    room_type_filter = _room_type_filter_for_category(category)
+    rooms = (
+        ConferenceRoom.objects.filter(
+            is_active=True,
+            room_type__in=room_type_filter,
+        )
+        .select_related("category")
+        .order_by('display_order', 'name')
+    )
 
-    all_categories = ConferenceCategory.objects.filter(
+    all_categories = list(ConferenceCategory.objects.filter(
         id__in=_ordered_conference_categories_queryset().values("id")
     ).annotate(
         sort_priority=Case(
@@ -65,7 +104,8 @@ def category_detail(request, slug):
             default=Value(99),
             output_field=IntegerField(),
         )
-    ).order_by("sort_priority", "display_order", "name")
+    ).order_by("sort_priority", "display_order", "name"))
+    all_categories = _attach_category_summaries(all_categories)
 
     return render(request, 'conferences/category_detail.html', {
         'category': category,
@@ -84,10 +124,15 @@ def room_detail(request, slug):
         is_active=True
     )
 
-    related_rooms = ConferenceRoom.objects.filter(
-        category=room.category,
-        is_active=True
-    ).exclude(id=room.id).order_by('display_order')[:3]
+    related_filter = ROOM_TYPES_BY_CATEGORY_TYPE.get(room.category.category_type, [room.room_type])
+    related_rooms = (
+        ConferenceRoom.objects.filter(
+            is_active=True,
+            room_type__in=related_filter,
+        )
+        .exclude(id=room.id)
+        .order_by('display_order', 'name')[:3]
+    )
 
     return render(request, 'conferences/room_detail.html', {
         'room': room,
@@ -120,3 +165,10 @@ def capacity_data(request, room_id):
     }
     
     return JsonResponse(data)
+
+
+def halls_category_redirect(request):
+    halls_category = ConferenceCategory.objects.filter(is_active=True, category_type="hall").order_by("display_order", "name").first()
+    if not halls_category:
+        return redirect("conferences:overview")
+    return redirect("conferences:category_detail", slug=halls_category.slug)

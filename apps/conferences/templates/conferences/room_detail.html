@@ -1,511 +1,208 @@
-{% extends "base.html" %}
+{% extends "conferences/base.html" %}
 {% load static %}
 
-{% block title %}{{ room.name }} - {{ room.category.name }} | Zamar Springs Gardens{% endblock %}
-
+{% block title %}{{ room.name }} | {{ room.category.name }} | Zamar Springs Gardens{% endblock %}
 {% block meta_description %}{{ room.meta_description|default:room.description|truncatewords:30 }}{% endblock %}
+{% block meta_keywords %}{{ room.name }}, {{ room.category.name }}, conference venue Machakos, meeting room Machakos{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/conference.css' %}">
-{% endblock %}
-
-{% block content %}
-<div class="room-detail">
+{% block conference_content %}
+<section class="room-detail-section">
     <div class="container">
-        <!-- Room Header -->
         <div class="room-detail-header">
-            <nav style="margin-bottom: var(--space-4);">
+            <p style="margin-bottom: var(--space-4);">
                 <a href="{% url 'conferences:overview' %}" class="text-gold" style="text-decoration: none;">
                     <i class="fas fa-arrow-left"></i> All Facilities
                 </a>
-                <span style="color: var(--neutral-400); margin: 0 var(--space-2);">/</span>
-                <a href="{% url 'conferences:category_detail' room.category.slug %}" class="text-gold" style="text-decoration: none;">
-                    {{ room.category.name }}
-                </a>
-            </nav>
-            
+            </p>
+
             <h1 class="room-detail-title">{{ room.name }}</h1>
-            
+
             <div class="room-detail-meta">
-                <div style="display: flex; align-items: center; gap: var(--space-2);">
-                    <i class="fas fa-users" style="color: var(--gold-dark);"></i>
-                    <span>Max Capacity: <strong>{{ room.get_max_capacity }} people</strong></span>
+                <div class="room-detail-meta-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>{{ room.category.name }}</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: var(--space-2);">
-                    <i class="fas fa-ruler-combined" style="color: var(--gold-dark);"></i>
-                    <span>Area: <strong>{{ room.floor_area }}</strong></span>
+                <div class="room-detail-meta-item">
+                    <i class="fas fa-users"></i>
+                    <span>Max {{ room.get_max_capacity }} Pax</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: var(--space-2);">
-                    <i class="fas fa-door-open" style="color: var(--gold-dark);"></i>
-                    <span>Type: <strong>{{ room.get_room_type_display }}</strong></span>
+                {% if room.floor_area %}
+                <div class="room-detail-meta-item">
+                    <i class="fas fa-ruler-combined"></i>
+                    <span>{{ room.floor_area }}</span>
+                </div>
+                {% endif %}
+                <div class="room-detail-meta-item">
+                    <i class="fas fa-door-open"></i>
+                    <span>{{ room.get_room_type_display }}</span>
                 </div>
             </div>
-        </div>
 
-        <div class="facility-nav">
+            <div class="facility-nav">
                 {% for category in conference_categories %}
                 <a class="facility-nav-link" href="{% url 'conferences:category_detail' category.slug %}">
                     <i class="{{ category.icon }}"></i>
                     {% if category.category_type == 'board' %}
-                        Board Rooms
+                        Board Rooms in Machakos
                     {% elif category.category_type == 'meeting' %}
-                        Meeting Rooms
+                        Meeting Rooms in Machakos
                     {% elif category.category_type == 'hall' %}
-                        Halls
+                        Meeting Halls in Machakos
                     {% else %}
                         {{ category.name }}
                     {% endif %}
                 </a>
                 {% endfor %}
             </div>
+        </div>
 
         <div class="room-detail-content">
-            <!-- Main Content -->
-            <div class="room-detail-main">
-                <!-- Room Description -->
-                <section class="room-section">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Room Description</h2>
-                    <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
-                        <p style="font-size: 1.125rem; line-height: 1.7; color: var(--neutral-700); margin-bottom: var(--space-4);">
-                            {{ room.description }}
-                        </p>
-                        
-                        {% if room.dimensions %}
-                        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gold-light); border-radius: 0.5rem;">
-                            <i class="fas fa-ruler-combined" style="color: var(--gold-dark); font-size: 1.25rem;"></i>
-                            <div>
-                                <p style="font-weight: 600; margin-bottom: 0.25rem;">Room Dimensions</p>
-                                <p style="color: var(--neutral-600); margin: 0;">{{ room.dimensions }}</p>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </section>
-
-                <!-- Gallery -->
-                {% if room.gallery.all %}
-                <section class="room-section">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Gallery</h2>
-                    <div class="gallery-grid">
-                        {% if room.featured_image %}
-                        <div class="gallery-item" style="grid-column: span 2;">
-                            <img src="{{ room.featured_image.url }}" alt="{{ room.name }}" loading="lazy">
-                        </div>
-                        {% endif %}
-                        
-                        {% for gallery_item in room.gallery.all|slice:":4" %}
-                        <div class="gallery-item">
-                            <img src="{{ gallery_item.image.url }}" alt="{{ gallery_item.caption|default:room.name }}" loading="lazy">
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% if room.gallery.count > 5 %}
-                    <div style="text-align: center; margin-top: var(--space-4);">
-                        <button class="btn btn-outline-gold" onclick="document.getElementById('fullGallery').style.display='block'">
-                            <i class="fas fa-images"></i>
-                            View All Photos ({{ room.gallery.count }})
-                        </button>
-                    </div>
+            <div>
+                <section class="detail-section">
+                    <h2>Facility Overview</h2>
+                    <p>{{ room.description }}</p>
+                    {% if room.dimensions %}
+                    <p><strong>Room Dimensions:</strong> {{ room.dimensions }}</p>
                     {% endif %}
                 </section>
-                {% endif %}
 
-                <!-- Capacity Table -->
-                <section class="room-section">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Seating Capacity</h2>
+                <section class="detail-section">
+                    <h2>Gallery</h2>
+                    <div class="gallery-grid">
+                        {% if room.featured_image %}
+                        <figure class="gallery-item">
+                            <img src="{{ room.featured_image.url }}" alt="{{ room.name }} at Zamar Springs Gardens" loading="lazy" decoding="async" width="900" height="600">
+                        </figure>
+                        {% endif %}
+                        {% for gallery_item in room.gallery.all|slice:":5" %}
+                        <figure class="gallery-item">
+                            <img src="{{ gallery_item.image.url }}" alt="{{ gallery_item.caption|default:room.name }}" loading="lazy" decoding="async" width="900" height="600">
+                        </figure>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="detail-section">
+                    <h2>Seating Capacity</h2>
                     <div style="overflow-x: auto;">
                         <table class="capacity-table">
                             <thead>
                                 <tr>
-                                    <th>Layout Style</th>
+                                    <th>Layout</th>
                                     <th>Capacity</th>
-                                    <th>Description</th>
+                                    <th>Use Case</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% if room.capacity_classroom > 0 %}
-                                <tr>
-                                    <td><strong>Classroom</strong></td>
-                                    <td>{{ room.capacity_classroom }} people</td>
-                                    <td>Rows of tables with chairs, ideal for training</td>
-                                </tr>
+                                <tr><td>Classroom</td><td>{{ room.capacity_classroom }}</td><td>Training sessions and workshops</td></tr>
                                 {% endif %}
-                                
                                 {% if room.capacity_theatre > 0 %}
-                                <tr>
-                                    <td><strong>Theatre</strong></td>
-                                    <td>{{ room.capacity_theatre }} people</td>
-                                    <td>Chairs only, maximum seating capacity</td>
-                                </tr>
+                                <tr><td>Theatre</td><td>{{ room.capacity_theatre }}</td><td>Talks and presentations</td></tr>
                                 {% endif %}
-                                
                                 {% if room.capacity_banquet > 0 %}
-                                <tr>
-                                    <td><strong>Banquet</strong></td>
-                                    <td>{{ room.capacity_banquet }} people</td>
-                                    <td>Round tables for dining and meetings</td>
-                                </tr>
+                                <tr><td>Banquet</td><td>{{ room.capacity_banquet }}</td><td>Dining and mixed events</td></tr>
                                 {% endif %}
-                                
                                 {% if room.capacity_u_shape > 0 %}
-                                <tr>
-                                    <td><strong>U-Shape</strong></td>
-                                    <td>{{ room.capacity_u_shape }} people</td>
-                                    <td>Tables arranged in U shape for interactive sessions</td>
-                                </tr>
+                                <tr><td>U-Shape</td><td>{{ room.capacity_u_shape }}</td><td>Interactive board sessions</td></tr>
                                 {% endif %}
-                                
                                 {% if room.capacity_boardroom > 0 %}
-                                <tr>
-                                    <td><strong>Boardroom</strong></td>
-                                    <td>{{ room.capacity_boardroom }} people</td>
-                                    <td>Large table for executive meetings</td>
-                                </tr>
+                                <tr><td>Boardroom</td><td>{{ room.capacity_boardroom }}</td><td>Executive meetings</td></tr>
                                 {% endif %}
                             </tbody>
                         </table>
                     </div>
                 </section>
 
-                <!-- Amenities -->
-                <section class="room-section">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Amenities & Features</h2>
+                <section class="detail-section">
+                    <h2>Amenities</h2>
                     <div class="amenities-grid">
-                        {% if room.has_projector %}
-                        <div class="amenity-item">
-                            <i class="fas fa-tv"></i>
-                            <span>HD Projector & Screen</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_sound_system %}
-                        <div class="amenity-item">
-                            <i class="fas fa-volume-up"></i>
-                            <span>Sound System</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_wifi %}
-                        <div class="amenity-item">
-                            <i class="fas fa-wifi"></i>
-                            <span>High-Speed WiFi</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_whiteboard %}
-                        <div class="amenity-item">
-                            <i class="fas fa-chalkboard"></i>
-                            <span>Whiteboard/Flipchart</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_air_conditioning %}
-                        <div class="amenity-item">
-                            <i class="fas fa-snowflake"></i>
-                            <span>Air Conditioning</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_natural_light %}
-                        <div class="amenity-item">
-                            <i class="fas fa-sun"></i>
-                            <span>Natural Lighting</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_secretary_space %}
-                        <div class="amenity-item">
-                            <i class="fas fa-user-tie"></i>
-                            <span>Secretary Space</span>
-                        </div>
-                        {% endif %}
-                        
-                        {% if room.has_video_conferencing %}
-                        <div class="amenity-item">
-                            <i class="fas fa-video"></i>
-                            <span>Video Conferencing</span>
-                        </div>
-                        {% endif %}
-                        
-                        <div class="amenity-item">
-                            <i class="fas fa-plug"></i>
-                            <span>Power Outlets</span>
-                        </div>
-                        
-                        <div class="amenity-item">
-                            <i class="fas fa-lightbulb"></i>
-                            <span>Adjustable Lighting</span>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Ideal For -->
-                <section class="room-section">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-4);">Ideal For</h2>
-                    <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
-                            {% if room.room_type == 'board' %}
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-gavel fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Board Meetings</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-handshake fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Executive Sessions</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-user-tie fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Client Meetings</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-chart-line fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Strategy Planning</p>
-                            </div>
-                            
-                            {% elif room.room_type == 'hall' %}
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-chalkboard-teacher fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Large Conferences</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-graduation-cap fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Seminars</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-users fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Corporate Events</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-award fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Award Ceremonies</p>
-                            </div>
-                            
-                            {% else %}
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-users fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Team Meetings</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-chart-pie fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Presentations</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-laptop-code fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Training Sessions</p>
-                            </div>
-                            <div style="text-align: center; padding: var(--space-4);">
-                                <i class="fas fa-briefcase fa-2x" style="color: var(--gold-dark); margin-bottom: var(--space-3);"></i>
-                                <p style="font-weight: 600;">Client Pitches</p>
-                            </div>
-                            {% endif %}
-                        </div>
+                        {% if room.has_projector %}<div class="amenity-item"><i class="fas fa-tv"></i><span>Projector</span></div>{% endif %}
+                        {% if room.has_sound_system %}<div class="amenity-item"><i class="fas fa-volume-up"></i><span>Sound System</span></div>{% endif %}
+                        {% if room.has_wifi %}<div class="amenity-item"><i class="fas fa-wifi"></i><span>High-Speed WiFi</span></div>{% endif %}
+                        {% if room.has_whiteboard %}<div class="amenity-item"><i class="fas fa-chalkboard"></i><span>Whiteboard / Flipchart</span></div>{% endif %}
+                        {% if room.has_air_conditioning %}<div class="amenity-item"><i class="fas fa-snowflake"></i><span>Air Conditioning</span></div>{% endif %}
+                        {% if room.has_natural_light %}<div class="amenity-item"><i class="fas fa-sun"></i><span>Natural Light</span></div>{% endif %}
+                        {% if room.has_secretary_space %}<div class="amenity-item"><i class="fas fa-user-tie"></i><span>Secretary Space</span></div>{% endif %}
+                        {% if room.has_video_conferencing %}<div class="amenity-item"><i class="fas fa-video"></i><span>Video Conferencing</span></div>{% endif %}
                     </div>
                 </section>
             </div>
 
-            <!-- Sidebar - Booking & Pricing -->
-            <div class="room-detail-sidebar">
-                <!-- Booking Widget -->
+            <aside>
                 <div class="booking-sidebar" id="booking">
-                    <h3 class="booking-sidebar-title">Book This Room</h3>
-                    
-                    <div class="price-display">
-                        <div class="price-amount">
-                            {% if room.hourly_rate %}
-                            Ksh {{ room.hourly_rate|floatformat:0 }}
-                            {% elif room.half_day_rate %}
-                            Ksh {{ room.half_day_rate|floatformat:0 }}
-                            {% else %}
-                            Contact
-                            {% endif %}
-                        </div>
-                        <div class="price-duration">
-                            {% if room.hourly_rate %}per hour{% else %}starting from{% endif %}
-                        </div>
-                        
-                        {% if room.half_day_rate or room.full_day_rate %}
-                        <div class="price-options">
-                            {% if room.half_day_rate %}
-                            <span class="price-option">Half Day: Ksh {{ room.half_day_rate|floatformat:0 }}</span>
-                            {% endif %}
-                            {% if room.full_day_rate %}
-                            <span class="price-option">Full Day: Ksh {{ room.full_day_rate|floatformat:0 }}</span>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                    </div>
-                    
+                    <h3>Book This Facility</h3>
                     <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
                         {% csrf_token %}
                         <input type="hidden" name="request_type" value="conference_room">
                         <input type="hidden" name="source_page" value="Conference Room Detail">
                         <input type="hidden" name="next" value="{{ request.get_full_path }}#booking">
                         <input type="hidden" name="room" value="{{ room.name }}">
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required>
+
+                        <div class="booking-form-fields">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Company / Organization</label>
+                                <input type="text" id="company" name="company">
+                            </div>
+                            <div class="form-group">
+                                <label for="room_start_datetime">Event Start *</label>
+                                <input type="datetime-local" id="room_start_datetime" class="event-start-datetime" name="start_datetime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="room_end_datetime">Event End *</label>
+                                <input type="datetime-local" id="room_end_datetime" class="event-end-datetime" name="end_datetime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="attendees">Attendees *</label>
+                                <input type="number" id="attendees" name="attendees" min="1" max="{{ room.get_max_capacity }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Additional Requirements</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Catering, layout, equipment, timing..."></textarea>
+                            </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="company">Company/Organization</label>
-                            <input type="text" id="company" name="company">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="room_start_datetime">Event Start *</label>
-                            <input type="datetime-local" id="room_start_datetime" class="event-start-datetime" name="start_datetime" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="room_end_datetime">Event End *</label>
-                            <input type="datetime-local" id="room_end_datetime" class="event-end-datetime" name="end_datetime" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="attendees">Number of Attendees *</label>
-                            <input type="number" id="attendees" name="attendees" min="1" max="{{ room.get_max_capacity }}" required>
-                            <small style="color: var(--neutral-500);">Max: {{ room.get_max_capacity }} people</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Additional Requirements</label>
-                            <textarea id="message" name="message" rows="3" placeholder="Catering, equipment, layout preferences..."></textarea>
-                        </div>
-                        
+
                         <div class="booking-cta">
                             <button type="submit" class="btn btn-gold" style="width: 100%;">
-                                <i class="fas fa-paper-plane"></i>
-                                Send Booking Request
+                                <i class="fas fa-paper-plane"></i> Send Booking Request
                             </button>
-                        </div>
-                        
-                        <div style="text-align: center; margin-top: var(--space-3);">
-                            <small style="color: var(--neutral-500);">
-                                <i class="fas fa-info-circle"></i>
-                                We'll contact you within 24 hours to confirm
-                            </small>
                         </div>
                     </form>
                 </div>
 
-                <!-- Quick Contact -->
-                <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
-                    <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: var(--space-4);">Need Help?</h4>
-                    
-                    <div style="display: grid; gap: var(--space-3);">
-                        <a href="tel:+254112394681" style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--neutral-50); border-radius: 0.5rem; text-decoration: none; color: var(--neutral-800);">
-                            <i class="fas fa-phone" style="color: var(--gold-dark);"></i>
-                            <span>Call: +254 112 394 681</span>
-                        </a>
-                        
-                        <a href="mailto:info@zamarsprings.com" style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--neutral-50); border-radius: 0.5rem; text-decoration: none; color: var(--neutral-800);">
-                            <i class="fas fa-envelope" style="color: var(--gold-dark);"></i>
-                            <span>Email Us</span>
-                        </a>
-                        
-                        <a href="{% url 'conferences:packages' %}" style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gold-light); border-radius: 0.5rem; text-decoration: none; color: var(--neutral-900); font-weight: 600;">
-                            <i class="fas fa-gift" style="color: var(--gold-dark);"></i>
-                            <span>View Packages & Deals</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Related Rooms -->
                 {% if related_rooms %}
-                <div style="background: white; padding: var(--space-6); border-radius: 1rem; box-shadow: var(--shadow-sm);">
-                    <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: var(--space-4);">Similar Rooms</h4>
-                    
-                    <div style="display: grid; gap: var(--space-4);">
+                <section class="detail-section">
+                    <h2>Related Facilities</h2>
+                    <div class="rooms-grid">
                         {% for related in related_rooms %}
-                        <a href="{% url 'conferences:room_detail' related.slug %}" style="display: block; text-decoration: none; color: inherit;">
-                            <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border: 1px solid var(--neutral-200); border-radius: 0.5rem; transition: var(--transition-base);">
-                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-700) 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white;">
-                                    <i class="fas fa-building"></i>
-                                </div>
-                                <div>
-                                    <p style="font-weight: 600; margin-bottom: 0.25rem; color: var(--neutral-900);">{{ related.name }}</p>
-                                    <div style="display: flex; align-items: center; gap: var(--space-2);">
-                                        <span style="font-size: 0.875rem; color: var(--neutral-600);">{{ related.get_room_type_display }}</span>
-                                        <span style="font-size: 0.75rem; background: var(--gold-light); color: var(--gold-darker); padding: 0.125rem 0.5rem; border-radius: 2rem;">
-                                            {{ related.get_max_capacity }} <i class="fas fa-users"></i>
-                                        </span>
-                                    </div>
+                        <article class="room-card">
+                            <div class="room-content">
+                                <h3 class="room-title" style="font-size: 1.1rem;">{{ related.name }}</h3>
+                                <p class="room-type">{{ related.get_room_type_display }}</p>
+                                <div class="room-capacity"><i class="fas fa-users"></i> {{ related.get_max_capacity }}</div>
+                                <div class="room-actions" style="margin-top: var(--space-3);">
+                                    <a href="{% url 'conferences:room_detail' related.slug %}" class="btn btn-outline-gold">Open</a>
                                 </div>
                             </div>
-                        </a>
+                        </article>
                         {% endfor %}
                     </div>
-                </div>
+                </section>
                 {% endif %}
-            </div>
+            </aside>
         </div>
     </div>
-</div>
-
-<!-- Full Gallery Modal (hidden by default) -->
-{% if room.gallery.all %}
-<div id="fullGallery" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 2000; padding: var(--space-8); overflow-y: auto;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
-            <h3 style="color: white; font-size: 1.5rem;">{{ room.name }} - Gallery</h3>
-            <button onclick="document.getElementById('fullGallery').style.display='none'" style="background: none; border: none; color: white; font-size: 2rem; cursor: pointer;">
-                &times;
-            </button>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-4);">
-            {% if room.featured_image %}
-            <div>
-                <img src="{{ room.featured_image.url }}" alt="{{ room.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem;">
-            </div>
-            {% endif %}
-            
-            {% for gallery_item in room.gallery.all %}
-            <div>
-                <img src="{{ gallery_item.image.url }}" alt="{{ gallery_item.caption|default:room.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem;">
-                {% if gallery_item.caption %}
-                <p style="color: white; margin-top: var(--space-2); text-align: center;">{{ gallery_item.caption }}</p>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-{% endif %}
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum date to today
-    const dateInput = document.getElementById('date');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
-        dateInput.value = today;
-    }
-    
-    // Update attendees max based on room capacity
-    const attendeesInput = document.getElementById('attendees');
-    if (attendeesInput) {
-        const maxCapacity = {{ room.get_max_capacity }};
-        attendeesInput.max = maxCapacity;
-        attendeesInput.addEventListener('input', function() {
-            if (parseInt(this.value) > maxCapacity) {
-                this.value = maxCapacity;
-            }
-        });
-    }
-});
-</script>
+</section>
 {% endblock %}

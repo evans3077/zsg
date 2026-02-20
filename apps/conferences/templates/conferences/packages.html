@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "conferences/base.html" %}
 {% load static %}
 
 {% block title %}Conference Packages in Machakos | All-Inclusive Meeting Solutions | Zamar Springs Gardens{% endblock %}
@@ -8,11 +8,7 @@
 Looking for affordable conference packages in Machakos? Zamar Springs Gardens offers full-day, half-day & corporate meeting packages with catering, WiFi, projector & parking. Get a custom quote today.
 {% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/conference.css' %}">
-{% endblock %}
-
-{% block content %}
+{% block conference_content %}
 <!-- Packages Hero -->
 <section class="conference-hero">
     <div class="container">

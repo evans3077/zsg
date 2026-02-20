@@ -10,6 +10,7 @@ class BookingRequest(TimeStampedModel):
         ("garden_event", "Garden Event Inquiry"),
         ("garden_booking", "Garden Booking"),
         ("dining_reservation", "Dining Reservation"),
+        ("outdoor_event", "Outdoor Event Inquiry"),
         ("general", "General Inquiry"),
     ]
 

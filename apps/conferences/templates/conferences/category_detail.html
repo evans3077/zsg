@@ -1,91 +1,56 @@
-{% extends "base.html" %}
+{% extends "conferences/base.html" %}
 {% load static %}
 
-{% block title %}{{ category.name }} in Machakos - Corporate Meeting & Conference Rooms
-{% endblock %}
+{% block title %}{{ category.name }} in Machakos | Zamar Springs Gardens{% endblock %}
+{% block meta_description %}{{ category.description }}{% endblock %}
+{% block meta_keywords %}{{ category.name }} Machakos, conference rooms Machakos, meeting facilities near Nairobi{% endblock %}
+{% block og_title %}{{ category.name }} in Machakos | Zamar Springs Gardens{% endblock %}
+{% block og_description %}Explore {{ category.name|lower }} at Zamar Springs Gardens for professional meetings and events.{% endblock %}
 
-{% block meta_description %}{{ category.name }} in Machakos at Zamar Springs Gardens. Ideal for corporate meetings, executive sessions, trainings, seminars and workshops. Fully equipped with dedicated high-speed WiFi, projector, air conditioning and catering services. Affordable conference room hire in Machakos. Book today.
-{% endblock %}
-
-{% block meta_keywords %}
-{{ category.name }} Machakos,
-{{ category.name }} in Machakos,
-conference rooms Machakos,
-meeting rooms Machakos,
-corporate meeting venue Machakos,
-executive meeting rooms Machakos,
-training venue Machakos,
-seminar venue Machakos,
-boardroom hire Machakos,
-conference rooms near Nairobi,
-meeting rooms near Nairobi,
-corporate meeting near Nairobi,
-executive meeting near Nairobi,
-training venue near Nairobi,
-seminar venue near Nairobi,
-boardroom hire near Nairobi,
-conference hall rental Machakos,
-professional meeting space Machakos,
-affordable conference rooms Kenya
-{% endblock %}
-{% block og_title %}{{ category.name }} in Machakos | Corporate Meeting Venue{% endblock %}
-
-{% block og_description %}
-Professional {{ category.name|lower }} in Machakos for meetings, corporate events, seminars and training sessions with modern amenities and flexible booking options.
-{% endblock %}
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/conference.css' %}">
-{% endblock %}
-
-{% block content %}
-<!-- Category Hero -->
+{% block conference_content %}
 <section class="conference-hero">
     <div class="container">
         <div class="conference-hero-content">
-            <h1 class="conference-hero-title">{{ category.name }} in Machakos for Corporate Meetings & Events</h1>
+            <h1 class="conference-hero-title">
+                {% if category.category_type == 'board' %}
+                    Board Rooms in Machakos
+                {% elif category.category_type == 'meeting' %}
+                    Meeting Rooms in Machakos
+                {% elif category.category_type == 'hall' %}
+                    Meeting Halls in Machakos
+                {% else %}
+                    {{ category.name }} in Machakos
+                {% endif %}
+            </h1>
             <p class="conference-hero-subtitle">{{ category.description }}</p>
             <a href="#rooms" class="btn btn-gold btn-large">
-                <i class="fas fa-building"></i>
-                View All Rooms
+                <i class="fas fa-building"></i> View Facilities
             </a>
         </div>
     </div>
 </section>
 
-<!-- Category Navigation -->
 <section class="category-nav">
     <div class="container">
         <div class="category-nav-scroll">
             {% for cat in all_categories %}
-            <a href="{% url 'conferences:category_detail' cat.slug %}" 
-               class="category-card {% if cat.slug == category.slug %}active{% endif %}">
+            <a href="{% url 'conferences:category_detail' cat.slug %}" class="category-card {% if cat.slug == category.slug %}active{% endif %}">
                 <div class="category-card-icon">
                     <i class="{{ cat.icon }}"></i>
                 </div>
                 <div class="category-card-content">
-
                     <h3>
                         {% if cat.category_type == 'board' %}
-                            Board Rooms
+                            Board Rooms in Machakos
                         {% elif cat.category_type == 'meeting' %}
-                            Meeting Rooms
+                            Meeting Rooms in Machakos
                         {% elif cat.category_type == 'hall' %}
-                            Halls
+                            Meeting Halls in Machakos
                         {% else %}
                             {{ cat.name }}
                         {% endif %}
                     </h3>
-                    <p>
-                        {% if cat.category_type == 'board' %}
-                            12 to 15 pax: Board Room 1 and Board Room 2
-                        {% elif cat.category_type == 'meeting' %}
-                            15 to 50 pax: Melia and Japonica
-                        {% elif cat.category_type == 'hall' %}
-                            50 to 180 pax: Acacia, Bamboo, and Cactus
-                        {% else %}
-                            {{ cat.description|truncatewords:8 }}
-                        {% endif %}
-                    </p>
+                    <p>{{ cat.room_names_summary|default:cat.description }}</p>
                 </div>
             </a>
             {% endfor %}
@@ -93,192 +58,86 @@ Professional {{ category.name|lower }} in Machakos for meetings, corporate event
     </div>
 </section>
 
-<!-- Rooms in this category -->
 <section class="rooms-section" id="rooms">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">All {{ category.name }} Available in Zamar Springs Gardens,Machakos</h2>
-            <p class="section-subtitle">Browse our selection of professional {{ category.name|lower }} for meetings and corporate events in Machakos.</p>
+            <h2 class="section-title">
+                {% if category.category_type == 'board' %}
+                    Available Board Rooms in Machakos
+                {% elif category.category_type == 'meeting' %}
+                    Available Meeting Rooms in Machakos
+                {% elif category.category_type == 'hall' %}
+                    Available Meeting Halls in Machakos
+                {% else %}
+                    Available {{ category.name }} in Machakos
+                {% endif %}
+            </h2>
+            <p class="section-subtitle">Browse active facilities in this category. Updates from admin are reflected automatically.</p>
         </div>
-        
+
         {% if rooms %}
         <div class="rooms-grid">
             {% for room in rooms %}
-            <div class="room-card {% if room.is_featured %}room-card-featured{% endif %}">
+            <article class="room-card {% if room.is_featured %}room-card-featured{% endif %}">
                 <div class="room-image-container">
                     {% if room.featured_image %}
-                    <img class="room-image" src="{{ room.featured_image.url }}" alt="{{ room.name }} - {{ category.name }} in Machakos at Zamar Springs Gardens" loading="lazy" decoding="async" width="800" height="533">
+                    <img class="room-image" src="{{ room.featured_image.url }}" alt="{{ room.name }} in {{ category.name }}" loading="lazy" decoding="async" width="800" height="533">
                     {% else %}
                     <div class="room-image-placeholder">
                         <i class="fas fa-building fa-4x"></i>
                     </div>
                     {% endif %}
-                    {% if room.room_type == 'executive' %}
-                    <span class="room-badge">Executive</span>
-                    {% elif room.room_type == 'hall' %}
-                    <span class="room-badge">Conference Hall</span>
-                    {% elif room.room_type == 'board' %}
-                    <span class="room-badge">Board Room</span>
-                    {% else %}
-                    <span class="room-badge">Meeting Room</span>
-                    {% endif %}
+                    <span class="room-badge">{{ room.get_room_type_display }}</span>
                 </div>
-                
+
                 <div class="room-content">
                     <div class="room-header">
                         <div>
                             <h3 class="room-title">{{ room.name }}</h3>
-                            <p class="room-type">{{ room.category.name }}</p>
+                            <p class="room-type">{{ category.name }}</p>
                         </div>
                         <div class="room-capacity">
-                            <i class="fas fa-users"></i>
-                            {{ room.get_max_capacity }}
+                            <i class="fas fa-users"></i> {{ room.get_max_capacity }}
                         </div>
                     </div>
-                    
-                    <p class="room-description">
-                        {{ room.description|truncatewords:25 }}
-                    </p>
-                    
+
+                    <p class="room-description">{{ room.description|truncatewords:24 }}</p>
+
                     <div class="room-features">
-                        {% if room.has_projector %}
-                        <span class="room-feature">
-                            <i class="fas fa-tv"></i>
-                            Projector
-                        </span>
-                        {% endif %}
-                        {% if room.has_wifi %}
-                        <span class="room-feature">
-                            <i class="fas fa-wifi"></i>
-                            WiFi
-                        </span>
-                        {% endif %}
-                        {% if room.has_air_conditioning %}
-                        <span class="room-feature">
-                            <i class="fas fa-snowflake"></i>
-                            A/C
-                        </span>
-                        {% endif %}
-                        {% if room.has_video_conferencing %}
-                        <span class="room-feature">
-                            <i class="fas fa-video"></i>
-                            Video Conf
-                        </span>
-                        {% endif %}
-                        {% if room.has_secretary_space %}
-                        <span class="room-feature">
-                            <i class="fas fa-user-tie"></i>
-                            Secretary
-                        </span>
-                        {% endif %}
+                        {% if room.has_projector %}<span class="room-feature"><i class="fas fa-tv"></i> Projector</span>{% endif %}
+                        {% if room.has_wifi %}<span class="room-feature"><i class="fas fa-wifi"></i> WiFi</span>{% endif %}
+                        {% if room.has_air_conditioning %}<span class="room-feature"><i class="fas fa-snowflake"></i> A/C</span>{% endif %}
+                        {% if room.has_video_conferencing %}<span class="room-feature"><i class="fas fa-video"></i> Video Conf</span>{% endif %}
                     </div>
-                    
+
                     <div class="room-actions">
-                        <a href="{% url 'conferences:room_detail' room.slug %}" class="btn btn-gold">
-                            View Details
-                        </a>
-                        <a href="{% url 'conferences:room_detail' room.slug %}#booking" class="btn btn-outline-gold">
-                            Book Now
-                        </a>
+                        <a href="{% url 'conferences:room_detail' room.slug %}" class="btn btn-gold">View Details</a>
+                        <a href="{% url 'conferences:room_detail' room.slug %}#booking" class="btn btn-outline-gold">Book Now</a>
                     </div>
                 </div>
-            </div>
+            </article>
             {% endfor %}
         </div>
         {% else %}
         <div class="text-center" style="padding: var(--space-12) 0;">
             <i class="fas fa-door-closed fa-4x" style="color: var(--neutral-400); margin-bottom: var(--space-4);"></i>
-            <h3 style="margin-bottom: var(--space-2); color: var(--neutral-700);">No rooms available in this category</h3>
-            <p style="color: var(--neutral-600); max-width: 400px; margin: 0 auto;">
-                We're currently updating our facilities. Please check back later or contact us for more information.
-            </p>
-            <div style="margin-top: var(--space-6);">
-                <a href="{% url 'conferences:overview' %}" class="btn btn-gold">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to All Facilities
-                </a>
-            </div>
+            <h3 style="margin-bottom: var(--space-2); color: var(--neutral-700);">No active facilities in this category</h3>
+            <p style="color: var(--neutral-600); max-width: 500px; margin: 0 auto;">Update facilities in Django admin and they will appear here automatically.</p>
         </div>
         {% endif %}
     </div>
 </section>
 
-<!-- Quick Stats -->
-<section class="section-padding bg-gold-light">
+<section class="cta-section">
     <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Why Choose Our {{ category.name }}?</h2>
-        </div>
-        
-        <div class="highlights-grid">
-            <div class="highlight-card">
-                <div class="highlight-icon">
-                    <i class="fas fa-glass-whiskey"></i>
-                </div>
-                <h3>Non-Alcoholic</h3>
-                <p>Professional environment focused on productivity</p>
-            </div>
-            
-            <div class="highlight-card">
-                <div class="highlight-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>Secure & Private</h3>
-                <p>Confidential meeting spaces for sensitive discussions</p>
-            </div>
-            
-            <div class="highlight-card">
-                <div class="highlight-icon">
-                    <i class="fas fa-concierge-bell"></i>
-                </div>
-                <h3>Full Service</h3>
-                <p>Catering and support staff available</p>
-            </div>
-            
-            <div class="highlight-card">
-                <div class="highlight-icon">
-                    <i class="fas fa-tree"></i>
-                </div>
-                <h3>Garden Views</h3>
-                <p>Beautiful natural surroundings for inspiration</p>
+        <div class="cta-content">
+            <h2 class="cta-title">Need Help Choosing a Facility?</h2>
+            <p class="cta-subtitle">Our team can guide you based on group size, layout, and session goals.</p>
+            <div class="cta-actions">
+                <a href="{% url 'conferences:overview' %}" class="btn btn-gold btn-large"><i class="fas fa-arrow-left"></i> Back to Overview</a>
+                <a href="{% url 'conferences:packages' %}" class="btn btn-outline-gold btn-large"><i class="fas fa-gift"></i> View Packages</a>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Back to overview -->
-<section class="section-padding">
-    <div class="container">
-        <div class="text-center facility-cta">
-            <a href="{% url 'conferences:overview' %}" class="btn btn-gold btn-large">
-                <i class="fas fa-arrow-left"></i>
-                Back to Conference Venues
-            </a>
-            <a href="{% url 'conferences:packages' %}" class="btn btn-outline-gold btn-large" style="margin-left: var(--space-4);">
-                <i class="fas fa-gift"></i>
-                View Conference Packages in Machakos
-            </a>
-        </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scroll for room links
-    const roomCards = document.querySelectorAll('.room-card');
-    roomCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            if (e.target.tagName === 'A' || e.target.closest('a')) {
-                return; // Let link clicks work normally
-            }
-            const viewDetailsLink = this.querySelector('.btn-gold');
-            if (viewDetailsLink) {
-                viewDetailsLink.click();
-            }
-        });
-    });
-});
-</script>
 {% endblock %}

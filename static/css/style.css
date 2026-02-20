@@ -99,31 +99,34 @@
         gap: 0.5rem;
         padding: var(--space-3) var(--space-6);
         font-family: var(--font-sans);
-        font-weight: 600;
+        font-weight: 700;
         text-decoration: none;
-        border-radius: 0.5rem;
+        border-radius: 999px;
         border: none;
         cursor: pointer;
         transition: all 0.3s ease;
         white-space: nowrap;
         max-width: 100%;
+        line-height: 1.2;
+        min-height: 44px;
+        box-shadow: 0 8px 16px rgba(28, 25, 23, 0.12);
     }
 
     .btn-gold {
-        background: var(--gold-dark);
+        background: var(--gold-accessible);
         color: white !important;
-        border: 2px solid var(--gold-dark);
+        border: 2px solid var(--gold-accessible);
     }
 
     .btn-gold:hover {
-        background: var(--gold-darker);
-        border-color: var(--gold-darker);
+        background: #5a4718;
+        border-color: #5a4718;
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 14px 24px rgba(28, 25, 23, 0.2);
     }
 
     .btn-outline-gold {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.96);
         color: var(--gold-accessible);
         border: 2px solid var(--gold-accessible);
     }
@@ -879,6 +882,7 @@
         gap: var(--space-3);
         justify-content: center;
         align-items: stretch;
+        margin-top: var(--space-4);
     }
 
     .contact-info {
@@ -1286,11 +1290,188 @@
         scrollbar-width: none;
     }
 
-    .mobile-swipe-row::-webkit-scrollbar {
-        display: none;
+.mobile-swipe-row::-webkit-scrollbar {
+    display: none;
+}
+
+/* Outdoor Events Page */
+.booking-form {
+    background: white;
+    border-radius: 1rem;
+    padding: var(--space-6);
+    box-shadow: var(--surface-card-shadow);
+    border: 1px solid var(--neutral-200);
+}
+
+.booking-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+.booking-form-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
+.booking-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.booking-form label {
+    font-weight: 600;
+    color: var(--neutral-800);
+    font-size: 0.9375rem;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--neutral-300);
+    border-radius: 0.75rem;
+    background: white;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--neutral-800);
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.booking-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.booking-form input::placeholder,
+.booking-form textarea::placeholder {
+    color: var(--neutral-600);
+    opacity: 1;
+}
+
+.booking-form input:focus,
+.booking-form select:focus,
+.booking-form textarea:focus {
+    outline: none;
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 3px rgba(196, 167, 71, 0.2);
+}
+
+.booking-form select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gold-dark) 50%),
+        linear-gradient(135deg, var(--gold-dark) 50%, transparent 50%);
+    background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 2.5rem;
+}
+
+.outdoor-feature-list {
+    list-style: none;
+    margin-bottom: var(--space-5);
+    display: grid;
+    gap: var(--space-2);
+}
+
+.outdoor-feature-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--neutral-800);
+}
+
+.outdoor-feature-list i {
+    color: var(--nature-green);
+}
+
+.outdoor-note {
+    border-left: 4px solid var(--gold-dark);
+    background: var(--gold-light);
+    border-radius: 0.5rem;
+    padding: var(--space-3) var(--space-4);
+    margin: var(--space-3) 0 var(--space-5);
+}
+
+.outdoor-form-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.outdoor-form-actions {
+    text-align: center;
+    margin-top: var(--space-6);
+}
+
+.service-image-photo {
+    padding: 0;
+    overflow: hidden;
+}
+
+.service-image-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.service-card:hover .service-image-photo img {
+    transform: scale(1.03);
+}
+
+.outdoor-highlights-grid {
+    max-width: 1080px;
+    margin: 0 auto;
+    justify-content: center;
+    justify-items: center;
+}
+
+.outdoor-highlights-grid .highlight-card {
+    text-align: center;
+    width: 100%;
+    max-width: 320px;
+}
+
+.outdoor-highlight-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+@media (max-width: 767px) {
+    .outdoor-highlights-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        overflow: visible;
+        gap: var(--space-4);
     }
 
-    @media (max-width: 767px) {
+    .outdoor-highlights-grid .highlight-card {
+        min-width: 0;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 640px) {
+    .outdoor-highlights-grid {
+        grid-template-columns: repeat(2, minmax(260px, 320px));
+        justify-content: center;
+    }
+}
+
+@media (min-width: 1024px) {
+    .outdoor-highlights-grid {
+        grid-template-columns: repeat(3, minmax(260px, 320px));
+        justify-content: center;
+    }
+}
+
+@media (max-width: 767px) {
         .highlights-grid,
         .services-grid,
         .family-features {
@@ -1413,6 +1594,10 @@
             height: 48px;
             font-size: 1.45rem;
         }
+
+        .room-actions .btn {
+            width: 100%;
+        }
     }
 
 
@@ -1483,5 +1668,15 @@
         
         .cta-title {
             font-size: 3rem;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .highlights-grid.outdoor-highlights-grid {
+            display: grid !important;
+            grid-template-columns: 1fr;
+            overflow: visible !important;
+            scroll-snap-type: none;
+            padding-bottom: 0;
         }
     }

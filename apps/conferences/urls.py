@@ -5,6 +5,7 @@ app_name = 'conferences'
 
 urlpatterns = [
     path('', views.conference_overview, name='overview'),
+    path('category/halls/', views.halls_category_redirect, name='halls_alias'),
     path('category/<slug:slug>/', views.category_detail, name='category_detail'),
     path('room/<slug:slug>/', views.room_detail, name='room_detail'),
     path('packages/', views.conference_packages, name='packages'),
