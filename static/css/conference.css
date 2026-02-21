@@ -1584,6 +1584,18 @@
     }
 }
 
+.faq-item {
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    border: 1px solid transparent;
+}
+
+.faq-item:hover {
+    border-color: var(--gold-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-hover);
+}
+
 /* ===== PRINT STYLES ===== */
 @media print {
     .conference-nav,

@@ -277,29 +277,5 @@ function selectEvent(eventName) {
     // Scroll to inquiry form
     document.getElementById('inquiry').scrollIntoView({ behavior: 'smooth' });
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum datetime and keep end after start
-    const startInput = document.getElementById('category_start_datetime');
-    const endInput = document.getElementById('category_end_datetime');
-    const now = new Date();
-    const minValue = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-
-    if (startInput) {
-        startInput.min = minValue;
-    }
-    if (endInput) {
-        endInput.min = minValue;
-    }
-    if (startInput && endInput) {
-        startInput.addEventListener('change', function() {
-            endInput.min = this.value || minValue;
-            if (endInput.value && endInput.value < endInput.min) {
-                endInput.value = endInput.min;
-            }
-        });
-    }
-    
-});
 </script>
 {% endblock %}

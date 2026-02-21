@@ -1294,6 +1294,62 @@
     display: none;
 }
 
+/* Reusable toast notifications */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: #1f7a43;
+}
+
+.notification-error {
+    background: #b42318;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 1rem;
+}
+
+/* Skip layout/paint work for off-screen card-heavy sections */
+@supports (content-visibility: auto) {
+    .highlights-grid,
+    .services-grid,
+    .rooms-grid,
+    .packages-grid,
+    .gardens-grid,
+    .event-types-grid,
+    .activity-grid,
+    .farm-grid,
+    .gallery-grid {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 700px;
+    }
+}
+
 /* Outdoor Events Page */
 .booking-form {
     background: white;

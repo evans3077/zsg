@@ -12,35 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    const startInput = document.getElementById("dining_start_datetime");
-    const endInput = document.getElementById("dining_end_datetime");
-    const now = new Date();
-    const minValue = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
-
-    if (startInput) {
-        startInput.min = minValue;
-    }
-    if (endInput) {
-        endInput.min = minValue;
-    }
-
-    if (startInput && endInput) {
-        startInput.addEventListener("change", function () {
-            endInput.min = this.value || minValue;
-            if (endInput.value && endInput.value < endInput.min) {
-                endInput.value = endInput.min;
-            }
-        });
-    }
-
     initDiningSpaceSliders();
 });
 
 function initDiningSpaceSliders() {
     const sliders = document.querySelectorAll("[data-slider]");
     if (!sliders.length) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     sliders.forEach(function (slider) {
         const track = slider.querySelector(".space-gallery-track");
@@ -51,6 +29,8 @@ function initDiningSpaceSliders() {
 
         let index = 0;
         let timer = null;
+        let isInViewport = false;
+        let isHovered = false;
 
         function goTo(target) {
             index = (target + slides.length) % slides.length;
@@ -58,10 +38,17 @@ function initDiningSpaceSliders() {
         }
 
         function startAuto() {
-            stopAuto();
+            if (prefersReducedMotion || slides.length < 2 || timer || !isInViewport || isHovered || document.hidden) {
+                return;
+            }
             timer = setInterval(function () {
                 goTo(index + 1);
             }, 3600);
+        }
+
+        function updateAuto() {
+            stopAuto();
+            startAuto();
         }
 
         function stopAuto() {
@@ -74,20 +61,43 @@ function initDiningSpaceSliders() {
         if (prevBtn) {
             prevBtn.addEventListener("click", function () {
                 goTo(index - 1);
-                startAuto();
+                updateAuto();
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener("click", function () {
                 goTo(index + 1);
-                startAuto();
+                updateAuto();
             });
         }
 
-        slider.addEventListener("mouseenter", stopAuto);
-        slider.addEventListener("mouseleave", startAuto);
+        slider.addEventListener("mouseenter", function () {
+            isHovered = true;
+            stopAuto();
+        });
+        slider.addEventListener("mouseleave", function () {
+            isHovered = false;
+            startAuto();
+        });
+
+        if ("IntersectionObserver" in window) {
+            const sliderObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    isInViewport = entry.isIntersecting;
+                    updateAuto();
+                });
+            }, { threshold: 0.15 });
+            sliderObserver.observe(slider);
+        } else {
+            isInViewport = true;
+            startAuto();
+        }
+
+        document.addEventListener("visibilitychange", function () {
+            updateAuto();
+        });
+
         goTo(0);
-        startAuto();
     });
 }

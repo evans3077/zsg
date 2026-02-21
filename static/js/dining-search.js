@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let items = [];
     let debounceTimer = null;
     let controller = null;
+    let lastQuery = "";
+    const resultCache = new Map();
 
     function closeResults() {
         resultsEl.classList.remove("is-open");
@@ -55,6 +57,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function fetchResults(query) {
+        if (resultCache.has(query)) {
+            return resultCache.get(query);
+        }
         if (controller) controller.abort();
         controller = new AbortController();
         const response = await fetch(`${endpoint}?q=${encodeURIComponent(query)}`, {
@@ -63,7 +68,13 @@ document.addEventListener("DOMContentLoaded", function () {
             signal: controller.signal,
         });
         if (!response.ok) throw new Error("Search request failed");
-        return response.json();
+        const payload = await response.json();
+        resultCache.set(query, payload);
+        if (resultCache.size > 30) {
+            const oldestKey = resultCache.keys().next().value;
+            resultCache.delete(oldestKey);
+        }
+        return payload;
     }
 
     function setActive(index) {
@@ -84,15 +95,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const query = this.value.trim();
         if (debounceTimer) clearTimeout(debounceTimer);
         if (query.length < 2) {
+            lastQuery = "";
             closeResults();
             return;
         }
+        if (query === lastQuery) {
+            return;
+        }
+        lastQuery = query;
         debounceTimer = setTimeout(async () => {
             try {
                 const payload = await fetchResults(query);
                 render(payload.results || []);
             } catch (err) {
                 if (err.name !== "AbortError") {
+                    lastQuery = "";
                     resultsEl.innerHTML = '<div class="dining-search-empty">Unable to search right now.</div>';
                     openResults();
                 }

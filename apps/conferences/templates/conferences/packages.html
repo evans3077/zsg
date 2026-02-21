@@ -402,27 +402,6 @@ function selectPackage(packageName) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum datetime and keep end after start
-    const startInput = document.getElementById('package_start_datetime');
-    const endInput = document.getElementById('package_end_datetime');
-    const now = new Date();
-    const minValue = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-
-    if (startInput) {
-        startInput.min = minValue;
-    }
-    if (endInput) {
-        endInput.min = minValue;
-    }
-    if (startInput && endInput) {
-        startInput.addEventListener('change', function() {
-            endInput.min = this.value || minValue;
-            if (endInput.value && endInput.value < endInput.min) {
-                endInput.value = endInput.min;
-            }
-        });
-    }
-    
     // FAQ toggle
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
@@ -432,18 +411,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
-<style>
-.faq-item {
-    cursor: pointer;
-    transition: var(--transition-base);
-    border: 1px solid transparent;
-}
-
-.faq-item:hover {
-    border-color: var(--gold-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-</style>
 {% endblock %}
