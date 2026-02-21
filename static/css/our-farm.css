@@ -1,0 +1,284 @@
+.farm-hero {
+    position: relative;
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    margin-top: -80px;
+    padding: calc(80px + var(--space-8)) 0 var(--space-8);
+    color: #fff;
+    overflow: hidden;
+    background: #1f2d1f;
+}
+
+.farm-hero-media {
+    position: absolute;
+    inset: 0;
+}
+
+.farm-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.farm-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(140deg, rgba(20, 33, 21, 0.85), rgba(25, 31, 24, 0.55));
+}
+
+.farm-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 42rem;
+}
+
+.farm-kicker {
+    margin: 0 0 var(--space-3);
+    color: var(--gold-medium);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.farm-hero-content h1 {
+    margin: 0;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    line-height: 1.2;
+    color: #fff;
+}
+
+.farm-hero-content p {
+    margin: var(--space-4) 0 var(--space-6);
+    max-width: 36rem;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #f4f4f3;
+}
+
+.farm-intro {
+    background: #fff;
+}
+
+.oak-section {
+    background: #f7f8f5;
+}
+
+.oak-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.oak-copy h2 {
+    margin-bottom: var(--space-4);
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+}
+
+.oak-copy p {
+    margin: 0 0 var(--space-4);
+    color: var(--neutral-700);
+    line-height: 1.7;
+}
+
+.farm-points {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: var(--space-2);
+    color: var(--neutral-800);
+}
+
+.farm-actions {
+    margin-top: var(--space-5);
+}
+
+.oak-media figure {
+    margin: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--neutral-200);
+}
+
+.oak-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.oak-media-grid {
+    margin-top: var(--space-3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+}
+
+.nursery-section {
+    background: #fff;
+}
+
+.nursery-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+.nursery-copy p {
+    color: var(--neutral-700);
+    line-height: 1.7;
+}
+
+.sustain-note {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    border-left: 4px solid var(--nature-green);
+    background: var(--nature-green-soft);
+    border-radius: 0.5rem;
+}
+
+.nursery-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+}
+
+.nursery-card {
+    margin: 0;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    border: 1px solid var(--neutral-200);
+    background: var(--neutral-100);
+}
+
+.nursery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 1/1;
+}
+
+.future-section {
+    background: #f6f5f1;
+}
+
+.future-card {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid var(--neutral-200);
+    border-radius: 1rem;
+    padding: var(--space-6);
+    text-align: center;
+}
+
+.future-card h2 {
+    margin-bottom: var(--space-3);
+}
+
+.future-card p {
+    margin: 0;
+    color: var(--neutral-700);
+}
+
+.farm-links {
+    background: #fff;
+}
+
+.farm-link-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
+.farm-link-card {
+    background: #fff;
+    border: 1px solid var(--neutral-200);
+    border-radius: 1rem;
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.farm-link-icon {
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold-light);
+    color: var(--nature-green-dark);
+}
+
+.farm-link-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.farm-link-card p {
+    margin: 0;
+    color: var(--neutral-700);
+}
+
+.farm-link-card .btn {
+    margin-top: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .nursery-card img {
+        transition: transform 0.35s ease;
+    }
+
+    .nursery-card:hover img {
+        transform: scale(1.04);
+    }
+}
+
+@media (min-width: 768px) {
+    .farm-hero {
+        min-height: 80vh;
+    }
+
+    .farm-link-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .oak-layout {
+        grid-template-columns: 1.08fr 0.92fr;
+        gap: var(--space-8);
+    }
+
+    .nursery-layout {
+        grid-template-columns: 0.85fr 1.15fr;
+        gap: var(--space-8);
+        align-items: start;
+    }
+
+    .nursery-gallery {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: 140px;
+    }
+
+    .nursery-card img {
+        aspect-ratio: auto;
+    }
+
+    .nursery-card.is-tall {
+        grid-row: span 2;
+    }
+
+    .nursery-card.is-wide {
+        grid-column: span 2;
+    }
+
+    .farm-link-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}

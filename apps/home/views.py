@@ -1,5 +1,7 @@
 import json
+from pathlib import Path
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import HomePageSettings, Feature, Service
@@ -191,20 +193,132 @@ def outdoor_events_view(request):
     return render(request, "home/outdoor_events.html", context)
 
 
+def _farm_gallery_items():
+    gallery_dir = Path(settings.MEDIA_ROOT) / "farm" / "gallery"
+    if not gallery_dir.exists():
+        return []
+
+    alt_text_map = {
+        "green-house-gardens-machakos.webp": "Greenhouse incubation of plants in Machakos",
+        "nursery-blooms-near-nairobi.webp": "Flower seedlings growing inside greenhouse Machakos",
+        "nature-canvas-inviting-cozy-near-nairobi.webp": "Native tree seedlings at Zamar Springs nursery",
+        "fresh-floral-moments-around-machakos.webp": "Tree nursery for landscaping in Kenya",
+        "floral-display-petals-blooming-around-machakos.webp": "Flower seedlings prepared for landscaping projects in Machakos",
+        "floral-paradise-petal-display-machakos.webp": "Greenhouse flowers grown for sustainable nursery sales in Machakos",
+    }
+
+    items = []
+    for image_path in sorted(gallery_dir.glob("*.webp")):
+        file_name = image_path.name
+        media_url = f"{settings.MEDIA_URL}farm/gallery/{file_name}"
+        items.append(
+            {
+                "url": media_url,
+                "alt": alt_text_map.get(
+                    file_name.lower(),
+                    "Tree nursery and greenhouse plants at Zamar Springs Gardens Machakos",
+                ),
+            }
+        )
+    return items
+
+
 def our_farm_view(request):
-    sections = [
+    page_url = request.build_absolute_uri()
+    base_url = f"{request.scheme}://{request.get_host()}"
+
+    seo = {
+        "title": "Farm to Table in Machakos | Oak Farm & Tree Nursery at Zamar Springs",
+        "description": (
+            "Discover Oak Farm at Zamar Springs Gardens in Machakos, where fresh vegetables, dairy and seasonal fruits "
+            "support our menu alongside a greenhouse and tree nursery focused on sustainable planting."
+        ),
+        "keywords": (
+            "farm to table Machakos, fresh farm produce Machakos, dairy farm Machakos, seasonal fruits Kenya, "
+            "sustainable farming near Nairobi, tree nursery Machakos, flower seedlings Kenya, native trees Machakos"
+        ),
+    }
+
+    oak_highlights = [
+        "Fresh vegetables grown on-site",
+        "Dairy production for tea, yoghurt and milk-based drinks",
+        "Seasonal fruits for salads and juices",
+        "Sustainable and controlled food sourcing",
+        "Supporting our in-house kitchen operations",
+    ]
+
+    nursery_support = [
+        "Flower seedlings",
+        "Native tree seedlings",
+        "Landscaping plants",
+        "Garden-ready ornamental varieties",
+    ]
+
+    internal_links = [
         {
-            "title": "Our Farm",
-            "description": "Foundational information about our farm operations will be added here.",
-            "icon": "fas fa-seedling",
+            "title": "Farm to Fork Dining",
+            "description": "See how our produce translates into fresh menu experiences.",
+            "url_name": "dining:farm_to_fork",
+            "icon": "fas fa-utensils",
         },
         {
-            "title": "Flower Nursery",
-            "description": "Foundational information about our flower nursery will be added here.",
-            "icon": "fas fa-spa",
+            "title": "Outdoor Events",
+            "description": "Pair farm tours with nature activities and team experiences.",
+            "url_name": "home:outdoor_events",
+            "icon": "fas fa-route",
+        },
+        {
+            "title": "Conference Retreats",
+            "description": "Plan sustainability-focused corporate sessions in natural surroundings.",
+            "url_name": "conferences:overview",
+            "icon": "fas fa-people-group",
+        },
+        {
+            "title": "Gallery Highlights",
+            "description": "Explore visual stories from our gardens, nursery and events.",
+            "url_name": "gallery:overview",
+            "icon": "fas fa-images",
         },
     ]
-    return render(request, "home/our_farm.html", {"sections": sections})
+
+    schema_payload = json.dumps(
+        {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Zamar Springs Gardens Farm and Nursery",
+            "url": page_url,
+            "image": f"{base_url}/static/images/web-pictures/muuo-grounds-zamarsprings.webp",
+            "description": seo["description"],
+            "telephone": "+254112394681",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Machakos",
+                "addressCountry": "KE",
+            },
+            "department": [
+                {
+                    "@type": "LocalBusiness",
+                    "name": "Oak Farm",
+                    "description": "Farm-to-table production of vegetables, dairy and seasonal fruits for in-house dining.",
+                },
+                {
+                    "@type": "GardenStore",
+                    "name": "Greenhouse and Tree Nursery",
+                    "description": "Sustainably nurtured flower and tree seedlings for landscaping and reforestation projects.",
+                },
+            ],
+        }
+    )
+
+    context = {
+        "seo": seo,
+        "oak_highlights": oak_highlights,
+        "nursery_support": nursery_support,
+        "internal_links": internal_links,
+        "nursery_gallery": _farm_gallery_items(),
+        "schema_payload": schema_payload,
+    }
+    return render(request, "home/our_farm.html", context)
 
 
 def careers_view(request):

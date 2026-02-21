@@ -1,22 +1,201 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Our Farm | Zamar Springs Gardens{% endblock %}
-{% block meta_description %}Our Farm and Flower Nursery at Zamar Springs Gardens.{% endblock %}
-{% block meta_keywords %}our farm, flower nursery, Zamar Springs Gardens{% endblock %}
+{% block title %}{{ seo.title }}{% endblock %}
+{% block meta_description %}{{ seo.description }}{% endblock %}
+{% block meta_keywords %}{{ seo.keywords }}{% endblock %}
+{% block og_title %}{{ seo.title }}{% endblock %}
+{% block og_description %}{{ seo.description }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/our-farm.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">{{ schema_payload|safe }}</script>
+{% endblock %}
 
 {% block content %}
-<section class="section-padding bg-gold-light">
+<section class="farm-hero">
+    <div class="farm-hero-media">
+        <img
+            src="{% static 'images/web-pictures/muuo-grounds-zamarsprings.webp' %}"
+            alt="Sustainable farm at Zamar Springs Gardens in Machakos"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            width="1920"
+            height="1080"
+        >
+    </div>
+    <div class="farm-hero-overlay" aria-hidden="true"></div>
+    <div class="container">
+        <div class="farm-hero-content">
+            <p class="farm-kicker">Our Farm</p>
+            <h1>From Farm to Table - Our Commitment to Freshness</h1>
+            <p>
+                At Zamar Springs Gardens, our farm is the heart of our menu and our nursery is the
+                foundation of our nature-focused vision.
+            </p>
+            <a href="#farm-intro" class="btn btn-gold btn-large">Discover Our Farm Story</a>
+        </div>
+    </div>
+</section>
+
+<section class="farm-intro section-padding" id="farm-intro">
     <div class="container">
         <div class="section-header">
-            <h1 class="section-title">Our Farm</h1>
-            <p class="section-subtitle">A new section for farm and nursery updates.</p>
+            <h2 class="section-title">Rooted in Sustainability</h2>
+            <p class="section-subtitle">
+                Our farm journey connects food production, environmental care, and long-term ecosystem support in Machakos.
+            </p>
         </div>
-        <div class="highlights-grid">
-            {% for section in sections %}
-            <article class="highlight-card">
-                <div class="highlight-icon nature-icon-bg"><i class="{{ section.icon }} nature-icon"></i></div>
-                <h3>{{ section.title }}</h3>
-                <p>{{ section.description }}</p>
+    </div>
+</section>
+
+<section class="oak-section section-padding" id="oak-farm">
+    <div class="container">
+        <div class="oak-layout">
+            <div class="oak-copy">
+                <p class="farm-kicker">Oak Farm</p>
+                <h2>Oak Farm - Growing What We Serve</h2>
+                <p>
+                    Oak Farm is the production hub behind the freshness you experience at Zamar Springs Gardens.
+                    Here, we grow a wide variety of vegetables including onions and other seasonal produce used directly in our kitchen.
+                </p>
+                <p>
+                    Our dairy production supports many of the beverages and meals served on our menu. Fresh milk from our farm
+                    is used in tea preparation, milkshakes, yoghurt production and other milk-based offerings.
+                </p>
+                <p>
+                    Seasonal fruits harvested from Oak Farm are used to prepare fresh salads and natural fruit juices,
+                    ensuring quality and flavor consistency throughout the year.
+                </p>
+                <p>
+                    This farm-to-table approach allows us to maintain control over quality, sustainability and freshness while
+                    supporting environmentally responsible agriculture.
+                </p>
+                <ul class="farm-points">
+                    {% for point in oak_highlights %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="farm-actions">
+                    <a href="{% url 'dining:overview' %}" class="btn btn-gold">Experience Fresh Farm Dining</a>
+                </div>
+            </div>
+            <div class="oak-media">
+                <figure>
+                    <img
+                        src="{% static 'images/web-pictures/outdoor-dining-space-machakos-1.webp' %}"
+                        alt="Farm to table agriculture in Machakos"
+                        loading="lazy"
+                        decoding="async"
+                        width="1200"
+                        height="900"
+                    >
+                </figure>
+                <div class="oak-media-grid">
+                    <figure>
+                        <img
+                            src="{% static 'images/web-pictures/dining-setups-machakos-1.webp' %}"
+                            alt="Fresh vegetables grown at Oak Farm Machakos"
+                            loading="lazy"
+                            decoding="async"
+                            width="900"
+                            height="900"
+                        >
+                    </figure>
+                    <figure>
+                        <img
+                            src="{% static 'images/web-pictures/open-air-dining-machakos.webp' %}"
+                            alt="Milk production supporting Zamar Springs dairy products"
+                            loading="lazy"
+                            decoding="async"
+                            width="900"
+                            height="900"
+                        >
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="nursery-section section-padding" id="nursery">
+    <div class="container">
+        <div class="section-header">
+            <p class="farm-kicker">Greenhouse & Nursery</p>
+            <h2 class="section-title">Greenhouse & Tree Nursery - Growing Nature</h2>
+            <p class="section-subtitle">
+                Our greenhouse serves as the seedling incubation center for flowers, native trees and landscaping plants.
+                Every plant is nurtured carefully from early growth to garden-ready maturity.
+            </p>
+        </div>
+
+        <div class="nursery-layout">
+            <div class="nursery-copy">
+                <p>
+                    These seedlings are grown for sale and landscaping projects, supporting environmental sustainability,
+                    biodiversity and reforestation initiatives across Machakos and beyond.
+                </p>
+                <ul class="farm-points">
+                    {% for point in nursery_support %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+                <p class="sustain-note">
+                    Through eco-conscious nursery operations, we support native species conservation and long-term landscaping partnerships.
+                </p>
+                <div class="farm-actions">
+                    <a href="{% url 'gallery:overview' %}" class="btn btn-gold">Explore Our Plant Nursery</a>
+                </div>
+            </div>
+            <div class="nursery-gallery">
+                {% for item in nursery_gallery %}
+                <figure class="nursery-card {% cycle 'is-tall' 'is-wide' '' 'is-tall' 'is-wide' '' %}">
+                    <img
+                        src="{{ item.url }}"
+                        alt="{{ item.alt }}"
+                        loading="lazy"
+                        decoding="async"
+                        width="900"
+                        height="900"
+                    >
+                </figure>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="future-section section-padding">
+    <div class="container">
+        <div class="future-card">
+            <h2>Looking Ahead</h2>
+            <p>
+                This farm platform is structured for future expansion into nursery listings, farm tours,
+                seasonal availability updates and sustainability reporting.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding farm-links">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Continue Exploring Zamar Springs</h2>
+            <p class="section-subtitle">Follow related experiences connected to our sustainability journey.</p>
+        </div>
+        <div class="farm-link-grid">
+            {% for item in internal_links %}
+            <article class="farm-link-card">
+                <div class="farm-link-icon"><i class="{{ item.icon }}"></i></div>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
+                <a href="{% url item.url_name %}" class="btn btn-outline-gold" aria-label="Open {{ item.title }}">
+                    Open
+                </a>
             </article>
             {% endfor %}
         </div>
