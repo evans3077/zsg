@@ -14,6 +14,29 @@ ROOM_TYPES_BY_CATEGORY_TYPE = {
     "hall": ["hall"],
 }
 
+SEATING_LAYOUTS = [
+    {"key": "boardroom", "label": "Boardroom"},
+    {"key": "classroom", "label": "Classroom"},
+    {"key": "theatre", "label": "Theatre"},
+    {"key": "u_shape", "label": "U-Shape"},
+    {"key": "banquet", "label": "Banquet"},
+]
+
+
+def _room_layout_keys(room):
+    layout_keys = []
+    if room.capacity_boardroom > 0:
+        layout_keys.append("boardroom")
+    if room.capacity_classroom > 0:
+        layout_keys.append("classroom")
+    if room.capacity_theatre > 0:
+        layout_keys.append("theatre")
+    if room.capacity_u_shape > 0:
+        layout_keys.append("u_shape")
+    if room.capacity_banquet > 0:
+        layout_keys.append("banquet")
+    return layout_keys
+
 
 def _ordered_conference_categories_queryset():
     return (
@@ -64,16 +87,27 @@ def conference_overview(request):
     categories = list(_ordered_conference_categories_queryset())
     categories = _attach_category_summaries(categories)
     featured_rooms = (
-        ConferenceRoom.objects.filter(is_active=True, is_featured=True)
+        ConferenceRoom.objects.filter(is_active=True)
         .select_related("category")
-        .order_by('display_order')[:6]
+        .order_by('display_order', 'name')
     )
+    featured_rooms = list(featured_rooms)
+    active_layout_keys = set()
+    for room in featured_rooms:
+        room.layout_keys = _room_layout_keys(room)
+        room.layout_keys_text = " ".join(room.layout_keys)
+        active_layout_keys.update(room.layout_keys)
+
+    seating_layouts = [
+        layout for layout in SEATING_LAYOUTS if layout["key"] in active_layout_keys
+    ]
     popular_packages = ConferencePackage.objects.filter(is_active=True, is_popular=True).order_by('display_order')[:3]
     
     context = {
         'page_settings': page_settings,
         'categories': categories,
         'featured_rooms': featured_rooms,
+        'seating_layouts': seating_layouts,
         'popular_packages': popular_packages,
     }
     return render(request, 'conferences/overview.html', context)

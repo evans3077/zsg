@@ -38,22 +38,6 @@
                 </div>
             </div>
 
-            <div class="facility-nav">
-                {% for category in conference_categories %}
-                <a class="facility-nav-link" href="{% url 'conferences:category_detail' category.slug %}">
-                    <i class="{{ category.icon }}"></i>
-                    {% if category.category_type == 'board' %}
-                        Board Rooms in Machakos
-                    {% elif category.category_type == 'meeting' %}
-                        Meeting Rooms in Machakos
-                    {% elif category.category_type == 'hall' %}
-                        Meeting Halls in Machakos
-                    {% else %}
-                        {{ category.name }}
-                    {% endif %}
-                </a>
-                {% endfor %}
-            </div>
         </div>
 
         <div class="room-detail-content">
@@ -84,7 +68,7 @@
 
                 <section class="detail-section">
                     <h2>Seating Capacity</h2>
-                    <div style="overflow-x: auto;">
+                    <div class="capacity-table-wrap">
                         <table class="capacity-table">
                             <thead>
                                 <tr>
@@ -129,10 +113,10 @@
                 </section>
             </div>
 
-            <aside>
+            <aside class="room-detail-aside">
                 <div class="booking-sidebar" id="booking">
                     <h3>Book This Facility</h3>
-                    <form class="booking-form" method="post" action="{% url 'bookings:submit' %}">
+                    <form class="booking-form booking-form-compact" method="post" action="{% url 'bookings:submit' %}">
                         {% csrf_token %}
                         <input type="hidden" name="request_type" value="conference_room">
                         <input type="hidden" name="source_page" value="Conference Room Detail">
@@ -185,7 +169,7 @@
                 {% if related_rooms %}
                 <section class="detail-section">
                     <h2>Related Facilities</h2>
-                    <div class="rooms-grid">
+                    <div class="related-rooms-grid">
                         {% for related in related_rooms %}
                         <article class="room-card">
                             <div class="room-content">

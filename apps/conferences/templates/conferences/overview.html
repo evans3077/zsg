@@ -14,7 +14,7 @@
         <div class="conference-hero-content">
             <h1 class="conference-hero-title">{{ page_settings.hero_title }} in Machakos</h1>
             <p class="conference-hero-subtitle">{{ page_settings.hero_subtitle }}</p>
-            <a href="#categories" class="btn btn-gold btn-large">
+            <a href="#facilities" class="btn btn-gold btn-large">
                 <i class="fas fa-search"></i> Explore Facilities
             </a>
         </div>
@@ -31,48 +31,33 @@
     </div>
 </section>
 
-<!-- Categories -->
-<section class="category-nav" id="categories">
-    <div class="container">
-        <h2 class="section-title text-center" style="margin-bottom: 2rem;">Our Facilities</h2>
-        <div class="category-nav-scroll">
-            {% for category in categories %}
-            <a href="{% url 'conferences:category_detail' category.slug %}" class="category-card">
-                <div class="category-card-icon">
-                    <i class="{{ category.icon }}"></i>
-                </div>
-                <div class="category-card-content">
-                    <h3>
-                        {% if category.category_type == 'board' %}
-                            Board Rooms in Machakos
-                        {% elif category.category_type == 'meeting' %}
-                            Meeting Rooms in Machakos
-                        {% elif category.category_type == 'hall' %}
-                            Meeting Halls in Machakos
-                        {% else %}
-                            {{ category.name }}
-                        {% endif %}
-                    </h3>
-                    <p>{{ category.room_names_summary|default:category.description }}</p>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
 <!-- Featured Rooms -->
-<section class="rooms-section">
+<section class="rooms-section" id="facilities">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Featured Facilities</h2>
-            <p class="section-subtitle">Our most popular conference spaces</p>
+            <h2 class="section-title">Conference Facilities</h2>
+            <p class="section-subtitle">Filter all facilities by seating arrangement style</p>
         </div>
+
+        {% if seating_layouts %}
+        <div class="layout-filter-wrap" id="layout-style-filter">
+            <div class="layout-filter-list" role="tablist" aria-label="Filter facilities by seating layout">
+                <button type="button" class="layout-filter-btn is-active" data-layout-filter="all" aria-pressed="true">
+                    All Styles
+                </button>
+                {% for layout in seating_layouts %}
+                <button type="button" class="layout-filter-btn" data-layout-filter="{{ layout.key }}" aria-pressed="false">
+                    {{ layout.label }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
         
         {% if featured_rooms %}
-        <div class="rooms-grid">
+        <div class="rooms-grid" id="overview-rooms-grid">
             {% for room in featured_rooms %}
-            <div class="room-card {% if room.is_featured %}room-card-featured{% endif %}">
+            <article class="room-card {% if room.is_featured %}room-card-featured{% endif %}" data-room-layouts="{{ room.layout_keys_text }}">
                 <div class="room-image-container">
                     {% if room.featured_image %}
                     <img class="room-image" src="{{ room.featured_image.url }}" alt="{{ room.name }}" loading="lazy" decoding="async" width="800" height="533">
@@ -117,12 +102,15 @@
                         <a href="{% url 'conferences:room_detail' room.slug %}#booking" class="btn btn-outline-gold">Book Now</a>
                     </div>
                 </div>
-            </div>
+            </article>
             {% endfor %}
+        </div>
+        <div class="layout-filter-empty" id="layout-filter-empty" hidden>
+            <p>No facilities currently match this seating style.</p>
         </div>
         {% else %}
         <div class="text-center" style="padding: 3rem;">
-            <p>No featured rooms available at the moment.</p>
+            <p>No facilities available at the moment.</p>
         </div>
         {% endif %}
     </div>
@@ -240,4 +228,8 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/conference-overview.js' %}" defer></script>
 {% endblock %}

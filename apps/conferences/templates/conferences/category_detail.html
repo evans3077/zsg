@@ -30,34 +30,6 @@
     </div>
 </section>
 
-<section class="category-nav">
-    <div class="container">
-        <div class="category-nav-scroll">
-            {% for cat in all_categories %}
-            <a href="{% url 'conferences:category_detail' cat.slug %}" class="category-card {% if cat.slug == category.slug %}active{% endif %}">
-                <div class="category-card-icon">
-                    <i class="{{ cat.icon }}"></i>
-                </div>
-                <div class="category-card-content">
-                    <h3>
-                        {% if cat.category_type == 'board' %}
-                            Board Rooms in Machakos
-                        {% elif cat.category_type == 'meeting' %}
-                            Meeting Rooms in Machakos
-                        {% elif cat.category_type == 'hall' %}
-                            Meeting Halls in Machakos
-                        {% else %}
-                            {{ cat.name }}
-                        {% endif %}
-                    </h3>
-                    <p>{{ cat.room_names_summary|default:cat.description }}</p>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
 <section class="rooms-section" id="rooms">
     <div class="container">
         <div class="section-header">
